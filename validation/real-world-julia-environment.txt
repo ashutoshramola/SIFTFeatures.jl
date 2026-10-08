@@ -1,0 +1,5 @@
+Julia 1.13.1; threads 1
+SIFTFeatures 0.1.0
+ImageFiltering 0.7.12
+ImageCore 0.10.5
+ColorTypes 0.12.3

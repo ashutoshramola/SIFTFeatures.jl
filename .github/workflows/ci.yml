@@ -1,0 +1,38 @@
+name: Tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  julia:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        julia: ['1.10', '1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.julia }}
+      - uses: julia-actions/cache@v2
+      - uses: julia-actions/julia-runtest@v1
+  opencv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: julia-actions/cache@v2
+      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+      - run: python -m pip install -r validation/requirements.txt
+      - run: python -m unittest discover -s validation -p 'test_*.py'
+      - run: python -O -m unittest discover -s validation -p 'test_*.py'
+      - run: python validation/validate.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: opencv-reference-results
+          path: validation/latest-results.json

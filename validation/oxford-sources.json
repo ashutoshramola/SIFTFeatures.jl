@@ -1,0 +1,168 @@
+{
+  "dataset": "Oxford affine covariant regions",
+  "homepage": "https://www.robots.ox.ac.uk/~vgg/research/affine/",
+  "sequences": [
+    {
+      "name": "bikes",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/bikes.tar.gz",
+      "sha256": "3b95c49accadfd71e63c2fa0f7602abcbadd87d7f53ff54eb1efb15210d19e0c",
+      "bytes": 7366360,
+      "condition": "blur",
+      "files_sha256": {
+        "H1to2p": "4085c2b82cfa0e6b75463b20b890f92edec36bfffe6ddd3c13e38796ed07708d",
+        "H1to3p": "451a7ebee311cc8855199bd7897d8d5a5957b9cc78d89821b5c25c5e142f6c65",
+        "H1to4p": "be681cd5179fa64677adf579dcde84e0fc06041971fac3aab017c2676de95524",
+        "H1to5p": "6959b5651852697f19d75848219a929cc65a5cc7ed00a85cbcf8765c56f25fc0",
+        "H1to6p": "a381de849e3579e2cac29fea887e2db74eeb5f420a1af65d9f45ec6c93d5b17b",
+        "img1.ppm": "8c60379afcc2e9de6f1faa8a4edd02200f351efcef2cc4e1f5f728ecb58a427f",
+        "img2.ppm": "28be7518ca327a1f831f39be66b28be65f3f4220f4b8fb9cb34320afa76d4fc1",
+        "img3.ppm": "4646bb3df0fb4e8712c62cab74b9f6a36335a3b6cc5ed3d03df7c1ee07401a98",
+        "img4.ppm": "aa43c413b3b964a9bdb4156d0f943ea8b5456f4ebd36993d61c187988b9c585c",
+        "img5.ppm": "a86b29c523f353c8194423407ca9d26184a351299cad945dcbf3579c5850fed1",
+        "img6.ppm": "2f3abe52e6863681c5e201e33e630b284a9c38c2b2c20a5d8d9469aade821917"
+      }
+    },
+    {
+      "name": "trees",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/trees.tar.gz",
+      "sha256": "04a39f201bffbc5035a560136fb37d2b36ecaa1532113eebfb113c90b5327f5d",
+      "bytes": 10935162,
+      "condition": "blur",
+      "files_sha256": {
+        "H1to2p": "a45af4c77d177b7111abaa1d7c291ae18695b908839e484b17268e60d472c661",
+        "H1to3p": "00dbf601b36c115de573c5a604a073a0d3ea74a2f05631204d71b26ab2db1591",
+        "H1to4p": "b396643c1aa92241605e958b4cf666c4b4c37fac0daedb1c4baedbe234a4d53f",
+        "H1to5p": "01806bccbb6e7f4121116a80adcc7b397b55023e6fb8353e3eaa75b7cd77b308",
+        "H1to6p": "0aeeec131ed627499e50c5b8ceb82c05d7d41ee5f32f334ad5f831e6612d7d7e",
+        "img1.ppm": "82536bf2be6e5ca83350680afb2104610836e8769ef284b7f1d2dfa7d88287db",
+        "img2.ppm": "83e1a146dc283d53b3418d568cb1d7212e61204f7bff0ed005da2f436888cfbe",
+        "img3.ppm": "8b0d0279628529a40b1ce9896bb27256fe614b5626c6aa5eaee6435bf77851a3",
+        "img4.ppm": "e6f0a57a80fc6b736b9eea9451e50840e2c3db72a64c32142a31f79b7e905c41",
+        "img5.ppm": "0ac9c05209c282e055eb7a433716804d175b0adbcd65aa9ad822f22e0ce08d0d",
+        "img6.ppm": "5f0017603e883151597ac8ca880b5282414b533f4c43b7703bc5986c809e871b"
+      }
+    },
+    {
+      "name": "graf",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/graf.tar.gz",
+      "sha256": "999871b945ee968a00a0d5f9af957d1382fb9dae1511cdee9553366817b53b5b",
+      "bytes": 8414417,
+      "condition": "viewpoint",
+      "files_sha256": {
+        "H1to2p": "da5bbc066c175ce7c4a4c7737e7280ec1a2dc961e5eac52e7ac1f8bf14d60838",
+        "H1to3p": "9142503a1ffcd2457cb20cd883d819a486e2fa730118781fdb213d657b674421",
+        "H1to4p": "b05c90145964f7973e77ff9b2d200fc1823b0b46b9c4e1494c8ccc7079e994e7",
+        "H1to5p": "f545eb32e909393d6bc4416197bb4004ced0aee9739c5a3c3ea6078c66bb6149",
+        "H1to6p": "d1a5f773e727d3772d6f10a1f698c1f87e479ef804f130f6422db6b7a5f2c091",
+        "img1.ppm": "8d53092ffa5b27f5138ec458302f35e7c72a9f35d1f94078ca35944c4b3626dd",
+        "img2.ppm": "d2938d6df7c15e8e032c90f9abb5f4cb5def5acbfff98cc90f9b5f259453b6a2",
+        "img3.ppm": "188ef2abda166a50ee44f023a7ef9c87d4ca349d972db1d9a3abeb2714d4021c",
+        "img4.ppm": "6b4717b18b92d6d6b69cb3c91a800067b220d0bbbf6880f2878dbcb28108f76a",
+        "img5.ppm": "f68fdfe99de81b323a8c6a2b1351affa49742c44b1b776e3d3b5ba75a383234c",
+        "img6.ppm": "a2e03ab33c4913ccecd2a5c7109b02435b5089ad664a028b51c6807d1f7cbd46"
+      }
+    },
+    {
+      "name": "wall",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/wall.tar.gz",
+      "sha256": "3cb3df75f40471f093adf6647d13df6a9f4312f7a222fc591d03f6c08e086344",
+      "bytes": 9991441,
+      "condition": "viewpoint",
+      "files_sha256": {
+        "H1to2p": "5106d4e1e974c1cfdb2cb362a68b35fc810e0878341ec0bb8bfa16093221b0a0",
+        "H1to3p": "97d5e44fe81e8310693f55ca1a17bee766401a5581d366716111f157606cabe9",
+        "H1to4p": "cd4bbb982060e5142d90d4da431c27104aaf6a923260be0d6e8bb2970a540095",
+        "H1to5p": "d547753f4e5b904faf25da29ff3f20ed19dc4498b6a3065f9ee5cce7c88eb9ea",
+        "H1to6p": "13e7c93bdc31fcc0f56bb819e0b51deb109e81cf8a9d7adbc269b66587e8abef",
+        "img1.ppm": "96140c5a649f6cfaf002fc06fdd97f22e7eec322d19aa522d9f198e90258419c",
+        "img2.ppm": "e7a4a1ea610ee1e4c8c21654c3200764f4a405b92b814d230cf219fb2ae27b6a",
+        "img3.ppm": "7f21d250f008e5cbd55cca6fc342dfd175c730728ccc39280cc0ed91a05738c1",
+        "img4.ppm": "a1fdfdbf4daa8afd6dc6fd1a0ba41151f9a9f1ca6475ed29864cc4099296c2d1",
+        "img5.ppm": "4114ddb2fd6dcaf47047b437c10a0a8d9280f6a014d5268907b0776e6cb4745e",
+        "img6.ppm": "5ff1c5e013cc6f5cf2936b9a1e0eef2b01155356b9346bea9faa47edbe98363e"
+      }
+    },
+    {
+      "name": "bark",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/bark.tar.gz",
+      "sha256": "f631c09a0f43fc1e092203f32f8f27e2e43e59b524918255d45474c50c91ea4f",
+      "bytes": 5941281,
+      "condition": "zoom_rotation",
+      "files_sha256": {
+        "H1to2p": "d69b0cef356b600a00cb7d00b9719be59f1736de0274b44edd56d150b6a402a4",
+        "H1to3p": "2a2d8457b6e2c7efb83d35b2a02fc8472e535739a5aadd6488f998e570d7a067",
+        "H1to4p": "5166a7b0b8d1ce6ae5e4222ffa511bdf07e74df1e4ee1a7ab5f005d3a27f4edc",
+        "H1to5p": "8d5e16d104d43d4baebf78ade4dfd0f57b6ea24ed1c44d828912be1e5d1067d3",
+        "H1to6p": "348f950de43ae2e7d6d51a06ec6e327a64240d26a310f0a992101658ef974ff9",
+        "img1.ppm": "cf8de954348fc1682ce80e611911e3dded9d4cc638b9ebaaea692fca58b332ef",
+        "img2.ppm": "b3aab9a4e84465e49b8280b5db7d24b502ca8608f4546cc8833f30b2522a289a",
+        "img3.ppm": "dd42a02b41055a9ad90ca8e2da46ff17577e3d0c905832b09f8edbf9a713a0e5",
+        "img4.ppm": "6655ef438836596cd1dea6c048d7fd15327bd5b42755c0bc6e7a4e48a11a3edb",
+        "img5.ppm": "155156f2661b0f1156f98eb76a750747e70aad8c6617c6f091cf8414d925f23f",
+        "img6.ppm": "8b0d508999e88e9cd4ff7860d988786af9680011b5cdc6ac803536e4ad05a4af"
+      }
+    },
+    {
+      "name": "boat",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/boat.tar.gz",
+      "sha256": "6e5721f37fbf9c3e974fd05935a42c1670f3e71aa3e5b218807ea046a068c603",
+      "bytes": 2160047,
+      "condition": "zoom_rotation",
+      "files_sha256": {
+        "H1to2p": "3370434236b5adda8ffa5eca0c943157c1887fd948637dda89f74123b95f96a9",
+        "H1to3p": "c5b6201a53b4a4565170c37c3ca0faa0f69d3b7f02dac2271f3892ff88380089",
+        "H1to4p": "1015f83749af117c8126ca56b7393c1864caf3eb50627a2d8f4295327b476813",
+        "H1to5p": "92e1de10c4acc9dd84cd4fd60d14dac0b8a3e77defeb70b0f41a1674aff37228",
+        "H1to6p": "6c9e68ea76539fed290b93a756715496662f1446652f712f446706ded2099a28",
+        "img1.pgm": "431d9399d98e47af324cc20207544159611f27f6dea1a07427a3b7e833e91c71",
+        "img2.pgm": "1a5f58c4715f4c65c5e5eaa15aae0a49d3815d62e0b885d92cda7bbd50a4da8a",
+        "img3.pgm": "c99b1709357e521d43e7451aa6b23df6d0915ad217f01b4ff0c05a457ed174da",
+        "img4.pgm": "5cd1c1649cae3d90397831448d7d46325ad3dbfa48d351d41471836786b5900c",
+        "img5.pgm": "fc7d3499a89f61afff53334a3e1c8145714bf174551c48405c443ddf178aa1d7",
+        "img6.pgm": "78dfcd0d03c68a033f9e0e2f9c21c9ce784d83957e36e70507dd1a32b807aea5"
+      }
+    },
+    {
+      "name": "leuven",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/leuven.tar.gz",
+      "sha256": "9b1ade6e64e5b27eee43463ff8f9ad2bd2f9c6911666e93de2634f3a5c0fe5dc",
+      "bytes": 6739237,
+      "condition": "illumination",
+      "files_sha256": {
+        "H1to2p": "ff26d194219dc26f56adfd3dcedf2dd0d38e790a53fda63a889cf88b96ac5168",
+        "H1to3p": "17a746802b4b165dca3605d7322f6e2723d57ce38df0dccb166105a67ecd46c5",
+        "H1to4p": "b7e5347f2a9e4aef94351a3a6142e6076c06dcb538a34f26a1fa4c430c477651",
+        "H1to5p": "9c311bfaf46fd1575eea64af6bc640f2b73caa47fd478aa917d5c24d8b65fd8a",
+        "H1to6p": "8adf8e4340ed76f8b5c78ab746b0cdcdf7526ca6e7b4150013ed8786ec502aa6",
+        "img1.ppm": "e56caad1390baccad0a8c062dbbb8e8cb9318af274cac991ae2e93b603eba502",
+        "img2.ppm": "cca7dc75cd1c434e24d26cd61c5daa81089d772c83b6efaa19d5273352a898b6",
+        "img3.ppm": "57417a1339680838db8cc73cab3e49ab9568c7869c33d62e352e97d91d93bbec",
+        "img4.ppm": "e3c8168345c19aad64e99acc418ad778ae469c6ec1b4312727cf41481e9ee1d0",
+        "img5.ppm": "4f10148590e2f13543b9e72a963981adc76ced33754eb5100291d99a5a535d94",
+        "img6.ppm": "83a226e54c354630eceeddfbac8b1de1343bfcee590b7fcbbe7decb7f55916f2"
+      }
+    },
+    {
+      "name": "ubc",
+      "url": "https://www.robots.ox.ac.uk/~vgg/research/affine/det_eval_files/ubc.tar.gz",
+      "sha256": "26ab4ac94c8d0b2ded66c3bfaeb3f12589ec33005e5b4d5fcba4639f5b6e5414",
+      "bytes": 3805484,
+      "condition": "jpeg_compression",
+      "files_sha256": {
+        "H1to2p": "bf284252c00be268976cb5f85fe21220797083556c200aa90e9f159123e71873",
+        "H1to3p": "bf284252c00be268976cb5f85fe21220797083556c200aa90e9f159123e71873",
+        "H1to4p": "bf284252c00be268976cb5f85fe21220797083556c200aa90e9f159123e71873",
+        "H1to5p": "bf284252c00be268976cb5f85fe21220797083556c200aa90e9f159123e71873",
+        "H1to6p": "bf284252c00be268976cb5f85fe21220797083556c200aa90e9f159123e71873",
+        "img1.ppm": "f8814d03ca5f7d967ad85059064dc7d089baedae970955f56095b122a69142b9",
+        "img2.ppm": "3e2899b1498aa1a0bc9f5f6bf14473e5d2d1f88bcf9e3021eea169d23941ee20",
+        "img3.ppm": "d9123586d9f3381c59a6f658b081906d843b6a18d40b88d729ad2d2b48a834d1",
+        "img4.ppm": "13bb6ebf2aed3f5b48b1491638d150be442e82fb25ea5b4ab2f238d15b6e01a5",
+        "img5.ppm": "1d6cf46dc36a9dfd8e24dd9ac0a2be1d13cdae34a151f06ee6d2b05e4753e2b4",
+        "img6.ppm": "736b3fb98925adbc27720912e8ddc2235cba9ab7fed7db1abc71eb522520f08b"
+      }
+    }
+  ],
+  "retrieved_date_local": "2026-10-09",
+  "retrieved_timezone": "Asia/Calcutta"
+}

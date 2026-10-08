@@ -1,0 +1,269 @@
+{
+  "scope": "Prepublication verification after octave-size, tiny-ratio, descriptor-test, and reporting repairs",
+  "date_local": "2026-10-09",
+  "timezone": "Asia/Calcutta",
+  "passed": true,
+  "julia_tests": {
+    "1.13.1": 132,
+    "1.10.0": 132
+  },
+  "julia_1_10_host_note": "Isolated official Julia 1.10.0 runtime uses the previously recorded local GNU_STACK flag repair for libopenlibm on this host; installed Julia is untouched.",
+  "python_harness_tests": {
+    "normal": 8,
+    "optimized": 8
+  },
+  "synthetic_reference_run_id": "cfdb2aa129b34227851296738f0ebbe7",
+  "synthetic_checks": 84,
+  "photographic_reference_run_id": "d287935e32204b6f9db0c1cd1bf82709",
+  "photographs_verified": 48,
+  "keypoints_and_descriptors_byte_identical_to_reference": true,
+  "matching_note": "The only matching change accepts unique exact neighbors when the ratio square underflows. For the recorded unit Float32 descriptors and ratio 0.8, both old and new predicates accept unique exact neighbors and reject exact ties; all nonzero-distance comparisons are unchanged.",
+  "source_sha256": {
+    "Project.toml": "d5d63b4c098d793f10b8465b140564af7cef4473261f663a49f878825a90a2bf",
+    "src/SIFTFeatures.jl": "20a512e1b7008279fc8305c33c0ce023b5a6d18c1264f718d531a466a95160f3",
+    "test/runtests.jl": "f4bb17ed1ac0ad42d9ac70b3e2beac95dee7e7372e751dd1775b0061ba548bec",
+    "test/fixtures.jl": "925036304b6c49c5871ba4b937ec567bfb40921fbfc4731596be7b3b2b725cd6"
+  },
+  "images": {
+    "bikes_1": {
+      "features": 3226,
+      "keypoint_csv_sha256": "5db5f17daea3fca5c4331e05d311b3115369cf75f5587e0fc203eb961bb79e6a",
+      "descriptor_f32_sha256": "d889fb374984a81f9d27d6341d211429b711940710ee36e82b93a8123b70c44c"
+    },
+    "bikes_2": {
+      "features": 1829,
+      "keypoint_csv_sha256": "d918b7df80d400acafd6ee84cb9d2d16bd8864ff470e874e9ebaa42fc49f8874",
+      "descriptor_f32_sha256": "06b24e935d4a29a95191039dbaff03cdc5f58dacc523bd43edd245a592834a1a"
+    },
+    "bikes_3": {
+      "features": 1251,
+      "keypoint_csv_sha256": "082988418c2a820ab63fd3a028aaa471d2d0fb642e0cd63451f4b5799379bd10",
+      "descriptor_f32_sha256": "95756c25ba853ec8baf2e5f373752338ea3908ffdd30966d731b827d1993e7b5"
+    },
+    "bikes_4": {
+      "features": 727,
+      "keypoint_csv_sha256": "864414ccde20304450966321344bb84c8080acf2b302b0636ea0c84215b9630d",
+      "descriptor_f32_sha256": "bed93dcd2d2727098880f95408399374e6d1b129be545ec89dee40bcd7a5dd26"
+    },
+    "bikes_5": {
+      "features": 517,
+      "keypoint_csv_sha256": "646af6a129922735ec7d00b3155d7b3234f787d2375ab4afe23e632e1d3ac428",
+      "descriptor_f32_sha256": "6b9c13a076da353593e375f048bc224624fe5e3fb290a70080affbb9b7ac9dea"
+    },
+    "bikes_6": {
+      "features": 355,
+      "keypoint_csv_sha256": "5e0288cb231447f614ead20de9851fa2c156f1dcbc735609f75e89fed468387c",
+      "descriptor_f32_sha256": "662961b8e386bbaccc4588ca96fa040bd40abcc0d8c36989f75de756f717026e"
+    },
+    "trees_1": {
+      "features": 12478,
+      "keypoint_csv_sha256": "e10247dce8dd6d12657094c5fc9cf666726f3fca4d28bdbb5104dc3410e725cd",
+      "descriptor_f32_sha256": "a377244825fb0b418d8c444eb95b838443b68ea7154b8d8c11683b6f522db5a6"
+    },
+    "trees_2": {
+      "features": 10729,
+      "keypoint_csv_sha256": "e75e7512704cb3f2f715bca7eddd971a4268ab860ca0d168a78e6fe304351735",
+      "descriptor_f32_sha256": "6777730025d1a119bcd3e7ad7f535578cd739eedad484abfb3ce89f9a8bc53e5"
+    },
+    "trees_3": {
+      "features": 15233,
+      "keypoint_csv_sha256": "018a90112d63d4cf19ee1dd26ebaa735fb5eb23b281f76910a23407f669007ee",
+      "descriptor_f32_sha256": "00e16f7decf74c6c54510fe1752130bbc4b87ad8627a7a1bd54f42fd74973e34"
+    },
+    "trees_4": {
+      "features": 10266,
+      "keypoint_csv_sha256": "962048a1f2365425ffad215055e00933652419c6781d5cb6d303736ae21a5665",
+      "descriptor_f32_sha256": "e27187e3cee12f5189c37098fe9987e40c26cbc145d3bb97fa63e5627015918b"
+    },
+    "trees_5": {
+      "features": 5109,
+      "keypoint_csv_sha256": "f3ab8334efd62b623ff7eb2f60481732166483092505f16bd3bdfda8abd27722",
+      "descriptor_f32_sha256": "6adaa15685363a907de035d497eec310e40f59bbd96d73cc163ddd84864f23a7"
+    },
+    "trees_6": {
+      "features": 3008,
+      "keypoint_csv_sha256": "e121aea10dffa554c315eb5e656a03910bf11dc43c5d770ce9b7a82749516a35",
+      "descriptor_f32_sha256": "d0bd3dba340890af92fef02f1220888d2bb75fe59e9d73f88b46aedebd5d9ea8"
+    },
+    "graf_1": {
+      "features": 2731,
+      "keypoint_csv_sha256": "1da6923f8e421cf10e582e216893c859d3c5c9f6fc62b3c0d9321066de74bb5d",
+      "descriptor_f32_sha256": "a1da0e8d77ee50d4e646c641834659d24ff960ec85bd084de94e364b3ab496c3"
+    },
+    "graf_2": {
+      "features": 3105,
+      "keypoint_csv_sha256": "7ce067afe267f698a96a6030c425deb429ecce6d4f3ab522ec545e5847326420",
+      "descriptor_f32_sha256": "d3e7d8283b9a9794ad3e50c7fa8cf2503185def6c7b2cbd2f5f2fbb6f0c82c2c"
+    },
+    "graf_3": {
+      "features": 3475,
+      "keypoint_csv_sha256": "a68d862a355786d974d233597aaf8d7417772e1bf75239515eca6a6ebc690870",
+      "descriptor_f32_sha256": "8587fa3a4bcf5e6a7552334889818af0b2b661084d5b18b68e310442f4a4c586"
+    },
+    "graf_4": {
+      "features": 3649,
+      "keypoint_csv_sha256": "a23d7b47648f7ee5f44515a0804756db3281d478256d7cfc367a1cb0cc770b27",
+      "descriptor_f32_sha256": "b5ac8ce454e237ead79963437a6a8916571d741e6d6525e9e04acbdea0406dde"
+    },
+    "graf_5": {
+      "features": 3895,
+      "keypoint_csv_sha256": "c04d46f9c0cddaac0c68f3f582ca4f0bbd16d51b2ed63f7707e28306653637ed",
+      "descriptor_f32_sha256": "9f8ae520690a4f2fa214df1fd0f6e7953c8dad0a43ec363e019e356b1e4fe534"
+    },
+    "graf_6": {
+      "features": 4571,
+      "keypoint_csv_sha256": "81d57979f57d4393d3b2b69808d1e749578c9d0a185ba5c6a703155e56de7f6c",
+      "descriptor_f32_sha256": "b137bcc00be6079116be99393b47f2b8973a191b58453ab4bf89777097aa13af"
+    },
+    "wall_1": {
+      "features": 9173,
+      "keypoint_csv_sha256": "2e4248b9121261e49255957f700fc920c7d6f3cab6cd1bac5fa264eac2cff4ff",
+      "descriptor_f32_sha256": "23e2bfbfa1d747ee675e029ef348ba97502815847b5fe8bb4cf891c9e9fbc7dc"
+    },
+    "wall_2": {
+      "features": 10394,
+      "keypoint_csv_sha256": "45bfd5aeb7dd870558f78760dd5037e5f60b7d2dbd8051006d53648e0bfc8048",
+      "descriptor_f32_sha256": "ed098c834d8355b42ffb8a0b5fb31ed1d8789e9c8129a10d85d79717c2c3cff7"
+    },
+    "wall_3": {
+      "features": 10232,
+      "keypoint_csv_sha256": "6d7387dae13c0c84054337bc71ec7c60f560d7c919204dc648ca26db31654bb2",
+      "descriptor_f32_sha256": "6a55d2cfa57420c44e66b8a78444ae33af205d64ab978632fb58045a7224690a"
+    },
+    "wall_4": {
+      "features": 10029,
+      "keypoint_csv_sha256": "faced31e331aa2b32cf7b12f769b5bedb67af3929fe1a5580319cd3a2c032c9c",
+      "descriptor_f32_sha256": "3a9ad4138252b1436791fa0f19ffa53d4d3a22f6d53787f42d17fe499337bfa1"
+    },
+    "wall_5": {
+      "features": 10404,
+      "keypoint_csv_sha256": "c3427dd5f686110b044767e0295ae3f921fc81a6b3b4e1b6689a1d0081d8f6ca",
+      "descriptor_f32_sha256": "384fb5c90a356f296cdddad7cc6aa9b54b109a4fb4f9e4088521f385b0074b01"
+    },
+    "wall_6": {
+      "features": 10119,
+      "keypoint_csv_sha256": "dd7f1f9b4cb69dbdf1b889275c918bc6e5574ed80a80dc2a2ba5e9486beffa68",
+      "descriptor_f32_sha256": "c53c37587cb2458006fa8d54f18ec39b764640518f28ffd5aea08758aa91a5a9"
+    },
+    "bark_1": {
+      "features": 3757,
+      "keypoint_csv_sha256": "e94b6b2ab157c8f59c7192f846ec57051d741fa91d6fd7c22be9611dad1530e5",
+      "descriptor_f32_sha256": "294617e881a8d49f11cb198324f5980f35b11fe99d84a155ba326fc908b41730"
+    },
+    "bark_2": {
+      "features": 3121,
+      "keypoint_csv_sha256": "f136ed20fd371c81387967adbed2fb6d8eb228eadab622194bb0eed303be3c8a",
+      "descriptor_f32_sha256": "18649159154747b5bd522f3ec5b2e0f90e592b4bf4b9f686ccc12ea4384a142a"
+    },
+    "bark_3": {
+      "features": 4158,
+      "keypoint_csv_sha256": "0339eec960bcf1bc3c851245252789e2612d33c0d222c2b3c5bb19f0ca73d6fe",
+      "descriptor_f32_sha256": "58563794c2246de9e1d7d8b1ffefdf8fd116cb86cd3d0b93db1c6dadb7f4e0de"
+    },
+    "bark_4": {
+      "features": 4590,
+      "keypoint_csv_sha256": "d3efce5ea80d21dfbac7e0d08332a86c020cb43077dd6f8a957e06f7bf1b660f",
+      "descriptor_f32_sha256": "9db4b8024d35c04e0299baa6ca2b9a2dda47a99d4caa78917543e514c32d7681"
+    },
+    "bark_5": {
+      "features": 4202,
+      "keypoint_csv_sha256": "c4aec2af493693f423b4b8c6d135e20ae88152d9275ec35536cc9f5933d4225b",
+      "descriptor_f32_sha256": "4947b5841e6e96e78ceeb5e4ae8a37bd7509e3b6842b27de165a4808ee627912"
+    },
+    "bark_6": {
+      "features": 4344,
+      "keypoint_csv_sha256": "9c3e3197fc15bda483299e98c11408bd69d9cc98144ee0f77c848a9659013625",
+      "descriptor_f32_sha256": "c85530b233afb92e8072b86d078bcae635385246575786dee8204031e8480970"
+    },
+    "boat_1": {
+      "features": 8357,
+      "keypoint_csv_sha256": "cd379187c92128f0c15275ef13219412ef5db3a1a030933a899d67d7d170335b",
+      "descriptor_f32_sha256": "ea1671986262f2539ce2be7518b507b998b0287b7aa33ea96c42bea0bae0ce58"
+    },
+    "boat_2": {
+      "features": 7951,
+      "keypoint_csv_sha256": "9abb0ef712811e0c94ecf88635ba180a824da2fbb2aae329d1d20e34703786b2",
+      "descriptor_f32_sha256": "d71492e50ec3f53bf13598e08df55fbb0ff6521ab20b841b484d0301dddd9d30"
+    },
+    "boat_3": {
+      "features": 6145,
+      "keypoint_csv_sha256": "a777fd00f37b31bc42eb4ff27049fe39177095988ad92012660f28194eb09196",
+      "descriptor_f32_sha256": "ca16fe58f6aad028bd6022dcf1bf1e10841fe8a9796afa60fe8fdfa7e5f236f7"
+    },
+    "boat_4": {
+      "features": 4915,
+      "keypoint_csv_sha256": "baee2c001860c67a88416fea64251c5773348e03dd4ebf23c60ce08c2edf31f2",
+      "descriptor_f32_sha256": "99f5750f9225889a05a56ce4331324034700820b4ceee787bbef50ec5daf9ea7"
+    },
+    "boat_5": {
+      "features": 4673,
+      "keypoint_csv_sha256": "ce371347c88b48b17d99702101830a931eefbb34eef494294aa77550f825674d",
+      "descriptor_f32_sha256": "2e47c3cfd6cb37c960864612ada05195544e28e1759891630f370d99b53d350a"
+    },
+    "boat_6": {
+      "features": 3897,
+      "keypoint_csv_sha256": "a50f103546a26a5017cc85c6f0c2040165feedcb60a93faad90607d69cdb654f",
+      "descriptor_f32_sha256": "77018fc1c1450a0723098faf3a397f5f380640a95105db157c400ca33653d3a8"
+    },
+    "leuven_1": {
+      "features": 2313,
+      "keypoint_csv_sha256": "8ca62167bf5ff4b121d55840c83f8815bcd7986d5925f1c4d198768c6aff822d",
+      "descriptor_f32_sha256": "70aab98fe7f29883a4baa73b2bb7ef9acee0019ee0c46b889c5050a993e6fe0a"
+    },
+    "leuven_2": {
+      "features": 1927,
+      "keypoint_csv_sha256": "42fb26566c0f5706af607aaaa8afbbdbea77eb18c22145743ce3347f8d4a2445",
+      "descriptor_f32_sha256": "09f55e5df2bc30313d8537fcf632636ee684c7c4ba638001c746cd48410569be"
+    },
+    "leuven_3": {
+      "features": 1697,
+      "keypoint_csv_sha256": "6429bc04a941fd87559e31cce65a4a5ac0968d303ce62261565c22c836f6a322",
+      "descriptor_f32_sha256": "89f063934f9e215624912ccc0420c649279b2a95e5a95f10bce4b8ee86f1bd79"
+    },
+    "leuven_4": {
+      "features": 1458,
+      "keypoint_csv_sha256": "5a97cc9dcbab234056285b6db414344fa1330073d27af15aa545eff8dde84713",
+      "descriptor_f32_sha256": "c451bf89764674ea6e626778b72d18d314c80b5dc3b5c975bf9358ac87062cb3"
+    },
+    "leuven_5": {
+      "features": 1329,
+      "keypoint_csv_sha256": "c21fa5086c9135982444cdada51c228a2a89f8006c0894163178ae37057d2dc8",
+      "descriptor_f32_sha256": "e9119b316b40d89022fc5c2e8d10a4afeaa68c3a0e1b84a87c1a7d3e6eb9b850"
+    },
+    "leuven_6": {
+      "features": 1085,
+      "keypoint_csv_sha256": "ba7b919f8bdc70e0641cad07c13ec4ef31a43613656c4749948a115c648879d1",
+      "descriptor_f32_sha256": "5f221d25ce30d1344d09bdbb5cbb13be1795fb936366fa9aba2146e69b1263ca"
+    },
+    "ubc_1": {
+      "features": 5036,
+      "keypoint_csv_sha256": "a36733e1a11bdd49332909737ea3e8ac4da53b5349344e738fca978a7b82bce5",
+      "descriptor_f32_sha256": "26767e97702437baf36d036f8274ef3d2c6726729f33e6276008f50a3086fffe"
+    },
+    "ubc_2": {
+      "features": 6071,
+      "keypoint_csv_sha256": "49e00e7466d04022c99f7ae7a6263480c3710ac4edfd81db723023f03382bceb",
+      "descriptor_f32_sha256": "88cfd5140b18c14bd6bf68538cd7c42b4e46f21e6afe9b884c856fef9e4d505e"
+    },
+    "ubc_3": {
+      "features": 7221,
+      "keypoint_csv_sha256": "21f0f65f6669f19e26d295e57ed1dc660a24efd456889ca9aa18f0d0ab3c6f81",
+      "descriptor_f32_sha256": "44dc2b597fb7fb50655978123679568acefb582c63951f44ccd2408d7b0fa45f"
+    },
+    "ubc_4": {
+      "features": 6961,
+      "keypoint_csv_sha256": "3572d5a939e4a95d7844d1d95d0b3e36e67c7d886e667720abf44e33680844af",
+      "descriptor_f32_sha256": "812121e6b7d57ffc58f9181dfb9df0343d18f6e7ee6b99209c6da7f4848262fb"
+    },
+    "ubc_5": {
+      "features": 4972,
+      "keypoint_csv_sha256": "836e62798657446ec614d80edf8c1f89c7eb759a1faa69e2a26025406cc71763",
+      "descriptor_f32_sha256": "ec084854d80cf232cbc626fce4ba78b9654d7375a5be06bb2b7996d4ceda6279"
+    },
+    "ubc_6": {
+      "features": 2876,
+      "keypoint_csv_sha256": "81f4eefb4f30840d559fdc3238d9c66860f41443cc9f92915530928252cd6f3a",
+      "descriptor_f32_sha256": "9350816422c8dd4b8faf4408fb7d169b334af562d056b31702dee7c08aaa3771"
+    }
+  }
+}

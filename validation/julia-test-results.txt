@@ -1,0 +1,11 @@
+Julia 1.13.1; Pkg.test(julia_args=["--check-bounds=yes"])
+
+Test Summary:         | Pass  Total  Time
+Inputs and parameters |   40     40  2.4s
+Test Summary:                 | Pass  Total  Time
+Scale space and interpolation |   27     27  1.1s
+Test Summary:                                     | Pass  Total  Time
+Detection, descriptors, and geometric consistency |   21     21  2.1s
+Test Summary:                | Pass  Total  Time
+L2 ratio and mutual matching |   10     10  0.9s
+     Testing SIFTFeatures tests passed

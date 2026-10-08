@@ -1,0 +1,12 @@
+Manifest.toml
+*.ji
+__pycache__/
+.venv/
+validation-data/
+validation-work/
+# Local review history and diagnostic plots retained outside the publication.
+audit/
+validation/REAL_WORLD_REPORT.md
+validation/real-world-figures/
+validation/real-world-resized-figures/
+validation/real-world-julia-tests.txt

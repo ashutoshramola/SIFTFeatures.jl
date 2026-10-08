@@ -1,0 +1,29 @@
+Prepublication Julia tests: 2026-10-09
+Bounds checking enabled on both runtimes.
+Isolated official Julia 1.10.0 runtime uses the previously recorded local GNU_STACK flag repair for libopenlibm on this host; installed Julia is untouched.
+
+Julia 1.13.1
+Test Summary:         | Pass  Total  Time
+Inputs and parameters |   65     65  2.8s
+Test Summary:                                   | Pass  Total  Time
+Independent descriptor layout and interpolation |    7      7  1.2s
+Test Summary:                 | Pass  Total  Time
+Scale space and interpolation |   27     27  1.3s
+Test Summary:                                     | Pass  Total  Time
+Detection, descriptors, and geometric consistency |   21     21  2.3s
+Test Summary:                | Pass  Total  Time
+L2 ratio and mutual matching |   12     12  1.2s
+     Testing SIFTFeatures tests passed
+
+Julia 1.10.0
+Test Summary:         | Pass  Total  Time
+Inputs and parameters |   65     65  0.8s
+Test Summary:                                   | Pass  Total  Time
+Independent descriptor layout and interpolation |    7      7  0.3s
+Test Summary:                 | Pass  Total  Time
+Scale space and interpolation |   27     27  0.9s
+Test Summary:                                     | Pass  Total  Time
+Detection, descriptors, and geometric consistency |   21     21  1.8s
+Test Summary:                | Pass  Total  Time
+L2 ratio and mutual matching |   12     12  1.4s
+     Testing SIFTFeatures tests passed

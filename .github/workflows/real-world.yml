@@ -1,0 +1,28 @@
+name: Real photographs
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  oxford:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: julia-actions/cache@v2
+      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+      - run: python -m pip install -r validation/requirements.txt
+      - run: python -m unittest discover -s validation -p 'test_*.py'
+      - run: python -O -m unittest discover -s validation -p 'test_*.py'
+      - run: python validation/download_oxford.py --data-dir validation-data
+      - run: python -O validation/real_world.py --data-dir validation-data --work-dir validation-work --max-side 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-photograph-results
+          path: validation/real-world-results.json
