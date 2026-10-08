@@ -9,6 +9,70 @@ comparison tests cover synthetic images and 48 photographs from eight Oxford
 benchmark sequences. See [validation results](docs/validation.md) and
 [implementation notes](docs/implementation.md).
 
+## Comparative benchmarks
+
+### Detection and descriptor timing
+
+Median of **five measured runs after one warmup per image**, using the first
+original-resolution photograph from each Oxford sequence. Intel Core i7-11800H;
+Julia 1.13.1 and OpenCV 4.10.0; one thread each; unlimited features.
+Measured 2026-10-09.
+
+| Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
+|---|---:|---:|---:|---:|---:|
+| bikes_1 | 1000×700 | 3,226 / 3,225 | 1,247.5 | 224.7 | 5.55× |
+| trees_1 | 1000×700 | 12,478 / 12,477 | 2,417.9 | 486.4 | 4.97× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 941.1 | 167.6 | 5.62× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 1,917.8 | 361.6 | 5.30× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 866.7 | 170.6 | 5.08× |
+| boat_1 | 850×680 | 8,357 / 8,359 | 1,578.9 | 305.3 | 5.17× |
+| leuven_1 | 900×600 | 2,313 / 2,314 | 976.3 | 153.1 | 6.38× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 1,239.8 | 230.4 | 5.38× |
+
+**Julia currently takes 4.97–6.38× as long as OpenCV on these eight inputs.**
+These are timings for the current reference implementation on this machine.
+Decoding, compilation, file interchange, warmups, and forced GC are excluded;
+GC triggered inside a measured call is included. Parameters match, with OpenCV
+`enable_precise_upscale=True`. System load and CPU frequency were not controlled.
+
+¹ OpenCV `detectAndCompute` plus transpose-copy to `128×N` and unit-L2
+normalization, matching Julia's output layout and normalization. The descriptor
+values still differ: OpenCV quantizes, while Julia returns unquantized Float32.
+[Raw samples and allocation values](benchmark/comparison-results.json),
+[method and reproduction](benchmark/comparison.md), and the earlier
+[48-photo timing observations](benchmark/real-world-baseline.md) are available.
+
+### Accuracy and matching
+
+All **48 original-resolution photographs and 40 image pairs** from eight Oxford
+sequences, including blur, viewpoint, zoom/rotation, illumination, and JPEG
+compression. Both libraries use a strict 0.8 ratio and mutual nearest neighbors.
+Correct matches are scored against the supplied homographies, within 3 pixels.
+
+| Metric | SIFTFeatures.jl | OpenCV 4.10 |
+|---|---:|---:|
+| Detected feature instances | 249,561 | 249,572 |
+| Descriptor matches across 40 pairs | 38,554 | 38,572 |
+| Correct matches within 3 px | 34,989 | 34,995 |
+| Pooled match precision | 90.753% | 90.726% |
+| Accurate fitted homographies² | 33 / 40 | 32 / 40 |
+
+| Numerical agreement with OpenCV | Measured value |
+|---|---:|
+| Geometry-paired feature instances | 249,484 (≥99.9647% overall coverage) |
+| Position difference: worst image's p95 | 0.000430 px |
+| Relative scale difference: worst image's p95 | 2.10241e-05 |
+| Orientation difference: worst image's p95 | 0.002935° |
+| Descriptor cosine: lowest per-image median | 0.99998057 (1 means identical directions) |
+
+² Mean fitted-homography error below 3 px at five fixed image probes, evaluated
+against independent reference geometry. Severe viewpoint pairs still fail in
+both implementations; these results describe a small planar-scene benchmark.
+[Full validation, thresholds, and difficult cases](docs/validation.md).
+The current source also passes 132 Julia checks on both Julia 1.10.0 and 1.13.1;
+[prepublication checks](validation/prepublication-results.json) confirm unchanged
+keypoint and descriptor outputs for all 48 photographs after the final repairs.
+
 ## Installation
 
 Requires Julia 1.10 or newer. From a local checkout:
@@ -18,7 +82,7 @@ using Pkg
 Pkg.develop(path="/path/to/SIFTFeatures.jl")
 ```
 
-Once the repository is published, install the unregistered package by URL:
+Install the unregistered package from GitHub:
 
 ```julia
 using Pkg

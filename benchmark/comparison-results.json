@@ -1,0 +1,794 @@
+{
+  "suite": "Repeated Julia/OpenCV timing comparison",
+  "run_id": "cdf9c1d194ce44a5a3a653bef0fd81bf",
+  "started_utc": "2026-10-08T19:56:15.198962+00:00",
+  "state": "complete",
+  "passed": true,
+  "python": "3.14.4",
+  "python_optimization": 1,
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "source_sha256": {
+    "Project.toml": "d5d63b4c098d793f10b8465b140564af7cef4473261f663a49f878825a90a2bf",
+    "src/SIFTFeatures.jl": "20a512e1b7008279fc8305c33c0ce023b5a6d18c1264f718d531a466a95160f3",
+    "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
+    "validation/common.py": "e66660563943b3efc2fc2d449209bdd66965876d51318816bc45b166058b2734",
+    "validation/download_oxford.py": "499e912c9298013b1fe8cdfda7002d0c0c9437ded3e384ff7a7f601ac9eb2fb1",
+    "validation/real_world.py": "7427347939fdf047730a4cf172dc201d29f42aec2b57fb95feb2f43e6f2b1338",
+    "validation/test_validation.py": "eefc6cf13db257bb0ce9e05586983badef7370f098d122f5d701dedf621cb734",
+    "validation/validate.py": "3bc73cdfd1b7f38993542a269e38b689151285b2bd48e5d76db7c3b5424fd949",
+    "validation/export.jl": "d7c168019662605d1fb20f45775e1f682b89992c912144bc8bf76583b13feed1",
+    "benchmark/compare.py": "29a60f9aa8a95d1be5651a963c01f3a60d19cb07ec92ede0a8f5363e208ec98a",
+    "benchmark/compare.jl": "8296788e795bb184c497904f2c1bc60348a91b2985b8f372c26d4f34ac6966dc"
+  },
+  "checks": [
+    {
+      "name": "bikes_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bikes_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bikes_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bikes_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trees_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trees_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trees_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "trees_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "graf_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "graf_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "graf_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "graf_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wall_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wall_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wall_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wall_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bark_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bark_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bark_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "bark_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "boat_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "boat_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "boat_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "boat_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "leuven_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "leuven_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "leuven_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "leuven_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ubc_1: Julia sample count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ubc_1: deterministic OpenCV counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ubc_1: deterministic Julia counts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ubc_1: comparable feature counts",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "failures": [],
+  "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+  "opencv": "4.10.0",
+  "numpy": "2.3.5",
+  "julia": "julia version 1.13.1",
+  "dataset_manifest_sha256": "64588c8fb619acdc37b3e20fa68323305ae7ece94fe7278075c170835e10193d",
+  "configuration": {
+    "samples": 5,
+    "warmups_per_image": 1,
+    "image_selection": "img1 from each of eight sequences, original resolution",
+    "julia_threads": 1,
+    "opencv_threads": 1,
+    "octave_layers": 3,
+    "contrast_threshold": 0.04,
+    "edge_threshold": 10,
+    "sigma": 1.6,
+    "nfeatures": 0,
+    "first_octave": -1,
+    "enable_precise_upscale": true
+  },
+  "timing_scope": {
+    "julia": "sift(UInt8 image): detection and unquantized unit 128xN Float32 descriptors",
+    "opencv": "detectAndCompute: detection and quantized Float32 descriptors",
+    "opencv_unit_descriptors": "detectAndCompute plus transpose-copy to 128xN and unit-L2 normalization",
+    "excluded": "image decoding, file interchange, warmups, forced GC, output checks, and report writing",
+    "allocation": "Julia total allocated bytes per call; not peak memory; OpenCV memory unmeasured",
+    "order": "Julia image blocks first, OpenCV image blocks second; timing is machine-specific",
+    "gc": "forced GC precedes each sample; GC during the timed call is included"
+  },
+  "images": {
+    "bikes_1": {
+      "shape": [
+        700,
+        1000
+      ],
+      "source_sha256": "8c60379afcc2e9de6f1faa8a4edd02200f351efcef2cc4e1f5f728ecb58a427f",
+      "input_u8_sha256": "e49712d233af981d706b0d76cf312838f7d1492270ea2e31c312ed1c0c8d2d96",
+      "julia_features": 3226,
+      "opencv_features": 3225,
+      "julia_seconds": {
+        "median": 1.247496515,
+        "minimum": 1.2163012,
+        "maximum": 1.314778048,
+        "samples": [
+          1.314778048,
+          1.247496515,
+          1.2163012,
+          1.223343724,
+          1.304477528
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 551326488,
+        "minimum": 551326488,
+        "maximum": 551326488,
+        "samples": [
+          551326488,
+          551326488,
+          551326488,
+          551326488,
+          551326488
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.156859901,
+        "minimum": 0.106368055,
+        "maximum": 0.189528521,
+        "samples": [
+          0.189528521,
+          0.157936362,
+          0.122336551,
+          0.106368055,
+          0.156859901
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.22221530800015898,
+        "minimum": 0.2156750620015373,
+        "maximum": 0.23287575200083666,
+        "samples": [
+          0.22221530800015898,
+          0.2156750620015373,
+          0.2214585210022051,
+          0.22882862899859902,
+          0.23287575200083666
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.22466950200032443,
+        "minimum": 0.21761872100250912,
+        "maximum": 0.23535493799863616,
+        "samples": [
+          0.22416471399992588,
+          0.21761872100250912,
+          0.22466950200032443,
+          0.23064914399947156,
+          0.23535493799863616
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.552585036656192
+    },
+    "trees_1": {
+      "shape": [
+        700,
+        1000
+      ],
+      "source_sha256": "82536bf2be6e5ca83350680afb2104610836e8769ef284b7f1d2dfa7d88287db",
+      "input_u8_sha256": "83adfdf03a123a4e4199ba07deb336b030385e873ae522e618441b0247d2fa66",
+      "julia_features": 12478,
+      "opencv_features": 12477,
+      "julia_seconds": {
+        "median": 2.41787285,
+        "minimum": 2.306411776,
+        "maximum": 2.466626733,
+        "samples": [
+          2.466626733,
+          2.306411776,
+          2.41787285,
+          2.346627002,
+          2.46302713
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 584977376,
+        "minimum": 584977376,
+        "maximum": 584977376,
+        "samples": [
+          584977376,
+          584977376,
+          584977376,
+          584977376,
+          584977376
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.121228666,
+        "minimum": 0.071077797,
+        "maximum": 0.204043179,
+        "samples": [
+          0.079853842,
+          0.071077797,
+          0.18205696,
+          0.121228666,
+          0.204043179
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.4740556589968037,
+        "minimum": 0.44929473500087624,
+        "maximum": 0.48566044800099917,
+        "samples": [
+          0.4740556589968037,
+          0.4829553620002116,
+          0.48566044800099917,
+          0.44929473500087624,
+          0.473226482001337
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.48638290500093717,
+        "minimum": 0.46241897700019763,
+        "maximum": 0.4953815939988999,
+        "samples": [
+          0.48566022099839756,
+          0.49533973800134845,
+          0.4953815939988999,
+          0.46241897700019763,
+          0.48638290500093717
+        ]
+      },
+      "julia_over_opencv_unit_time": 4.971130410093959
+    },
+    "graf_1": {
+      "shape": [
+        640,
+        800
+      ],
+      "source_sha256": "8d53092ffa5b27f5138ec458302f35e7c72a9f35d1f94078ca35944c4b3626dd",
+      "input_u8_sha256": "2080bd79dad10f25300182c03f41df7a352554a139032ac29e9e2e813afa52b2",
+      "julia_features": 2731,
+      "opencv_features": 2731,
+      "julia_seconds": {
+        "median": 0.941111554,
+        "minimum": 0.931855911,
+        "maximum": 1.011900672,
+        "samples": [
+          0.946974977,
+          1.011900672,
+          0.933257263,
+          0.941111554,
+          0.931855911
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 407156888,
+        "minimum": 407156888,
+        "maximum": 407156888,
+        "samples": [
+          407156888,
+          407156888,
+          407156888,
+          407156888,
+          407156888
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.054745559,
+        "minimum": 0.04526776,
+        "maximum": 0.123420529,
+        "samples": [
+          0.056448051,
+          0.123420529,
+          0.053160249,
+          0.04526776,
+          0.054745559
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.1661898439997458,
+        "minimum": 0.15959043399925577,
+        "maximum": 0.19838388499920256,
+        "samples": [
+          0.19838388499920256,
+          0.1661898439997458,
+          0.19770881399745122,
+          0.16331523299959372,
+          0.15959043399925577
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.16755182000269997,
+        "minimum": 0.1613727129988547,
+        "maximum": 0.19996048100074404,
+        "samples": [
+          0.19996048100074404,
+          0.16755182000269997,
+          0.1990981959970668,
+          0.16463949799799593,
+          0.1613727129988547
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.616838742693662
+    },
+    "wall_1": {
+      "shape": [
+        700,
+        1000
+      ],
+      "source_sha256": "96140c5a649f6cfaf002fc06fdd97f22e7eec322d19aa522d9f198e90258419c",
+      "input_u8_sha256": "65a3198b7aa98c2d310afd9308f3ec983f26a290d571a33c58fbd2e163a396cf",
+      "julia_features": 9173,
+      "opencv_features": 9175,
+      "julia_seconds": {
+        "median": 1.91778576,
+        "minimum": 1.838440097,
+        "maximum": 2.06761511,
+        "samples": [
+          1.91778576,
+          2.06761511,
+          1.953333729,
+          1.840743333,
+          1.838440097
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 572885152,
+        "minimum": 572885152,
+        "maximum": 572885152,
+        "samples": [
+          572885152,
+          572885152,
+          572885152,
+          572885152,
+          572885152
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.107446061,
+        "minimum": 0.103714755,
+        "maximum": 0.117462174,
+        "samples": [
+          0.103714755,
+          0.117462174,
+          0.103914651,
+          0.107446061,
+          0.111615669
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.3529532989996369,
+        "minimum": 0.3468022099987138,
+        "maximum": 0.3739614749974862,
+        "samples": [
+          0.3739614749974862,
+          0.3579423400005908,
+          0.3509475079990807,
+          0.3529532989996369,
+          0.3468022099987138
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.36157976100003,
+        "minimum": 0.35301930399873527,
+        "maximum": 0.3813884669980325,
+        "samples": [
+          0.3813884669980325,
+          0.3656586110009812,
+          0.36157976100003,
+          0.3598778419982409,
+          0.35301930399873527
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.3039079253106785
+    },
+    "bark_1": {
+      "shape": [
+        512,
+        765
+      ],
+      "source_sha256": "cf8de954348fc1682ce80e611911e3dded9d4cc638b9ebaaea692fca58b332ef",
+      "input_u8_sha256": "0cb7dae9bf1bf70732531110487758946a48158c96743801ddf4026135703bf5",
+      "julia_features": 3757,
+      "opencv_features": 3758,
+      "julia_seconds": {
+        "median": 0.866726743,
+        "minimum": 0.860020605,
+        "maximum": 0.880820055,
+        "samples": [
+          0.860020605,
+          0.865892228,
+          0.866726743,
+          0.868066522,
+          0.880820055
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 319631392,
+        "minimum": 319631392,
+        "maximum": 319631392,
+        "samples": [
+          319631392,
+          319631392,
+          319631392,
+          319631392,
+          319631392
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.050985634,
+        "minimum": 0.048356657,
+        "maximum": 0.057168273,
+        "samples": [
+          0.04877489,
+          0.054373443,
+          0.048356657,
+          0.057168273,
+          0.050985634
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.16790241099806735,
+        "minimum": 0.1614939589999267,
+        "maximum": 0.17549954599962803,
+        "samples": [
+          0.1614939589999267,
+          0.16964084299979731,
+          0.1639744950007298,
+          0.17549954599962803,
+          0.16790241099806735
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.1705538259993773,
+        "minimum": 0.16453337100028875,
+        "maximum": 0.17848544600201421,
+        "samples": [
+          0.16453337100028875,
+          0.17258353600118426,
+          0.16627649500151165,
+          0.17848544600201421,
+          0.1705538259993773
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.081836997331062
+    },
+    "boat_1": {
+      "shape": [
+        680,
+        850
+      ],
+      "source_sha256": "431d9399d98e47af324cc20207544159611f27f6dea1a07427a3b7e833e91c71",
+      "input_u8_sha256": "14f2132f182d41a69358aeb6f710ee5c168c199eb3c94dceda24c983e0078242",
+      "julia_features": 8357,
+      "opencv_features": 8359,
+      "julia_seconds": {
+        "median": 1.578920613,
+        "minimum": 1.516804415,
+        "maximum": 1.851857677,
+        "samples": [
+          1.516804415,
+          1.522929015,
+          1.578920613,
+          1.645299749,
+          1.851857677
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 479209728,
+        "minimum": 479209728,
+        "maximum": 479209728,
+        "samples": [
+          479209728,
+          479209728,
+          479209728,
+          479209728,
+          479209728
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.074790142,
+        "minimum": 0.05338996,
+        "maximum": 0.100056664,
+        "samples": [
+          0.100056664,
+          0.068169964,
+          0.05338996,
+          0.074790142,
+          0.077009023
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.29780977799964603,
+        "minimum": 0.2951082830004452,
+        "maximum": 0.3061466309991374,
+        "samples": [
+          0.3038376900003641,
+          0.3061466309991374,
+          0.2951082830004452,
+          0.29780977799964603,
+          0.2961977660015691
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.30525451799985603,
+        "minimum": 0.30121314200005145,
+        "maximum": 0.31242379900140804,
+        "samples": [
+          0.31165675000011106,
+          0.31242379900140804,
+          0.30121314200005145,
+          0.30525451799985603,
+          0.302972019999288
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.1724725430623915
+    },
+    "leuven_1": {
+      "shape": [
+        600,
+        900
+      ],
+      "source_sha256": "e56caad1390baccad0a8c062dbbb8e8cb9318af274cac991ae2e93b603eba502",
+      "input_u8_sha256": "68b073cebbf02e29caabc340691ff426507ae56c91da34b63cc050f78b0e6cd0",
+      "julia_features": 2313,
+      "opencv_features": 2314,
+      "julia_seconds": {
+        "median": 0.976256783,
+        "minimum": 0.96164339,
+        "maximum": 0.992070583,
+        "samples": [
+          0.976256783,
+          0.9686549,
+          0.992070583,
+          0.96164339,
+          0.979766485
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 425081728,
+        "minimum": 425081728,
+        "maximum": 425081728,
+        "samples": [
+          425081728,
+          425081728,
+          425081728,
+          425081728,
+          425081728
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.069801299,
+        "minimum": 0.060042052,
+        "maximum": 0.08389522,
+        "samples": [
+          0.07190092,
+          0.063282836,
+          0.069801299,
+          0.060042052,
+          0.08389522
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.1520520830017631,
+        "minimum": 0.1490659089977271,
+        "maximum": 0.15602248499999405,
+        "samples": [
+          0.1520520830017631,
+          0.1490659089977271,
+          0.15153572599956533,
+          0.1533228100015549,
+          0.15602248499999405
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.15308369700142066,
+        "minimum": 0.15008815100009087,
+        "maximum": 0.15706837099787663,
+        "samples": [
+          0.15308369700142066,
+          0.15008815100009087,
+          0.1529072230005113,
+          0.1542856230007601,
+          0.15706837099787663
+        ]
+      },
+      "julia_over_opencv_unit_time": 6.377274668189782
+    },
+    "ubc_1": {
+      "shape": [
+        640,
+        800
+      ],
+      "source_sha256": "f8814d03ca5f7d967ad85059064dc7d089baedae970955f56095b122a69142b9",
+      "input_u8_sha256": "6caf7964c44755314e5e6c5509ccd85d0bde00e32fc93b7b3ffa24d4c536d382",
+      "julia_features": 5036,
+      "opencv_features": 5037,
+      "julia_seconds": {
+        "median": 1.239779187,
+        "minimum": 1.176807333,
+        "maximum": 1.338387439,
+        "samples": [
+          1.270942802,
+          1.338387439,
+          1.239779187,
+          1.237241455,
+          1.176807333
+        ]
+      },
+      "julia_allocated_bytes": {
+        "median": 412779312,
+        "minimum": 412779312,
+        "maximum": 412779312,
+        "samples": [
+          412779312,
+          412779312,
+          412779312,
+          412779312,
+          412779312
+        ]
+      },
+      "julia_gc_seconds": {
+        "median": 0.06216792,
+        "minimum": 0.054070744,
+        "maximum": 0.076039574,
+        "samples": [
+          0.060869129,
+          0.073990212,
+          0.054070744,
+          0.076039574,
+          0.06216792
+        ]
+      },
+      "opencv_seconds": {
+        "median": 0.2268937740009278,
+        "minimum": 0.19710231999852112,
+        "maximum": 0.25408524900194607,
+        "samples": [
+          0.23094017999756034,
+          0.2268937740009278,
+          0.19710231999852112,
+          0.25408524900194607,
+          0.2218594240002858
+        ]
+      },
+      "opencv_unit_descriptor_seconds": {
+        "median": 0.23042783799974131,
+        "minimum": 0.20172363500023494,
+        "maximum": 0.2589343990002817,
+        "samples": [
+          0.23459115699733957,
+          0.23042783799974131,
+          0.20172363500023494,
+          0.2589343990002817,
+          0.22568299699923955
+        ]
+      },
+      "julia_over_opencv_unit_time": 5.380335977467235
+    }
+  },
+  "julia_environment": {
+    "julia": "1.13.1",
+    "cpu_target": "tigerlake",
+    "julia_threads": "1",
+    "blas_threads": "1",
+    "ImageFiltering": "0.7.12",
+    "ImageCore": "0.10.5",
+    "ColorTypes": "0.12.3"
+  },
+  "finished_utc": "2026-10-08T19:57:42.572483+00:00"
+}

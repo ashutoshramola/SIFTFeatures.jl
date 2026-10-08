@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 validation-data/
 validation-work/
+benchmark-work/
 # Local review history and diagnostic plots retained outside the publication.
 audit/
 validation/REAL_WORLD_REPORT.md
