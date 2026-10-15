@@ -463,30 +463,62 @@ function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
     return nothing
 end
 
-function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, sm::AbstractVector{Float64},
-                       a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
-    Base.require_one_based_indexing(angles, hist, sm)
-    (length(hist) == 36 && length(sm) == 36) ||
-        throw(DimensionMismatch("orientation buffers must have length 36"))
+# Full Float32-precision branchless minimax approximation of atan2(y, x).
+@inline function _atan2_f32(y::Float32, x::Float32)
+    ax = abs(x)
+    ay = abs(y)
+    mn = min(ax, ay)
+    mx = max(ax, ay)
+    a = ifelse(mx == 0f0, 0f0, mn / mx)
+    s = a * a
+    p = muladd(s, -0.0117195f0, 0.05265332f0)
+    p = muladd(p, s, -0.11643287f0)
+    p = muladd(p, s, 0.19354346f0)
+    p = muladd(p, s, -0.33262347f0)
+    p = muladd(p, s, 0.99997726f0)
+    r = p * a
+    r = ifelse(ay > ax, 1.57079637f0 - r, r)
+    r = ifelse(x < 0f0, 3.14159274f0 - r, r)
+    return ifelse(y < 0f0, -r, r)
+end
+
+# Minimax degree-5 approximation of exp(-x) on x in [0, 1.5625] for descriptor spatial weights.
+@inline function _exp_neg_f32(x::Float32)
+    p = muladd(x, -0.0046062f0, 0.0293684f0)
+    p = muladd(p, x, -0.1573072f0)
+    p = muladd(p, x, 0.4976051f0)
+    p = muladd(p, x, -0.9997653f0)
+    return muladd(p, x, 0.9999968f0)
+end
+
+function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
+                        sm::AbstractVector{Float64}, wtab::Vector{Float32},
+                        a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
     fill!(hist, 0.0)
     empty!(angles)
     radius = round(Int, 4.5 * sigma)
+    length(wtab) < radius + 1 && resize!(wtab, radius + 1)
+    inv_2sigma2 = Float32(-1.0 / (2.0 * (1.5 * sigma)^2))
+    @inbounds for k in 0:radius
+        wtab[k + 1] = exp(Float32(k * k) * inv_2sigma2)
+    end
     h, w = size(a)
-    inv_2sigma2 = -1.0 / (2.0 * (1.5 * sigma)^2)
-    scale = 36.0 / (2pi)
+    scale = Float32(36.0 / (2pi))
     j_min = max(-radius, 2 - x)
     j_max = min(radius, w - 1 - x)
     i_min = max(-radius, 2 - y)
     i_max = min(radius, h - 1 - y)
     @inbounds for j in j_min:j_max
         xx = x + j
-        j2 = j * j
+        wj = wtab[abs(j) + 1]
         for i in i_min:i_max
             yy = y + i
             gx = a[yy, xx + 1] - a[yy, xx - 1]
             gy = a[yy - 1, xx] - a[yy + 1, xx]
-            bin = mod(round(Int, atan(gy, gx) * scale), 36) + 1
-            hist[bin] += hypot(gx, gy) * exp((i * i + j2) * inv_2sigma2)
+            b = round(Int, _atan2_f32(gy, gx) * scale)
+            bin = ifelse(b < 0, b + 36, ifelse(b >= 36, b - 36, b)) + 1
+            mag = sqrt(muladd(gx, gx, gy * gy))
+            hist[bin] += Float64(mag * (wj * wtab[abs(i) + 1]))
         end
     end
     peak = 0.0
@@ -509,88 +541,188 @@ function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, s
     return angles
 end
 
+function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, sm::AbstractVector{Float64},
+                       a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
+    Base.require_one_based_indexing(angles, hist, sm)
+    (length(hist) == 36 && length(sm) == 36) ||
+        throw(DimensionMismatch("orientation buffers must have length 36"))
+    wtab = Vector{Float32}(undef, max(0, round(Int, 4.5 * sigma)) + 1)
+    return _orientations!(angles, hist, sm, wtab, a, y, x, sigma)
+end
+
 orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
     orientations!(Float64[], Memory{Float64}(undef, 36), Memory{Float64}(undef, 36), a, y, x, sigma)
 
-function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64},
-                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
-    Base.require_one_based_indexing(out, hist)
-    (length(out) == 128 && length(hist) == 128) ||
-        throw(DimensionMismatch("descriptor buffers must have length 128"))
-    fill!(hist, 0.0)
+mutable struct _DescriptorWorkspace
+    const phist::Memory{Float32}
+    rb::Memory{Float32}
+    cb::Memory{Float32}
+    ob::Memory{Float32}
+    mag::Memory{Float32}
+end
+
+_DescriptorWorkspace(cap::Int=256) = _DescriptorWorkspace(
+    Memory{Float32}(undef, 288),
+    Memory{Float32}(undef, cap),
+    Memory{Float32}(undef, cap),
+    Memory{Float32}(undef, cap),
+    Memory{Float32}(undef, cap),
+)
+
+@inline function _ensure_col_cap!(ws::_DescriptorWorkspace, n::Int)
+    if n > length(ws.rb)
+        ws.rb = Memory{Float32}(undef, n)
+        ws.cb = Memory{Float32}(undef, n)
+        ws.ob = Memory{Float32}(undef, n)
+        ws.mag = Memory{Float32}(undef, n)
+    end
+    return nothing
+end
+
+function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
+                      a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+    phist = ws.phist
+    fill!(phist, 0f0)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
     # choose the opposite pixel if applied directly to a one-based coordinate.
     cy, cx = round(Int, y - 1) + 1, round(Int, x - 1) + 1
     width = 3.0 * sigma
     # Internal gradient angles use upward y, as in the standard SIFT convention.
     phi = -Float64(angle)
-    cs, sn = cos(phi) / width, sin(phi) / width
+    cs64, sn64 = cos(phi) / width, sin(phi) / width
+    cs, sn = Float32(cs64), Float32(sn64)
     h, w = size(a)
     radius = min(round(Int, width * sqrt(2.0) * 2.5), ceil(Int, hypot(h, w)))
-    scale = 8.0 / (2pi)
+    scale = Float32(8.0 / (2pi))
+    phi_f32 = Float32(phi)
     j_min = max(-radius, 2 - cx)
     j_max = min(radius, w - 1 - cx)
-    i_min = max(-radius, 2 - cy)
-    i_max = min(radius, h - 1 - cy)
+    i_min_base = max(-radius, 2 - cy)
+    i_max_base = min(radius, h - 1 - cy)
+    _ensure_col_cap!(ws, max(0, i_max_base - i_min_base + 1))
+    rb_buf, cb_buf, ob_buf, mag_buf = ws.rb, ws.cb, ws.ob, ws.mag
+
     @inbounds for j in j_min:j_max
         xx = cx + j
-        j_cs = j * cs
-        j_sn = j * sn
-        for i in i_min:i_max
-            u = j_cs - i * sn
-            v = j_sn + i * cs
-            rb, cb = v + 1.5, u + 1.5
-            (-1.0 < rb < 4.0 && -1.0 < cb < 4.0) || continue
+        j_cs64 = j * cs64
+        j_sn64 = j * sn64
+        i_lo = i_min_base
+        i_hi = i_max_base
+        if abs(sn64) > 1e-12
+            b1 = (j_cs64 - 2.5) / sn64
+            b2 = (j_cs64 + 2.5) / sn64
+            lo_s, hi_s = minmax(b1, b2)
+            i_lo = max(i_lo, floor(Int, lo_s) + 1)
+            i_hi = min(i_hi, ceil(Int, hi_s) - 1)
+        elseif !(-2.5 < j_cs64 < 2.5)
+            continue
+        end
+        if abs(cs64) > 1e-12
+            b1 = (-2.5 - j_sn64) / cs64
+            b2 = ( 2.5 - j_sn64) / cs64
+            lo_c, hi_c = minmax(b1, b2)
+            i_lo = max(i_lo, floor(Int, lo_c) + 1)
+            i_hi = min(i_hi, ceil(Int, hi_c) - 1)
+        elseif !(-2.5 < j_sn64 < 2.5)
+            continue
+        end
+        n_i = i_hi - i_lo + 1
+        n_i <= 0 && continue
+
+        j_cs = Float32(j_cs64)
+        j_sn = Float32(j_sn64)
+        # Pass 1: branchless SIMD math over the contiguous column slice
+        @simd for idx in 1:n_i
+            i = i_lo + idx - 1
             yy = cy + i
+            if32 = Float32(i)
+            u = muladd(-if32, sn, j_cs)
+            v = muladd( if32, cs, j_sn)
+            rb_buf[idx] = v + 1.5f0
+            cb_buf[idx] = u + 1.5f0
             gx = a[yy, xx + 1] - a[yy, xx - 1]
             gy = a[yy - 1, xx] - a[yy + 1, xx]
-            ob = mod((atan(gy, gx) - phi) * scale, 8.0)
-            mag = hypot(gx, gy) * exp(-(u * u + v * v) * 0.125)
-            r0, c0, o0 = floor(Int, rb), floor(Int, cb), floor(Int, ob)
-            fr, fc, fo = rb - r0, cb - c0, ob - o0
+            raw_ob = (_atan2_f32(gy, gx) - phi_f32) * scale
+            ob_buf[idx] = raw_ob - 8f0 * floor(raw_ob * 0.125f0)
+            mag_buf[idx] = sqrt(muladd(gx, gx, gy * gy)) * _exp_neg_f32((u * u + v * v) * 0.125f0)
+        end
+
+        # Pass 2: branchless 8-way trilinear scatter into 1-cell-padded 6×6×8 histogram
+        for idx in 1:n_i
+            rb = rb_buf[idx]
+            cb = cb_buf[idx]
+            ob = ob_buf[idx]
+            mag = mag_buf[idx]
+            r0 = floor(Int, rb)
+            c0 = floor(Int, cb)
+            o0 = unsafe_trunc(Int, ob)
+            fr = rb - r0
+            fc = cb - c0
+            fo = ob - o0
             b0 = o0 & 7
             b1 = (o0 + 1) & 7
-            w_o0 = 1.0 - fo
-            w_o1 = fo
-            for dr in 0:1
-                r = r0 + dr
-                (0 <= r < 4) || continue
-                wr = mag * (dr == 0 ? 1.0 - fr : fr)
-                for dc in 0:1
-                    cl = c0 + dc
-                    (0 <= cl < 4) || continue
-                    wrc = wr * (dc == 0 ? 1.0 - fc : fc)
-                    base_idx = (r * 4 + cl) * 8 + 1
-                    hist[base_idx + b0] += wrc * w_o0
-                    hist[base_idx + b1] += wrc * w_o1
-                end
-            end
+            base00 = ((r0 + 1) * 6 + (c0 + 1)) * 8 + 1
+            w_r1 = mag * fr
+            w_r0 = mag - w_r1
+            w_r0c1 = w_r0 * fc
+            w_r0c0 = w_r0 - w_r0c1
+            w_r1c1 = w_r1 * fc
+            w_r1c0 = w_r1 - w_r1c1
+
+            phist[base00 + b0]      += w_r0c0 - w_r0c0 * fo
+            phist[base00 + b1]      += w_r0c0 * fo
+            phist[base00 + 8 + b0]  += w_r0c1 - w_r0c1 * fo
+            phist[base00 + 8 + b1]  += w_r0c1 * fo
+            phist[base00 + 48 + b0] += w_r1c0 - w_r1c0 * fo
+            phist[base00 + 48 + b1] += w_r1c0 * fo
+            phist[base00 + 56 + b0] += w_r1c1 - w_r1c1 * fo
+            phist[base00 + 56 + b1] += w_r1c1 * fo
         end
     end
-    s1 = 0.0
-    @inbounds @simd for k in 1:128
-        s1 = muladd(hist[k], hist[k], s1)
+
+    s1 = 0f0
+    idx = 1
+    @inbounds for pr in 1:4, pc in 1:4
+        base = (pr * 6 + pc) * 8
+        @simd for b in 1:8
+            v = phist[base + b]
+            out[idx + b - 1] = v
+            s1 = muladd(v, v, s1)
+        end
+        idx += 8
     end
-    if s1 <= 0.0
+    if s1 <= 0f0
         fill!(out, 0f0)
         return out
     end
-    inv_n1 = 1.0 / sqrt(s1)
-    s2 = 0.0
+    inv_n1 = 1f0 / sqrt(s1)
+    s2 = 0f0
     @inbounds for k in 1:128
-        v = min(hist[k] * inv_n1, 0.2)
-        hist[k] = v
+        v = min(out[k] * inv_n1, 0.2f0)
+        out[k] = v
         s2 = muladd(v, v, s2)
     end
-    inv_n2 = Float32(1.0 / sqrt(s2))
+    inv_n2 = 1f0 / sqrt(s2)
     @inbounds @simd for k in 1:128
-        out[k] = Float32(hist[k]) * inv_n2
+        out[k] *= inv_n2
+    end
+    return out
+end
+
+function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64},
+                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+    Base.require_one_based_indexing(out, hist)
+    (length(out) == 128 && length(hist) == 128) ||
+        throw(DimensionMismatch("descriptor buffers must have length 128"))
+    _descriptor!(out, _DescriptorWorkspace(), a, y, x, sigma, angle)
+    @inbounds for k in 1:128
+        hist[k] = Float64(out[k])
     end
     return out
 end
 
 descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real) =
-    descriptor!(Vector{Float32}(undef, 128), Memory{Float64}(undef, 128), a, y, x, sigma, angle)
+    _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(), a, y, x, sigma, angle)
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
 @inline function angle32(angle)
@@ -669,11 +801,12 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
     angles_buf = Float64[]
     ori_hist = Memory{Float64}(undef, 36)
     ori_sm = Memory{Float64}(undef, 36)
+    ori_wtab = Vector{Float32}(undef, 64)
     for idx in r
         cand = cands[idx]
         factor = 2.0^cand.octave
-        orientations!(
-            angles_buf, ori_hist, ori_sm,
+        _orientations!(
+            angles_buf, ori_hist, ori_sm, ori_wtab,
             gp[cand.o][cand.layer], cand.iy, cand.ix, cand.sigma
         )
         y_img = Float32(1 + (cand.y - 1) * factor)
@@ -695,12 +828,12 @@ function _build_descriptors_range!(desc::Matrix{Float32},
                                    gp::Vector{Vector{Matrix{Float32}}},
                                    first_octave::Int,
                                    r::UnitRange{Int})
-    hist_buf = Memory{Float64}(undef, 128)
+    ws = _DescriptorWorkspace()
     @views for i in r
         k = kp[i]
         factor = 2.0^k.octave
-        descriptor!(
-            desc[:, i], hist_buf,
+        _descriptor!(
+            desc[:, i], ws,
             gp[k.octave - first_octave + 1][k.layer + 1],
             1 + (k.y - 1) / factor,
             1 + (k.x - 1) / factor,
