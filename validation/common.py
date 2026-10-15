@@ -70,7 +70,7 @@ def execute(args, runner, suite):
               "started_utc": now(), "state": "running", "passed": False,
               "python": sys.version.split()[0], "python_optimization": sys.flags.optimize,
               "platform": platform.platform(),
-              "source_sha256": {str(p.relative_to(ROOT)): sha256(p) for p in sources}}
+              "source_sha256": {p.relative_to(ROOT).as_posix(): sha256(p) for p in sources}}
     gates = Gates(report)
     # Replace an old success before starting work, including if Julia later fails.
     write_report(args.output, report)

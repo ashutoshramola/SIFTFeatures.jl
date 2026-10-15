@@ -4,6 +4,9 @@
 
 - Native Julia Gaussian/DoG scale space, subpixel localization, edge rejection,
   multiple orientation assignment, and 128-dimensional SIFT descriptors.
+- Julia 1.13+ native optimizations: `public` API declarations, `StaticArrays`
+  3D localization, `Memory` work buffers, in-place `gaussian_blur!`,
+  `orientations!`, and `descriptor!`, and deterministic multi-threading.
 - L2 matching with strict Lowe ratio and optional mutual nearest neighbors.
 - Focused JuliaImages dependencies and one-based AbstractMatrix input APIs.
 - Analytical Julia tests plus OpenCV comparison on synthetic images and eight

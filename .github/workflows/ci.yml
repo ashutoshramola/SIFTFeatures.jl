@@ -7,7 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        julia: ['1.10', '1']
+        julia: ['1.13']
+        threads: ['1', 'auto']
+    env:
+      JULIA_NUM_THREADS: ${{ matrix.threads }}
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
@@ -21,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
         with:
-          version: '1'
+          version: '1.13'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

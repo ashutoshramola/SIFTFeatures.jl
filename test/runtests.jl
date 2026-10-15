@@ -13,11 +13,27 @@ include("fixtures.jl")
         @test eltype(d) == Float32
     end
     a = fixture(80,96)
+    for sym in (:validate, :grayscale_float, :double_image, :gaussian_blur, :gaussian_blur!,
+                :default_octaves, :is_extremum, :derivatives, :localize,
+                :orientations, :orientations!, :descriptor, :descriptor!, :angle32)
+        @test Base.ispublic(SIFTFeatures, sym)
+    end
     @test SF.grayscale_float(Gray.(a)) == a
     @test SF.grayscale_float(RGB.(a,a,a)) ≈ a
     u = UInt8.(round.(a.*255))
     @test SF.grayscale_float(u) ≈ Float32.(u)./255
+    u16 = round.(UInt16, Float64.(a).*typemax(UInt16))
+    @test SF.grayscale_float(u16) ≈ Float32.(Float64.(u16)./typemax(UInt16))
+    u32 = round.(UInt32, Float64.(a).*typemax(UInt32))
+    @test SF.grayscale_float(u32) ≈ Float32.(Float64.(u32)./typemax(UInt32))
     @test SF.grayscale_float(Gray{N0f8}.(a)) ≈ Float32.(Gray{N0f8}.(a))
+    large = fill(0.25f0, 260, 260)
+    @test SF.grayscale_float(large) == large
+    for v in (NaN32, Inf32, -0.1f0, 1.1f0)
+        bad_large = copy(large)
+        bad_large[end, end] = v
+        @test_throws ArgumentError SF.grayscale_float(bad_large)
+    end
     @test sift(@view a[:,:]) == sift(a)
     @test sift(transpose(a)) == sift(permutedims(a))
     for v in (NaN,Inf,-0.1,1.1)
@@ -73,6 +89,13 @@ end
     actual = SF.descriptor(impulse,center,center,1/3,0)
     @test actual ≈ expected atol=2e-6
     @test !isapprox(reverse(actual),expected;atol=2e-6)
+    out_buf = fill(-1f0, 128)
+    hist_buf = fill(-1.0, 128)
+    @test SF.descriptor!(out_buf, hist_buf, impulse, center, center, 1/3, 0) === out_buf
+    @test out_buf == actual
+    @test SF.descriptor!(out_buf, hist_buf, zeros(Float32, 33, 33), center, center, 1/3, 0) == zeros(Float32, 128)
+    @test_throws DimensionMismatch SF.descriptor!(zeros(Float32, 127), hist_buf, impulse, center, center, 1/3, 0)
+    @test_throws DimensionMismatch SF.descriptor!(out_buf, zeros(Float64, 127), impulse, center, center, 1/3, 0)
 end
 
 @testset "Scale space and interpolation" begin
@@ -91,6 +114,13 @@ end
     @test length(d[1]) == 5
     @test d[2][3] == p[2][4]-p[2][3]
     @test maximum(abs,SF.gaussian_blur(ones(Float32,20,20),1.5).-1) < 2e-6
+    blur_src = fixture(32, 40)
+    blur_dst = similar(blur_src)
+    @test SF.gaussian_blur!(blur_dst, blur_src, 1.5) === blur_dst
+    @test blur_dst == SF.gaussian_blur(blur_src, 1.5)
+    @test SF.gaussian_blur!(blur_dst, blur_src, 0.0) == blur_src
+    @test_throws DimensionMismatch SF.gaussian_blur!(zeros(Float32, 10, 10), blur_src, 1.5)
+    @test CartesianIndex(SIFTKeypoint(10.4f0, 20.6f0, 1.6f0, 0.0f0, 0.1f0, 0, 1)) == CartesianIndex(10, 21)
     # Known quadratic extremum with a non-integer x/y/scale maximum.
     dogs = [Float32[1-0.05*((x-10.2)^2+(y-9.7)^2+(l-3.15)^2)
                      for y in 1:21,x in 1:21] for l in 1:5]
@@ -157,6 +187,14 @@ end
     ramp = Float32[x/65 for y in 1:65,x in 1:65]
     @test only(SF.orientations(ramp,33,33,2.0)) ≈ 0 atol=1e-7
     @test only(SF.orientations(permutedims(ramp),33,33,2.0)) ≈ pi/2 atol=1e-7
+    ang_buf = [99.0]
+    ori_hist = fill(-1.0, 36)
+    ori_sm = fill(-1.0, 36)
+    @test SF.orientations!(ang_buf, ori_hist, ori_sm, ramp, 33, 33, 2.0) === ang_buf
+    @test ang_buf == SF.orientations(ramp, 33, 33, 2.0)
+    @test isempty(SF.orientations!(ang_buf, ori_hist, ori_sm, zeros(Float32, 65, 65), 33, 33, 2.0))
+    @test_throws DimensionMismatch SF.orientations!(ang_buf, zeros(Float64, 35), ori_sm, ramp, 33, 33, 2.0)
+    @test_throws DimensionMismatch SF.orientations!(ang_buf, ori_hist, zeros(Float64, 35), ramp, 33, 33, 2.0)
     @test SF.descriptor(zeros(Float32,30,30),15.,15.,2.,0.) == zeros(Float32,128)
 end
 
@@ -177,6 +215,17 @@ end
     distinct = hcat(exact,ones(Float32,128,1))
     @test [(t.query,t.train) for t in match_descriptors(exact,distinct;ratio=1e-200)] == [(1,1)]
     @test isempty(match_descriptors(exact,hcat(exact,exact);ratio=1e-200))
+    # Large descriptor matrices (na * nb >= 4096) exercise the chunked matcher path.
+    big_q = zeros(Float32, 128, 70)
+    big_t = zeros(Float32, 128, 70)
+    for idx in 1:70
+        big_q[mod1(idx, 128), idx] = 1f0
+        big_q[mod1(idx + 1, 128), idx] = Float32(idx) / 100f0
+        big_t[:, idx] = big_q[:, idx]
+    end
+    big_m = match_descriptors(big_q, big_t; crosscheck=true)
+    @test [(t.query, t.train) for t in big_m] == [(idx, idx) for idx in 1:70]
+    @test all(iszero(t.distance) for t in big_m)
     @test_throws DimensionMismatch match_descriptors(zeros(127,2),b)
     @test_throws ArgumentError match_descriptors(a,b;ratio=1)
     @test_throws ArgumentError match_descriptors(a,fill(NaN,128,2))

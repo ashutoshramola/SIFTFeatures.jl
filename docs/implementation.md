@@ -42,11 +42,10 @@ defect. Reproducers identified and motivated these repairs:
   whose square underflows; duplicate exact nearest neighbors still fail.
 - Input-range documentation specifies validation after Float32 conversion.
 
-Gaussian filtering still allocates Float64 intermediates before storing
-Float32 pyramid levels. Matching is brute-force and accumulates squared L2
-distance in Float64. These are profiling targets after correctness validation.
-Lower dependency compatibility bounds, hosted CI, and platforms beyond the
-tested Linux environment still need execution.
+Gaussian filtering uses `imfilter!` into preallocated Float32 destination arrays,
+3D quadratic localization solves use stack-allocated `StaticArrays` (`SVector`/`SMatrix`),
+and orientation, descriptor, and matcher routines reuse `Memory` buffers with
+deterministic multi-threaded chunking on Julia 1.13+.
 
 ## References
 

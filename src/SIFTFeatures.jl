@@ -1,7 +1,7 @@
 module SIFTFeatures
 
 using ColorTypes: Colorant, Gray, AbstractGray, color
-using ImageCore: ImageCore, Normed, normedview, gray
+using ImageCore: ImageCore, Normed, gray
 using ImageFiltering: imfilter!, KernelFactors, Algorithm, CPU1, CPUThreads
 using LinearAlgebra: norm, dot, det
 using StaticArrays: SVector, SMatrix
@@ -86,36 +86,39 @@ end
 @inline _chunk_range(n::Int, chunk::Int, nchunks::Int) =
     (((chunk - 1) * n) ÷ nchunks + 1):((chunk * n) ÷ nchunks)
 
+function _grayscale_float_chunk!(a::Matrix{Float32}, invalid::Memory{Bool},
+                                 img::AbstractMatrix, chunk::Int, r::UnitRange{Int})
+    @inbounds for i in r
+        v = intensity(img[i])
+        if !(isfinite(v) && 0f0 <= v <= 1f0)
+            invalid[chunk] = true
+            break
+        end
+        a[i] = v
+    end
+    return nothing
+end
+
 function grayscale_float(img::AbstractMatrix{<:Union{Real,Colorant}})
     Base.require_one_based_indexing(img)
-    src = eltype(img) <: Unsigned ? normedview(img) : img
-    a = Matrix{Float32}(undef, size(src))
+    a = Matrix{Float32}(undef, size(img))
     n = length(a)
     n == 0 && return a
     nt = Threads.nthreads()
-    if nt > 1 && n >= 65_536 && IndexStyle(src) === IndexLinear()
+    if nt > 1 && n >= 65_536 && IndexStyle(img) === IndexLinear()
         nchunks = min(nt, n ÷ 16_384)
         invalid = Memory{Bool}(undef, nchunks)
         fill!(invalid, false)
         @sync for chunk in 1:nchunks
-            Threads.@spawn begin
-                r = _chunk_range(n, chunk, nchunks)
-                @inbounds for i in r
-                    v = intensity(src[i])
-                    if !(isfinite(v) && 0f0 <= v <= 1f0)
-                        invalid[chunk] = true
-                        break
-                    end
-                    a[i] = v
-                end
-            end
+            r = _chunk_range(n, chunk, nchunks)
+            Threads.@spawn _grayscale_float_chunk!(a, invalid, img, chunk, r)
         end
         any(invalid) && throw(ArgumentError(
             "image intensities must be finite and in [0,1]; unsigned integers are normalized by typemax"
         ))
     else
-        @inbounds for i in eachindex(a, src)
-            v = intensity(src[i])
+        @inbounds for i in eachindex(a, img)
+            v = intensity(img[i])
             isfinite(v) && 0f0 <= v <= 1f0 ||
                 throw(ArgumentError("image intensities must be finite and in [0,1]; unsigned integers are normalized by typemax"))
             a[i] = v
@@ -163,6 +166,7 @@ function double_image(a::Matrix{Float32})
 end
 
 function gaussian_blur!(dst::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
+    size(dst) == size(src) || throw(DimensionMismatch("dst and src must have the same size"))
     if sigma <= eps(Float32)
         copyto!(dst, src)
         return dst
@@ -327,6 +331,9 @@ end
 
 function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, sm::AbstractVector{Float64},
                        a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
+    Base.require_one_based_indexing(angles, hist, sm)
+    (length(hist) == 36 && length(sm) == 36) ||
+        throw(DimensionMismatch("orientation buffers must have length 36"))
     fill!(hist, 0.0)
     empty!(angles)
     radius = round(Int, 4.5 * sigma)
@@ -373,6 +380,9 @@ orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
 
 function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64},
                      a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+    Base.require_one_based_indexing(out, hist)
+    (length(out) == 128 && length(hist) == 128) ||
+        throw(DimensionMismatch("descriptor buffers must have length 128"))
     fill!(hist, 0.0)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
     # choose the opposite pixel if applied directly to a one-based coordinate.
@@ -545,6 +555,27 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
     return out
 end
 
+function _build_descriptors_range!(desc::Matrix{Float32},
+                                   kp::Vector{SIFTKeypoint{Float32}},
+                                   gp::Vector{Vector{Matrix{Float32}}},
+                                   first_octave::Int,
+                                   r::UnitRange{Int})
+    hist_buf = Memory{Float64}(undef, 128)
+    @views for i in r
+        k = kp[i]
+        factor = 2.0^k.octave
+        descriptor!(
+            desc[:, i], hist_buf,
+            gp[k.octave - first_octave + 1][k.layer + 1],
+            1 + (k.y - 1) / factor,
+            1 + (k.x - 1) / factor,
+            k.sigma / factor,
+            k.angle
+        )
+    end
+    return desc
+end
+
 """
     keypoints, descriptors = sift(img; config=SIFTConfig(), octaves=nothing)
 
@@ -586,36 +617,10 @@ function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=noth
             nchunks = min(nt, nkp)
             @sync for chunk in 1:nchunks
                 r = _chunk_range(nkp, chunk, nchunks)
-                Threads.@spawn begin
-                    hist_buf = Memory{Float64}(undef, 128)
-                    @views for i in r
-                        k = kp[i]
-                        factor = 2.0^k.octave
-                        descriptor!(
-                            desc[:, i], hist_buf,
-                            gp[k.octave - c.first_octave + 1][k.layer + 1],
-                            1 + (k.y - 1) / factor,
-                            1 + (k.x - 1) / factor,
-                            k.sigma / factor,
-                            k.angle
-                        )
-                    end
-                end
+                Threads.@spawn _build_descriptors_range!(desc, kp, gp, c.first_octave, r)
             end
         else
-            hist_buf = Memory{Float64}(undef, 128)
-            @views for i in 1:nkp
-                k = kp[i]
-                factor = 2.0^k.octave
-                descriptor!(
-                    desc[:, i], hist_buf,
-                    gp[k.octave - c.first_octave + 1][k.layer + 1],
-                    1 + (k.y - 1) / factor,
-                    1 + (k.x - 1) / factor,
-                    k.sigma / factor,
-                    k.angle
-                )
-            end
+            _build_descriptors_range!(desc, kp, gp, c.first_octave, 1:nkp)
         end
     end
     return kp, desc
@@ -670,6 +675,11 @@ end
     end
 end
 
+function _filter_crosscheck!(matches::Vector{DescriptorMatch}, reverse_idx::Memory{Int})
+    filter!(m -> @inbounds(reverse_idx[m.train]) == m.query, matches)
+    return matches
+end
+
 """
     match_descriptors(a, b; ratio=0.8, crosscheck=false)
 
@@ -715,12 +725,12 @@ function match_descriptors(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real};
                     end
                 end
             end
-            filter!(m -> reverse_idx[m.train] == m.query, matches)
+            _filter_crosscheck!(matches, reverse_idx)
         end
     else
         reverse_dist, reverse_idx = _alloc_rev_buffers(nb, crosscheck)
         _match_chunk!(matches, reverse_dist, reverse_idx, a, b, 1:na, r2, crosscheck)
-        crosscheck && filter!(m -> reverse_idx[m.train] == m.query, matches)
+        crosscheck && _filter_crosscheck!(matches, reverse_idx)
     end
     return matches
 end

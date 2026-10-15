@@ -35,9 +35,9 @@ def cpu_name():
 
 
 def run(args, report, gates):
-    if args.samples < 3 or args.warmups < 1:
-        raise ValueError("Require at least 3 samples and 1 warmup")
-    cv2.setNumThreads(1)
+    if args.samples < 3 or args.warmups < 1 or args.threads < 1:
+        raise ValueError("Require at least 3 samples, 1 warmup, and 1 thread")
+    cv2.setNumThreads(args.threads)
     manifest_path = ROOT / "validation/oxford-sources.json"
     manifest = json.loads(manifest_path.read_text())
     report.update({
@@ -46,7 +46,7 @@ def run(args, report, gates):
         "dataset_manifest_sha256": sha256(manifest_path),
         "configuration": {"samples": args.samples, "warmups_per_image": args.warmups,
                           "image_selection": "img1 from each of eight sequences, original resolution",
-                          "julia_threads": 1, "opencv_threads": cv2.getNumThreads(),
+                          "julia_threads": args.threads, "opencv_threads": cv2.getNumThreads(),
                           "octave_layers": 3, "contrast_threshold": .04,
                           "edge_threshold": 10, "sigma": 1.6, "nfeatures": 0,
                           "first_octave": -1, "enable_precise_upscale": True},
@@ -60,7 +60,7 @@ def run(args, report, gates):
             "gc": "forced GC precedes each sample; GC during the timed call is included"},
         "images": {}})
     for path in (Path(__file__), ROOT / "benchmark/compare.jl"):
-        report["source_sha256"][str(path.relative_to(ROOT))] = sha256(path)
+        report["source_sha256"][path.relative_to(ROOT).as_posix()] = sha256(path)
     work = args.work_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
     images = {}
@@ -82,9 +82,9 @@ def run(args, report, gates):
                                  "source_sha256": sha256(path),
                                  "input_u8_sha256": sha256(work / (name + ".u8"))}
     (work / "images.txt").write_text("\n".join(images) + "\n")
-    env = dict(os.environ, JULIA_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
+    env = dict(os.environ, JULIA_NUM_THREADS=str(args.threads), OPENBLAS_NUM_THREADS="1",
                OMP_NUM_THREADS="1", MKL_NUM_THREADS="1")
-    subprocess.run([args.julia, "--startup-file=no", "--threads=1", f"--project={ROOT}",
+    subprocess.run([args.julia, "--startup-file=no", f"--threads={args.threads}", f"--project={ROOT}",
                     str(ROOT / "benchmark/compare.jl"), str(work), str(args.samples),
                     str(args.warmups)], check=True, env=env)
     report["julia_environment"] = dict(line.split("\t", 1) for line in
@@ -140,6 +140,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, default=ROOT / "benchmark/comparison-results.json")
     parser.add_argument("--samples", type=int, default=5)
     parser.add_argument("--warmups", type=int, default=1)
+    parser.add_argument("--threads", type=int, default=1)
     parser.add_argument("--julia", default="julia")
     args = parser.parse_args()
     sys.exit(execute(args, run, "Repeated Julia/OpenCV timing comparison"))
