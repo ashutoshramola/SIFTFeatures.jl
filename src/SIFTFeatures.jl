@@ -556,8 +556,8 @@ end
 orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
     orientations!(Float64[], Memory{Float64}(undef, 36), Memory{Float64}(undef, 36), a, y, x, sigma)
 
-mutable struct _DescriptorWorkspace
-    const phist::Memory{Float32}
+struct _DescriptorWorkspace
+    phist::Memory{Float32}
     rb::Memory{Float32}
     cb::Memory{Float32}
     ob::Memory{Float32}
@@ -571,16 +571,6 @@ _DescriptorWorkspace(cap::Int=256) = _DescriptorWorkspace(
     Memory{Float32}(undef, cap),
     Memory{Float32}(undef, cap),
 )
-
-@inline function _ensure_col_cap!(ws::_DescriptorWorkspace, n::Int)
-    if n > length(ws.rb)
-        ws.rb = Memory{Float32}(undef, n)
-        ws.cb = Memory{Float32}(undef, n)
-        ws.ob = Memory{Float32}(undef, n)
-        ws.mag = Memory{Float32}(undef, n)
-    end
-    return nothing
-end
 
 function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
                       a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
@@ -602,7 +592,6 @@ function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
     j_max = min(radius, w - 1 - cx)
     i_min_base = max(-radius, 2 - cy)
     i_max_base = min(radius, h - 1 - cy)
-    _ensure_col_cap!(ws, max(0, i_max_base - i_min_base + 1))
     rb_buf, cb_buf, ob_buf, mag_buf = ws.rb, ws.cb, ws.ob, ws.mag
 
     @inbounds for j in j_min:j_max
@@ -717,7 +706,7 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
     Base.require_one_based_indexing(out, hist)
     (length(out) == 128 && length(hist) == 128) ||
         throw(DimensionMismatch("descriptor buffers must have length 128"))
-    _descriptor!(out, _DescriptorWorkspace(), a, y, x, sigma, angle)
+    _descriptor!(out, _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
     @inbounds for k in 1:128
         hist[k] = Float64(out[k])
     end
@@ -725,7 +714,7 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
 end
 
 descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real) =
-    _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(), a, y, x, sigma, angle)
+    _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
 @inline function angle32(angle)
@@ -894,7 +883,8 @@ function _build_descriptors_range!(desc::Matrix{Float32},
                                    gp::Vector{Vector{Matrix{Float32}}},
                                    first_octave::Int,
                                    r::UnitRange{Int})
-    ws = _DescriptorWorkspace()
+    max_h = isempty(gp) || isempty(gp[1]) ? 256 : max(256, size(gp[1][1], 1))
+    ws = _DescriptorWorkspace(max_h)
     @views for i in r
         k = kp[i]
         factor = 2.0^k.octave
