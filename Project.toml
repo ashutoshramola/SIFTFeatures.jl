@@ -1,6 +1,6 @@
 name = "SIFTFeatures"
 uuid = "ffbe621a-46c8-4cd9-a338-7594868b69cf"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Ashutosh Ramola and contributors"]
 
 [deps]

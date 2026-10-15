@@ -4,7 +4,7 @@ Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
 descriptors, and L2 matching. Uses `ImageCore`, `ColorTypes`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
-Version 0.1.0 is a reference implementation focused on correctness. OpenCV
+Version 0.2.0 is a native Julia implementation focused on correctness and performance. OpenCV
 comparison tests cover synthetic images and 48 photographs from eight Oxford
 benchmark sequences. See [validation results](docs/validation.md) and
 [implementation notes](docs/implementation.md).
