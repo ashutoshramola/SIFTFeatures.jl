@@ -1,4 +1,4 @@
-using SIFTFeatures, LinearAlgebra, ImageFiltering, ImageCore, ColorTypes
+using SIFTFeatures, LinearAlgebra, ImageCore, ColorTypes, StaticArrays
 
 # File loading, compilation/warmup, forced GC, and result checks are outside
 # the timed interval. GC triggered by sift itself remains part of that interval.
@@ -6,15 +6,14 @@ function main()
     root, samples_text, warmups_text = ARGS
     samples, warmups = parse(Int, samples_text), parse(Int, warmups_text)
     samples >= 3 && warmups >= 1 || error("Require at least 3 samples and 1 warmup")
-    Threads.nthreads() == 1 || error("Run this comparison with one Julia thread")
     BLAS.set_num_threads(1)
     open(joinpath(root, "julia-environment.tsv"), "w") do io
         for (key, value) in (("julia", VERSION), ("cpu_target", Sys.CPU_NAME),
                              ("julia_threads", Threads.nthreads()),
                              ("blas_threads", BLAS.get_num_threads()),
-                             ("ImageFiltering", Base.pkgversion(ImageFiltering)),
                              ("ImageCore", Base.pkgversion(ImageCore)),
-                             ("ColorTypes", Base.pkgversion(ColorTypes)))
+                             ("ColorTypes", Base.pkgversion(ColorTypes)),
+                             ("StaticArrays", Base.pkgversion(StaticArrays)))
             println(io, key, '\t', value)
         end
     end

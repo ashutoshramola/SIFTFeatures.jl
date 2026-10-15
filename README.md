@@ -1,10 +1,10 @@
 # SIFTFeatures.jl
 
 Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
-descriptors, and L2 matching. Uses `ImageCore`, `ImageFiltering`, and `ColorTypes`
+descriptors, and L2 matching. Uses `ImageCore`, `ColorTypes`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
-Version 0.1.0 is a reference implementation focused on correctness. OpenCV
+Version 0.2.0 is a native Julia implementation focused on correctness and performance. OpenCV
 comparison tests cover synthetic images and 48 photographs from eight Oxford
 benchmark sequences. See [validation results](docs/validation.md) and
 [implementation notes](docs/implementation.md).
@@ -14,23 +14,23 @@ benchmark sequences. See [validation results](docs/validation.md) and
 ### Detection and descriptor timing
 
 Median of **five measured runs after one warmup per image**, using the first
-original-resolution photograph from each Oxford sequence. Intel Core i7-11800H;
-Julia 1.13.1 and OpenCV 4.10.0; one thread each; unlimited features.
-Measured 2026-10-09.
+original-resolution photograph from each Oxford sequence. Intel64 Family 6 Model 183 Stepping 1, GenuineIntel;
+Julia 1.13.2 and OpenCV 4.10.0; one thread each; unlimited features.
+Measured 2026-10-15.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3,226 / 3,225 | 1,247.5 | 224.7 | 5.55× |
-| trees_1 | 1000×700 | 12,478 / 12,477 | 2,417.9 | 486.4 | 4.97× |
-| graf_1 | 800×640 | 2,731 / 2,731 | 941.1 | 167.6 | 5.62× |
-| wall_1 | 1000×700 | 9,173 / 9,175 | 1,917.8 | 361.6 | 5.30× |
-| bark_1 | 765×512 | 3,757 / 3,758 | 866.7 | 170.6 | 5.08× |
-| boat_1 | 850×680 | 8,357 / 8,359 | 1,578.9 | 305.3 | 5.17× |
-| leuven_1 | 900×600 | 2,313 / 2,314 | 976.3 | 153.1 | 6.38× |
-| ubc_1 | 800×640 | 5,036 / 5,037 | 1,239.8 | 230.4 | 5.38× |
+| bikes_1 | 1000×700 | 3,224 / 3,225 | 201.1 | 165.7 | 1.21× |
+| trees_1 | 1000×700 | 12,477 / 12,477 | 420.6 | 350.2 | 1.20× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 166.1 | 123.7 | 1.34× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 352.5 | 289.3 | 1.22× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 162.3 | 141.5 | 1.15× |
+| boat_1 | 850×680 | 8,356 / 8,359 | 274.2 | 247.7 | 1.11× |
+| leuven_1 | 900×600 | 2,311 / 2,314 | 144.3 | 116.9 | 1.23× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 193.2 | 171.4 | 1.13× |
 
-**Julia currently takes 4.97–6.38× as long as OpenCV on these eight inputs.**
-These are timings for the current reference implementation on this machine.
+**Julia currently takes 1.11–1.34× as long as OpenCV on these eight inputs.**
+These are timings for the current implementation on this machine.
 Decoding, compilation, file interchange, warmups, and forced GC are excluded;
 GC triggered inside a measured call is included. Parameters match, with OpenCV
 `enable_precise_upscale=True`. System load and CPU frequency were not controlled.
@@ -39,7 +39,7 @@ GC triggered inside a measured call is included. Parameters match, with OpenCV
 normalization, matching Julia's output layout and normalization. The descriptor
 values still differ: OpenCV quantizes, while Julia returns unquantized Float32.
 [Raw samples and allocation values](benchmark/comparison-results.json),
-[method and reproduction](benchmark/comparison.md), and the earlier
+[method and reproduction](benchmark/comparison.md), and the
 [48-photo timing observations](benchmark/real-world-baseline.md) are available.
 
 ### Accuracy and matching
@@ -51,31 +51,30 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 
 | Metric | SIFTFeatures.jl | OpenCV 4.10 |
 |---|---:|---:|
-| Detected feature instances | 249,561 | 249,572 |
-| Descriptor matches across 40 pairs | 38,554 | 38,572 |
-| Correct matches within 3 px | 34,989 | 34,995 |
-| Pooled match precision | 90.753% | 90.726% |
+| Detected feature instances | 249,541 | 249,572 |
+| Descriptor matches across 40 pairs | 38,552 | 38,572 |
+| Correct matches within 3 px | 34,983 | 34,995 |
+| Pooled match precision | 90.742% | 90.726% |
 | Accurate fitted homographies² | 33 / 40 | 32 / 40 |
 
 | Numerical agreement with OpenCV | Measured value |
 |---|---:|
-| Geometry-paired feature instances | 249,484 (≥99.9647% overall coverage) |
-| Position difference: worst image's p95 | 0.000430 px |
-| Relative scale difference: worst image's p95 | 2.10241e-05 |
-| Orientation difference: worst image's p95 | 0.002935° |
-| Descriptor cosine: lowest per-image median | 0.99998057 (1 means identical directions) |
+| Geometry-paired feature instances | 249,471 (≥99.9595% overall coverage) |
+| Position difference: worst image's p95 | 0.000581 px |
+| Relative scale difference: worst image's p95 | 2.70769e-05 |
+| Orientation difference: worst image's p95 | 0.002931° |
+| Descriptor cosine: lowest per-image median | 0.99998051 (1 means identical directions) |
 
 ² Mean fitted-homography error below 3 px at five fixed image probes, evaluated
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Full validation, thresholds, and difficult cases](docs/validation.md).
-The current source also passes 132 Julia checks on both Julia 1.10.0 and 1.13.1;
-[prepublication checks](validation/prepublication-results.json) confirm unchanged
-keypoint and descriptor outputs for all 48 photographs after the final repairs.
+The current source also passes 170 Julia checks on Julia 1.13.2 (both single-threaded
+and multi-threaded).
 
 ## Installation
 
-Requires Julia 1.10 or newer. From a local checkout:
+Requires Julia 1.13 or newer. From a local checkout:
 
 ```julia
 using Pkg
@@ -154,7 +153,7 @@ julia --project=. benchmark/run.jl
 
 The Julia tests include analytical localization and descriptor-layout anchors,
 orientation/interpolation checks, geometric consistency, and matcher edge cases.
-CI runs Julia 1.10 and the current release on Linux.
+CI runs Julia 1.13 on Linux (single-threaded and multi-threaded).
 
 Python is used only in the optional OpenCV comparison environment:
 
@@ -178,13 +177,13 @@ python -O validation/real_world.py --data-dir validation-data \
 `--sequences graf,leuven` selects a subset. `--julia /path/to/julia` selects the
 runtime. Optional `--figures /path/to/figures` needs matplotlib and generates
 local diagnostic match plots. Dataset archives and extracted images stay local.
-The `Real photographs` GitHub workflow can run this benchmark manually.
+The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) runs this benchmark weekly (when commits were made) or manually on demand.
 
 Validation uses explicit checks that remain active under Python `-O`, writes
 failures with a nonzero exit status, and replaces stale success reports before
 starting. [Synthetic timing samples](benchmark/baseline.md) and
 [photographic timing observations](benchmark/real-world-baseline.md) are recorded;
-no SIMD/GPU optimization has been added.
+no GPU kernels have been added.
 
 ## Development and references
 

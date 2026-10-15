@@ -42,15 +42,15 @@ defect. Reproducers identified and motivated these repairs:
   whose square underflows; duplicate exact nearest neighbors still fail.
 - Input-range documentation specifies validation after Float32 conversion.
 
-Gaussian filtering still allocates Float64 intermediates before storing
-Float32 pyramid levels. Matching is brute-force and accumulates squared L2
-distance in Float64. These are profiling targets after correctness validation.
-Lower dependency compatibility bounds, hosted CI, and platforms beyond the
-tested Linux environment still need execution.
+Gaussian filtering uses a separable symmetric Float32 FIR filter with reflect-101
+border handling and preallocated workspace buffers, 3D quadratic localization
+solves use stack-allocated `StaticArrays` (`SVector`/`SMatrix`), and orientation,
+descriptor, and matcher routines use branchless SIMD passes, padded trilinear
+histogram splatting, and `4×1` register-blocked L2 distance accumulation with
+deterministic multi-threaded chunking on Julia 1.13+.
 
 ## References
 
 - D. Lowe, [Distinctive Image Features from Scale-Invariant Keypoints](https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf), 2004.
 - [OpenCV pyramid implementation](https://github.com/opencv/opencv/blob/4.10.0/modules/features2d/src/sift.dispatch.cpp).
 - [OpenCV orientation and descriptor implementation](https://github.com/opencv/opencv/blob/4.10.0/modules/features2d/src/sift.simd.hpp).
-- [ImageFiltering Gaussian kernels](https://juliaimages.org/ImageFiltering.jl/stable/kernels/).
