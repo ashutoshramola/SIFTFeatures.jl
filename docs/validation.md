@@ -2,32 +2,32 @@
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 4.10.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.2; OpenCV 4.10.0; NumPy 2.4.6; Python 3.11.17. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `28e0880eccc84284bb4ba0284ac72701`.
+Runtime: julia version 1.13.2; OpenCV 4.10.0; NumPy 2.4.6; Python 3.11.17. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `af7e29618f7c4ba7a594144ddbf56416`.
 
 ## Numerical agreement
 
-- 249,563 Julia feature instances and 249,572 OpenCV instances; 249,484 geometry-only one-to-one pairs (99.9647% coverage across all frames).
+- 249,541 Julia feature instances and 249,572 OpenCV instances; 249,471 geometry-only one-to-one pairs (99.9595% coverage across all frames).
 - Lowest coverage on any individual photograph: 99.5497%.
-- Lowest per-image median descriptor cosine similarity: 0.99998057 (1 means identical directions).
-- Worst per-image p95 position difference: 0.000438 px; relative scale difference: 2.04067e-05; orientation difference: 0.002935°.
+- Lowest per-image median descriptor cosine similarity: 0.99998051 (1 means identical directions).
+- Worst per-image p95 position difference: 0.000581 px; relative scale difference: 2.70769e-05; orientation difference: 0.002931°.
 - Fixed-frame descriptors, descriptor norms, cross-library retrieval, and matching the same descriptors with Julia versus BFMatcher were also checked.
 
 ## Matching against independent geometry
 
-Across 40 reference/target pairs, Julia returned 38,555 descriptor matches, of which 34,990 landed within 3 pixels of the published transformation (90.753% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
+Across 40 reference/target pairs, Julia returned 38,552 descriptor matches, of which 34,983 landed within 3 pixels of the published transformation (90.742% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
 
 A separately fitted homography had mean error below 3 pixels at five fixed source-image probes on 33/40 Julia pairs and 32/40 OpenCV pairs. Fit accuracy is scored against the supplied homography, not the RANSAC mask.
 
 | Scene | Change | Lowest frame coverage | Correct matches: Julia / OpenCV¹ | Accurate homographies: Julia / OpenCV² |
 |---|---|---:|---:|---:|
-| bikes | blur | 99.7249% | 1,849 / 1,843 | 5 / 4 |
-| trees | blur | 99.9217% | 3,721 / 3,722 | 3 / 3 |
-| graf | viewpoint | 99.9356% | 1,434 / 1,435 | 3 / 3 |
-| wall | viewpoint | 99.9209% | 10,468 / 10,473 | 3 / 3 |
-| bark | zoom rotation | 99.9286% | 2,443 / 2,444 | 5 / 5 |
-| boat | zoom rotation | 99.9230% | 4,914 / 4,912 | 4 / 4 |
-| leuven | illumination | 99.9078% | 3,084 / 3,090 | 5 / 5 |
-| ubc | jpeg compression | 99.5497% | 7,077 / 7,076 | 5 / 5 |
+| bikes | blur | 99.9199% | 1,845 / 1,843 | 5 / 4 |
+| trees | blur | 99.9217% | 3,720 / 3,722 | 3 / 3 |
+| graf | viewpoint | 99.9125% | 1,434 / 1,435 | 3 / 3 |
+| wall | viewpoint | 99.9111% | 10,467 / 10,473 | 3 / 3 |
+| bark | zoom rotation | 99.9278% | 2,444 / 2,444 | 5 / 5 |
+| boat | zoom rotation | 99.9282% | 4,913 / 4,912 | 4 / 4 |
+| leuven | illumination | 99.8704% | 3,084 / 3,090 | 5 / 5 |
+| ubc | jpeg compression | 99.5497% | 7,076 / 7,076 | 5 / 5 |
 
 ¹ Sum of correct descriptor matches across the five target images. ² Out of five pairs, using the mean error at the five probes.
 

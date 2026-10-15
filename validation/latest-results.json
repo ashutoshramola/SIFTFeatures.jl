@@ -1,54 +1,54 @@
 {
   "suite": "synthetic OpenCV reference",
-  "run_id": "c55051d25f284863971f47d501ddc7d0",
-  "started_utc": "2026-10-15T14:35:06.702386+00:00",
+  "run_id": "f41d99a4adb649cbbd76ab570eaa7a4a",
+  "started_utc": "2026-10-15T20:23:35.453841+00:00",
   "state": "complete",
   "passed": true,
-  "python": "3.11.17",
+  "python": "3.15.0",
   "python_optimization": 0,
-  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "platform": "Windows-11-10.0.26300-SP0",
   "source_sha256": {
-    "Project.toml": "74a524e075dacb5a6f03e39309be9d6f5a2b01eec1bae42128c69dde528d43ac",
-    "src/SIFTFeatures.jl": "a1fc412baba650437398c30f8ea002ad6efd18ee1e6a1dbacb0ac4d9d843dff5",
-    "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
-    "validation/common.py": "153a8bb914a0ce408cbe079102eedca95ee0eb2c80a4a7a4fe1d258da65ec86f",
-    "validation/download_oxford.py": "499e912c9298013b1fe8cdfda7002d0c0c9437ded3e384ff7a7f601ac9eb2fb1",
-    "validation/real_world.py": "7427347939fdf047730a4cf172dc201d29f42aec2b57fb95feb2f43e6f2b1338",
-    "validation/test_validation.py": "eefc6cf13db257bb0ce9e05586983badef7370f098d122f5d701dedf621cb734",
-    "validation/update_reports.py": "82f267c9e3352b296cdbf6f42e8248d07b06e0181ce15af3ba6c1bc092986047",
-    "validation/validate.py": "3bc73cdfd1b7f38993542a269e38b689151285b2bd48e5d76db7c3b5424fd949",
-    "validation/export.jl": "d7c168019662605d1fb20f45775e1f682b89992c912144bc8bf76583b13feed1"
+    "Project.toml": "f86e3a9fbb9e80deb82f603740012a044f949172e66e70bfb5ac30a604d398b6",
+    "src/SIFTFeatures.jl": "f0e5507f4ae7e14c75a317232925ad673d3318b735a850192844bca86b7aaeb5",
+    "validation/check_guards.py": "a67312c526dbe5f0f18ba3d82ae3669605b71bab3f138459dde6740c9998cb79",
+    "validation/common.py": "a301c5d3d89a18e348c668b13d7a5f4915690296d08518fd04a2c2b8d2036c81",
+    "validation/download_oxford.py": "148a0d4ccff0b90acb57f2ffcfc02422a1f2c73315bfab87927fdb11a457665c",
+    "validation/real_world.py": "299f04d0b5b7ff849da905b870478749e7a44864cf864acdae621dcee3432fc5",
+    "validation/test_validation.py": "a45faa9e1d39d216d92a1b688d40e15dbbb4ac5616edbd87ec10000abc693f5a",
+    "validation/update_reports.py": "28cd5392ac2937ab30bbc02444d36f3d8be23961c27b14a01f0e95f6374d3fab",
+    "validation/validate.py": "7dfdb855dece8bab8e5d6de814cf75d2b871e4ff7131f560d32a46d582832d3e",
+    "validation/export.jl": "ed206cf3758ce00bc86238dc088270d5b5ae81af405bb6c8325426f62fbde66b"
   },
   "checks": [
     {
       "name": "base: corresponding frames",
       "passed": true,
-      "detail": "728"
+      "detail": "727"
     },
     {
       "name": "base: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9996168613433838"
+      "detail": "0.9996114373207092"
     },
     {
       "name": "base: frame coverage",
       "passed": true,
-      "detail": "0.9958960328317373"
+      "detail": "0.9945280437756497"
     },
     {
       "name": "base: position p95",
       "passed": true,
-      "detail": "6.624906166026267e-05"
+      "detail": "8.251734953178566e-05"
     },
     {
       "name": "base: scale p95",
       "passed": true,
-      "detail": "1.4304473373372141e-05"
+      "detail": "1.744798678440239e-05"
     },
     {
       "name": "base: angle p95",
       "passed": true,
-      "detail": "0.0033746976692824067"
+      "detail": "0.0014829871117068068"
     },
     {
       "name": "base: descriptor median cosine",
@@ -63,7 +63,7 @@
     {
       "name": "base: cross-library retrieval count",
       "passed": true,
-      "detail": "728"
+      "detail": "726"
     },
     {
       "name": "base: cross-library precision",
@@ -73,32 +73,32 @@
     {
       "name": "translate: corresponding frames",
       "passed": true,
-      "detail": "698"
+      "detail": "697"
     },
     {
       "name": "translate: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9999804496765137"
+      "detail": "0.9999802112579346"
     },
     {
       "name": "translate: frame coverage",
       "passed": true,
-      "detail": "0.9957203994293866"
+      "detail": "0.9942938659058488"
     },
     {
       "name": "translate: position p95",
       "passed": true,
-      "detail": "6.573468948426652e-05"
+      "detail": "8.651219159066269e-05"
     },
     {
       "name": "translate: scale p95",
       "passed": true,
-      "detail": "1.488673871833379e-05"
+      "detail": "1.7551863559406284e-05"
     },
     {
       "name": "translate: angle p95",
       "passed": true,
-      "detail": "0.0010537064820580221"
+      "detail": "0.001001270464328534"
     },
     {
       "name": "translate: descriptor median cosine",
@@ -108,12 +108,12 @@
     {
       "name": "translate: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999796152114868"
+      "detail": "0.9999796748161316"
     },
     {
       "name": "translate: cross-library retrieval count",
       "passed": true,
-      "detail": "698"
+      "detail": "696"
     },
     {
       "name": "translate: cross-library precision",
@@ -123,32 +123,32 @@
     {
       "name": "rotate90: corresponding frames",
       "passed": true,
-      "detail": "720"
+      "detail": "718"
     },
     {
       "name": "rotate90: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9999805688858032"
+      "detail": "0.9999808669090271"
     },
     {
       "name": "rotate90: frame coverage",
       "passed": true,
-      "detail": "0.997229916897507"
+      "detail": "0.9944598337950139"
     },
     {
       "name": "rotate90: position p95",
       "passed": true,
-      "detail": "6.826635792167499e-05"
+      "detail": "8.732352238447468e-05"
     },
     {
       "name": "rotate90: scale p95",
       "passed": true,
-      "detail": "1.5175102530901041e-05"
+      "detail": "1.8452374046051808e-05"
     },
     {
       "name": "rotate90: angle p95",
       "passed": true,
-      "detail": "0.002054875274040345"
+      "detail": "0.0014773281891154023"
     },
     {
       "name": "rotate90: descriptor median cosine",
@@ -158,12 +158,12 @@
     {
       "name": "rotate90: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999798536300659"
+      "detail": "0.9999797344207764"
     },
     {
       "name": "rotate90: cross-library retrieval count",
       "passed": true,
-      "detail": "720"
+      "detail": "717"
     },
     {
       "name": "rotate90: cross-library precision",
@@ -178,7 +178,7 @@
     {
       "name": "similarity: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9999810457229614"
+      "detail": "0.9999811053276062"
     },
     {
       "name": "similarity: frame coverage",
@@ -188,17 +188,17 @@
     {
       "name": "similarity: position p95",
       "passed": true,
-      "detail": "7.894990053708316e-05"
+      "detail": "0.00010296903074165206"
     },
     {
       "name": "similarity: scale p95",
       "passed": true,
-      "detail": "1.087790220627438e-05"
+      "detail": "1.367107314066973e-05"
     },
     {
       "name": "similarity: angle p95",
       "passed": true,
-      "detail": "0.0001602576969004083"
+      "detail": "0.00016512238777825335"
     },
     {
       "name": "similarity: descriptor median cosine",
@@ -208,7 +208,7 @@
     {
       "name": "similarity: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999794960021973"
+      "detail": "0.9999793767929077"
     },
     {
       "name": "similarity: cross-library retrieval count",
@@ -228,7 +228,7 @@
     {
       "name": "perspective: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9999526739120483"
+      "detail": "0.9999447464942932"
     },
     {
       "name": "perspective: frame coverage",
@@ -238,27 +238,27 @@
     {
       "name": "perspective: position p95",
       "passed": true,
-      "detail": "7.086830941999015e-05"
+      "detail": "9.737605983732861e-05"
     },
     {
       "name": "perspective: scale p95",
       "passed": true,
-      "detail": "1.0985727909140763e-05"
+      "detail": "1.6664480711581206e-05"
     },
     {
       "name": "perspective: angle p95",
       "passed": true,
-      "detail": "0.0001938025869694417"
+      "detail": "0.00022239422908862304"
     },
     {
       "name": "perspective: descriptor median cosine",
       "passed": true,
-      "detail": "0.9999850392341614"
+      "detail": "0.9999849200248718"
     },
     {
       "name": "perspective: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999797940254211"
+      "detail": "0.9999797344207764"
     },
     {
       "name": "perspective: cross-library retrieval count",
@@ -278,7 +278,7 @@
     {
       "name": "texture: half-pixel descriptors",
       "passed": true,
-      "detail": "0.9999772310256958"
+      "detail": "0.999977707862854"
     },
     {
       "name": "texture: frame coverage",
@@ -288,27 +288,27 @@
     {
       "name": "texture: position p95",
       "passed": true,
-      "detail": "2.575957105085374e-05"
+      "detail": "3.178553112118675e-05"
     },
     {
       "name": "texture: scale p95",
       "passed": true,
-      "detail": "4.557710636898804e-06"
+      "detail": "6.040176133426112e-06"
     },
     {
       "name": "texture: angle p95",
       "passed": true,
-      "detail": "6.178461795472927e-05"
+      "detail": "7.068750695389261e-05"
     },
     {
       "name": "texture: descriptor median cosine",
       "passed": true,
-      "detail": "0.9999802112579346"
+      "detail": "0.9999801516532898"
     },
     {
       "name": "texture: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999772906303406"
+      "detail": "0.9999771118164062"
     },
     {
       "name": "texture: cross-library retrieval count",
@@ -348,7 +348,7 @@
     {
       "name": "translate: homography probe error",
       "passed": true,
-      "detail": "0.01783485267217685"
+      "detail": "0.017860139865881426"
     },
     {
       "name": "rotate90: same-descriptor matcher agreement",
@@ -358,17 +358,17 @@
     {
       "name": "rotate90: match count",
       "passed": true,
-      "detail": "676"
+      "detail": "675"
     },
     {
       "name": "rotate90: inlier fraction",
       "passed": true,
-      "detail": "0.9985207100591716"
+      "detail": "0.9985185185185185"
     },
     {
       "name": "rotate90: sufficient matches for homography",
       "passed": true,
-      "detail": "676"
+      "detail": "675"
     },
     {
       "name": "rotate90: homography found",
@@ -378,7 +378,7 @@
     {
       "name": "rotate90: homography probe error",
       "passed": true,
-      "detail": "0.01213678693393328"
+      "detail": "0.012177856169781098"
     },
     {
       "name": "similarity: same-descriptor matcher agreement",
@@ -408,7 +408,7 @@
     {
       "name": "similarity: homography probe error",
       "passed": true,
-      "detail": "0.17110601777514264"
+      "detail": "0.17109951375407503"
     },
     {
       "name": "perspective: same-descriptor matcher agreement",
@@ -438,175 +438,175 @@
     {
       "name": "perspective: homography probe error",
       "passed": true,
-      "detail": "0.0745330015562182"
+      "detail": "0.07453326239024675"
     }
   ],
   "failures": [],
   "opencv": "4.10.0",
-  "numpy": "2.4.6",
+  "numpy": "2.5.4",
   "julia": "julia version 1.13.2",
   "precise_upscale": true,
   "images": {
     "base": {
       "half_pixel_probe_cosine": {
-        "min": 0.9996168613433838,
-        "p05": 0.9996716380119324,
-        "median": 0.9999843835830688,
-        "p95": 0.9999883770942688,
-        "max": 0.9999886155128479
+        "min": 0.9996114373207092,
+        "p05": 0.9996669888496399,
+        "median": 0.9999842643737793,
+        "p95": 0.9999882578849792,
+        "max": 0.9999885559082031
       },
-      "native_count": 730,
+      "native_count": 727,
       "opencv_count": 731,
-      "paired_count": 728,
-      "native_coverage": 0.9972602739726028,
-      "opencv_coverage": 0.9958960328317373,
+      "paired_count": 727,
+      "native_coverage": 1.0,
+      "opencv_coverage": 0.9945280437756497,
       "position_px": {
-        "min": 2.9253469850530463e-07,
-        "p05": 2.4913803185872843e-06,
-        "median": 1.3823343044391355e-05,
-        "p95": 6.624906166026267e-05,
-        "max": 0.0004345902653482387
+        "min": 3.5135220175501766e-07,
+        "p05": 3.3529762186777045e-06,
+        "median": 1.5991837869776788e-05,
+        "p95": 8.251734953178566e-05,
+        "max": 0.0005267087589024487
       },
       "relative_scale_error": {
-        "min": 8.864339484659922e-09,
-        "p05": 1.3174899376466876e-07,
-        "median": 1.2454579719767267e-06,
-        "p95": 1.4304473373372141e-05,
-        "max": 6.0095125228532e-05
+        "min": 1.2026957318944653e-08,
+        "p05": 9.763120800698744e-08,
+        "median": 1.6342968027771576e-06,
+        "p95": 1.744798678440239e-05,
+        "max": 6.278808043824746e-05
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 9.034373994805916e-07,
-        "median": 1.1388616727915156e-05,
-        "p95": 0.0033746976692824067,
-        "max": 0.4536576745775872
+        "p05": 1.2082234077514843e-06,
+        "median": 1.3064479131126104e-05,
+        "p95": 0.0014829871117068068,
+        "max": 1.2714216474797326
       },
       "detected_descriptor_cosine": {
-        "min": 0.9998734593391418,
+        "min": 0.9987618327140808,
         "p05": 0.9999789595603943,
         "median": 0.9999854564666748,
-        "p95": 0.9999940395355225,
-        "max": 0.999996542930603
+        "p95": 0.9999939799308777,
+        "max": 0.9999964833259583
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999747276306152,
         "p05": 0.9999796152114868,
-        "median": 0.9999856948852539,
-        "p95": 0.9999940395355225,
-        "max": 0.999996542930603
+        "median": 0.9999855756759644,
+        "p95": 0.9999939799308777,
+        "max": 0.9999964833259583
       },
-      "cross_matches": 728,
+      "cross_matches": 726,
       "cross_match_precision": 1.0
     },
     "translate": {
       "half_pixel_probe_cosine": {
-        "min": 0.9999804496765137,
-        "p05": 0.9999812245368958,
-        "median": 0.9999884366989136,
-        "p95": 0.9999964237213135,
-        "max": 0.9999973773956299
+        "min": 0.9999802112579346,
+        "p05": 0.9999809861183167,
+        "median": 0.9999885559082031,
+        "p95": 0.9999964833259583,
+        "max": 0.9999973177909851
       },
-      "native_count": 698,
+      "native_count": 697,
       "opencv_count": 701,
-      "paired_count": 698,
+      "paired_count": 697,
       "native_coverage": 1.0,
-      "opencv_coverage": 0.9957203994293866,
+      "opencv_coverage": 0.9942938659058488,
       "position_px": {
-        "min": 9.26513656906991e-08,
-        "p05": 2.6980969285526987e-06,
-        "median": 1.4863105712682541e-05,
-        "p95": 6.573468948426652e-05,
-        "max": 0.0003520583882356848
+        "min": 4.407803237219619e-07,
+        "p05": 3.340771317296215e-06,
+        "median": 1.6925941845825074e-05,
+        "p95": 8.651219159066269e-05,
+        "max": 0.00027624858391104494
       },
       "relative_scale_error": {
-        "min": 8.453950206543936e-09,
-        "p05": 1.0121694371534318e-07,
-        "median": 1.428823898974585e-06,
-        "p95": 1.488673871833379e-05,
-        "max": 6.0095125228532e-05
+        "min": 1.5934409347551082e-09,
+        "p05": 8.85902522451687e-08,
+        "median": 1.678568586349627e-06,
+        "p95": 1.7551863559406284e-05,
+        "max": 6.278808043824746e-05
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 1.1368397916360655e-06,
-        "median": 1.1391986296600229e-05,
-        "p95": 0.0010537064820580221,
-        "max": 0.4536576745775872
+        "p05": 1.37752935617774e-06,
+        "median": 1.2824095072856026e-05,
+        "p95": 0.001001270464328534,
+        "max": 1.2714216474797326
       },
       "detected_descriptor_cosine": {
-        "min": 0.9998734593391418,
-        "p05": 0.9999790191650391,
+        "min": 0.9987618327140808,
+        "p05": 0.9999790787696838,
         "median": 0.9999856948852539,
-        "p95": 0.9999938607215881,
-        "max": 0.999996542930603
+        "p95": 0.9999938011169434,
+        "max": 0.9999964833259583
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.999976634979248,
-        "p05": 0.9999796152114868,
+        "p05": 0.9999796748161316,
         "median": 0.9999858140945435,
-        "p95": 0.9999938607215881,
-        "max": 0.999996542930603
+        "p95": 0.9999938011169434,
+        "max": 0.9999964833259583
       },
-      "cross_matches": 698,
+      "cross_matches": 696,
       "cross_match_precision": 1.0
     },
     "rotate90": {
       "half_pixel_probe_cosine": {
-        "min": 0.9999805688858032,
-        "p05": 0.9999810457229614,
-        "median": 0.999984622001648,
-        "p95": 0.9999938011169434,
-        "max": 0.999995231628418
+        "min": 0.9999808669090271,
+        "p05": 0.9999813437461853,
+        "median": 0.9999847412109375,
+        "p95": 0.9999933242797852,
+        "max": 0.999994695186615
       },
-      "native_count": 722,
+      "native_count": 718,
       "opencv_count": 722,
-      "paired_count": 720,
-      "native_coverage": 0.997229916897507,
-      "opencv_coverage": 0.997229916897507,
+      "paired_count": 718,
+      "native_coverage": 1.0,
+      "opencv_coverage": 0.9944598337950139,
       "position_px": {
         "min": 0.0,
-        "p05": 1.849244777308731e-06,
-        "median": 1.3245528399985497e-05,
-        "p95": 6.826635792167499e-05,
-        "max": 0.0004193157812951651
+        "p05": 2.312564602116781e-06,
+        "median": 1.6784581469650713e-05,
+        "p95": 8.732352238447468e-05,
+        "max": 0.0005117944346008273
       },
       "relative_scale_error": {
-        "min": 1.8722556838213222e-10,
-        "p05": 9.493864342458027e-08,
-        "median": 1.5636285076725542e-06,
-        "p95": 1.5175102530901041e-05,
-        "max": 5.693551230523397e-05
+        "min": 4.246278439978823e-09,
+        "p05": 1.6463528829113727e-07,
+        "median": 2.0716482036498007e-06,
+        "p95": 1.8452374046051808e-05,
+        "max": 7.308072719192094e-05
       },
       "angle_error_deg": {
-        "min": 4.333007042519988e-08,
-        "p05": 1.0795592015281334e-06,
-        "median": 1.1924449456877806e-05,
-        "p95": 0.002054875274040345,
-        "max": 2.0506207792602305
+        "min": 1.5764711889704614e-08,
+        "p05": 1.1132423760767517e-06,
+        "median": 1.2685154182762508e-05,
+        "p95": 0.0014773281891154023,
+        "max": 1.671104994921459
       },
       "detected_descriptor_cosine": {
-        "min": 0.9968520402908325,
+        "min": 0.9979144930839539,
         "p05": 0.9999793767929077,
         "median": 0.9999855756759644,
-        "p95": 0.9999940395355225,
-        "max": 0.9999966025352478
+        "p95": 0.9999939203262329,
+        "max": 0.9999966621398926
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.9999757409095764,
-        "p05": 0.9999798536300659,
-        "median": 0.9999857544898987,
-        "p95": 0.9999940395355225,
-        "max": 0.9999966025352478
+        "min": 0.9999762773513794,
+        "p05": 0.9999797344207764,
+        "median": 0.9999856948852539,
+        "p95": 0.9999939203262329,
+        "max": 0.9999966621398926
       },
-      "cross_matches": 720,
+      "cross_matches": 717,
       "cross_match_precision": 1.0
     },
     "similarity": {
       "half_pixel_probe_cosine": {
-        "min": 0.9999810457229614,
+        "min": 0.9999811053276062,
         "p05": 0.9999814033508301,
-        "median": 0.9999849200248718,
-        "p95": 0.9999873638153076,
-        "max": 0.9999874830245972
+        "median": 0.9999848008155823,
+        "p95": 0.9999868273735046,
+        "max": 0.9999868869781494
       },
       "native_count": 532,
       "opencv_count": 532,
@@ -614,50 +614,50 @@
       "native_coverage": 1.0,
       "opencv_coverage": 1.0,
       "position_px": {
-        "min": 3.2060601707961614e-07,
-        "p05": 2.720945093455874e-06,
-        "median": 1.692949794406959e-05,
-        "p95": 7.894990053708316e-05,
-        "max": 0.00021809379771277565
+        "min": 2.1251960844942118e-07,
+        "p05": 2.406706835833468e-06,
+        "median": 1.948113419009032e-05,
+        "p95": 0.00010296903074165206,
+        "max": 0.0002446922397680222
       },
       "relative_scale_error": {
-        "min": 8.494072112341655e-10,
-        "p05": 9.73683567107031e-08,
-        "median": 1.3464963847242828e-06,
-        "p95": 1.087790220627438e-05,
-        "max": 3.105044476514607e-05
+        "min": 6.710952016319993e-09,
+        "p05": 1.70604169513755e-07,
+        "median": 1.6975807374253193e-06,
+        "p95": 1.367107314066973e-05,
+        "max": 3.077287857489175e-05
       },
       "angle_error_deg": {
         "min": 1.5515025624991004e-08,
-        "p05": 1.1297155107217651e-06,
-        "median": 1.0742390291902431e-05,
-        "p95": 0.0001602576969004083,
-        "max": 0.16880513265882094
+        "p05": 1.175889808709748e-06,
+        "median": 1.2152203494341137e-05,
+        "p95": 0.00016512238777825335,
+        "max": 0.16878815499637445
       },
       "detected_descriptor_cosine": {
-        "min": 0.9999648928642273,
-        "p05": 0.9999793767929077,
+        "min": 0.9999635219573975,
+        "p05": 0.9999792575836182,
         "median": 0.9999850988388062,
-        "p95": 0.9999920725822449,
-        "max": 0.9999947547912598
+        "p95": 0.9999920129776001,
+        "max": 0.9999951124191284
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.9999765157699585,
-        "p05": 0.9999794960021973,
-        "median": 0.9999851584434509,
-        "p95": 0.9999920725822449,
-        "max": 0.9999947547912598
+        "min": 0.9999764561653137,
+        "p05": 0.9999793767929077,
+        "median": 0.9999850988388062,
+        "p95": 0.9999920129776001,
+        "max": 0.9999951124191284
       },
       "cross_matches": 532,
       "cross_match_precision": 1.0
     },
     "perspective": {
       "half_pixel_probe_cosine": {
-        "min": 0.9999526739120483,
-        "p05": 0.999957263469696,
-        "median": 0.9999839663505554,
-        "p95": 0.9999858140945435,
-        "max": 0.9999860525131226
+        "min": 0.9999447464942932,
+        "p05": 0.9999505281448364,
+        "median": 0.9999837279319763,
+        "p95": 0.999985933303833,
+        "max": 0.9999862313270569
       },
       "native_count": 624,
       "opencv_count": 623,
@@ -665,50 +665,50 @@
       "native_coverage": 0.9983974358974359,
       "opencv_coverage": 1.0,
       "position_px": {
-        "min": 3.359961341171719e-07,
-        "p05": 2.129144845844255e-06,
-        "median": 1.5298964966055657e-05,
-        "p95": 7.086830941999015e-05,
-        "max": 0.0005600606998599411
+        "min": 5.029795131159544e-07,
+        "p05": 2.809735129167939e-06,
+        "median": 1.7924889977979072e-05,
+        "p95": 9.737605983732861e-05,
+        "max": 0.00031892201127952773
       },
       "relative_scale_error": {
-        "min": 1.0325194033100615e-09,
-        "p05": 1.062719304223414e-07,
-        "median": 1.3895070523073372e-06,
-        "p95": 1.0985727909140763e-05,
-        "max": 9.777878999550627e-05
+        "min": 1.0613254719515908e-09,
+        "p05": 1.224690749590529e-07,
+        "median": 1.6613040678681301e-06,
+        "p95": 1.6664480711581206e-05,
+        "max": 9.014891592584728e-05
       },
       "angle_error_deg": {
-        "min": 2.3427482339348682e-08,
-        "p05": 8.917313552532464e-07,
-        "median": 9.99149742454342e-06,
-        "p95": 0.0001938025869694417,
-        "max": 0.48168159192216825
+        "min": 8.370726299525412e-08,
+        "p05": 1.1955815807257587e-06,
+        "median": 1.3667967499717599e-05,
+        "p95": 0.00022239422908862304,
+        "max": 0.48166440318831705
       },
       "detected_descriptor_cosine": {
-        "min": 0.9998645186424255,
-        "p05": 0.999979555606842,
-        "median": 0.9999850392341614,
+        "min": 0.9998640418052673,
+        "p05": 0.9999793767929077,
+        "median": 0.9999849200248718,
         "p95": 0.9999921321868896,
-        "max": 0.9999963045120239
+        "max": 0.9999966621398926
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.999976396560669,
-        "p05": 0.9999797940254211,
-        "median": 0.9999851584434509,
+        "min": 0.9999763369560242,
+        "p05": 0.9999797344207764,
+        "median": 0.9999850988388062,
         "p95": 0.9999921321868896,
-        "max": 0.9999963045120239
+        "max": 0.9999966621398926
       },
       "cross_matches": 623,
       "cross_match_precision": 1.0
     },
     "texture": {
       "half_pixel_probe_cosine": {
-        "min": 0.9999772310256958,
-        "p05": 0.9999775290489197,
-        "median": 0.9999794960021973,
-        "p95": 0.9999798536300659,
-        "max": 0.9999798536300659
+        "min": 0.999977707862854,
+        "p05": 0.9999778866767883,
+        "median": 0.9999792575836182,
+        "p95": 0.9999796152114868,
+        "max": 0.9999796152114868
       },
       "native_count": 3353,
       "opencv_count": 3351,
@@ -716,39 +716,39 @@
       "native_coverage": 0.9994035192365046,
       "opencv_coverage": 1.0,
       "position_px": {
-        "min": 9.469761281943624e-08,
-        "p05": 9.014708688144565e-07,
-        "median": 4.932097450477446e-06,
-        "p95": 2.575957105085374e-05,
-        "max": 0.0005986308342445416
+        "min": 9.194123792896531e-08,
+        "p05": 1.1762555266874455e-06,
+        "median": 5.7900212768877305e-06,
+        "p95": 3.178553112118675e-05,
+        "max": 0.0008394349594929313
       },
       "relative_scale_error": {
-        "min": 1.0295986285768777e-10,
-        "p05": 7.017948400189766e-08,
-        "median": 8.053141796748875e-07,
-        "p95": 4.557710636898804e-06,
-        "max": 7.262547656672336e-05
+        "min": 2.6652902107571208e-11,
+        "p05": 8.640738302645445e-08,
+        "median": 1.0290517319377912e-06,
+        "p95": 6.040176133426112e-06,
+        "max": 3.9206102054656355e-05
       },
       "angle_error_deg": {
-        "min": 2.550041521410189e-10,
-        "p05": 7.431260546046269e-07,
-        "median": 7.950438236808342e-06,
-        "p95": 6.178461795472927e-05,
+        "min": 1.6890017580443858e-09,
+        "p05": 9.065055508151685e-07,
+        "median": 9.234750797182051e-06,
+        "p95": 7.068750695389261e-05,
         "max": 1.0355706335901316
       },
       "detected_descriptor_cosine": {
-        "min": 0.9991718530654907,
-        "p05": 0.9999769926071167,
-        "median": 0.9999802112579346,
-        "p95": 0.9999830722808838,
-        "max": 0.9999877214431763
+        "min": 0.9991716146469116,
+        "p05": 0.9999768733978271,
+        "median": 0.9999801516532898,
+        "p95": 0.9999829530715942,
+        "max": 0.9999875426292419
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.9999741315841675,
-        "p05": 0.9999772906303406,
-        "median": 0.9999802708625793,
-        "p95": 0.9999830722808838,
-        "max": 0.9999877214431763
+        "min": 0.9999737739562988,
+        "p05": 0.9999771118164062,
+        "median": 0.9999802112579346,
+        "p95": 0.999983012676239,
+        "max": 0.9999875426292419
       },
       "cross_matches": 3351,
       "cross_match_precision": 1.0
@@ -762,55 +762,55 @@
         "min": 0.0,
         "p05": 0.0,
         "median": 0.0,
-        "p95": 0.19067594822498934,
-        "max": 1.6814840531506736
+        "p95": 0.1906836912778235,
+        "max": 1.6814054286221307
       },
       "opencv_matches": 627,
       "opencv_inlier_fraction": 1.0,
-      "recovered_homography_max_probe_error_px": 0.01783485267217685
+      "recovered_homography_max_probe_error_px": 0.017860139865881426
     },
     "rotate90": {
-      "native_matches": 676,
-      "native_inlier_fraction": 0.9985207100591716,
+      "native_matches": 675,
+      "native_inlier_fraction": 0.9985185185185185,
       "native_error_px": {
         "min": 0.0,
         "p05": 0.0,
-        "median": 1.0000000003174137e-05,
-        "p95": 0.1502929805620971,
-        "max": 3.2988118860135165
+        "median": 2.0000000006348273e-05,
+        "p95": 0.15062217517184354,
+        "max": 3.298981034459737
       },
       "opencv_matches": 675,
       "opencv_inlier_fraction": 0.9985185185185185,
-      "recovered_homography_max_probe_error_px": 0.01213678693393328
+      "recovered_homography_max_probe_error_px": 0.012177856169781098
     },
     "similarity": {
       "native_matches": 305,
       "native_inlier_fraction": 0.9442622950819672,
       "native_error_px": {
-        "min": 0.0012625786972477778,
-        "p05": 0.00903446923685765,
-        "median": 0.2299454216908655,
-        "p95": 2.267433701338382,
-        "max": 302.9714113055577
+        "min": 0.0012539475342141343,
+        "p05": 0.009001673031769738,
+        "median": 0.22988504969355839,
+        "p95": 2.2673247674294448,
+        "max": 302.97140870938455
       },
       "opencv_matches": 305,
       "opencv_inlier_fraction": 0.9442622950819672,
-      "recovered_homography_max_probe_error_px": 0.17110601777514264
+      "recovered_homography_max_probe_error_px": 0.17109951375407503
     },
     "perspective": {
       "native_matches": 387,
       "native_inlier_fraction": 0.9689922480620154,
       "native_error_px": {
-        "min": 0.00419708533209562,
-        "p05": 0.018462093328472297,
-        "median": 0.1579686796516455,
-        "p95": 0.8867516479936893,
-        "max": 223.8406471255466
+        "min": 0.0041993725852804194,
+        "p05": 0.018456115312609767,
+        "median": 0.15800944259533264,
+        "p95": 0.8867528367802298,
+        "max": 223.84064925992
       },
       "opencv_matches": 386,
       "opencv_inlier_fraction": 0.9689119170984456,
-      "recovered_homography_max_probe_error_px": 0.0745330015562182
+      "recovered_homography_max_probe_error_px": 0.07453326239024675
     }
   },
-  "finished_utc": "2026-10-15T14:35:14.530776+00:00"
+  "finished_utc": "2026-10-15T20:23:40.417618+00:00"
 }

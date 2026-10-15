@@ -14,22 +14,22 @@ benchmark sequences. See [validation results](docs/validation.md) and
 ### Detection and descriptor timing
 
 Median of **five measured runs after one warmup per image**, using the first
-original-resolution photograph from each Oxford sequence. AMD EPYC 7763 64-Core Processor;
+original-resolution photograph from each Oxford sequence. Intel64 Family 6 Model 183 Stepping 1, GenuineIntel;
 Julia 1.13.2 and OpenCV 4.10.0; one thread each; unlimited features.
 Measured 2026-10-15.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3,226 / 3,225 | 796.2 | 214.7 | 3.71× |
-| trees_1 | 1000×700 | 12,478 / 12,477 | 1,577.0 | 452.3 | 3.49× |
-| graf_1 | 800×640 | 2,731 / 2,731 | 614.5 | 153.9 | 3.99× |
-| wall_1 | 1000×700 | 9,173 / 9,175 | 1,285.6 | 366.4 | 3.51× |
-| bark_1 | 765×512 | 3,757 / 3,758 | 593.5 | 168.8 | 3.52× |
-| boat_1 | 850×680 | 8,357 / 8,359 | 1,058.2 | 287.8 | 3.68× |
-| leuven_1 | 900×600 | 2,313 / 2,314 | 573.2 | 142.2 | 4.03× |
-| ubc_1 | 800×640 | 5,036 / 5,037 | 774.8 | 203.3 | 3.81× |
+| bikes_1 | 1000×700 | 3,224 / 3,225 | 201.1 | 165.7 | 1.21× |
+| trees_1 | 1000×700 | 12,477 / 12,477 | 420.6 | 350.2 | 1.20× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 166.1 | 123.7 | 1.34× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 352.5 | 289.3 | 1.22× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 162.3 | 141.5 | 1.15× |
+| boat_1 | 850×680 | 8,356 / 8,359 | 274.2 | 247.7 | 1.11× |
+| leuven_1 | 900×600 | 2,311 / 2,314 | 144.3 | 116.9 | 1.23× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 193.2 | 171.4 | 1.13× |
 
-**Julia currently takes 3.49–4.03× as long as OpenCV on these eight inputs.**
+**Julia currently takes 1.11–1.34× as long as OpenCV on these eight inputs.**
 These are timings for the current implementation on this machine.
 Decoding, compilation, file interchange, warmups, and forced GC are excluded;
 GC triggered inside a measured call is included. Parameters match, with OpenCV
@@ -51,19 +51,19 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 
 | Metric | SIFTFeatures.jl | OpenCV 4.10 |
 |---|---:|---:|
-| Detected feature instances | 249,563 | 249,572 |
-| Descriptor matches across 40 pairs | 38,555 | 38,572 |
-| Correct matches within 3 px | 34,990 | 34,995 |
-| Pooled match precision | 90.753% | 90.726% |
+| Detected feature instances | 249,541 | 249,572 |
+| Descriptor matches across 40 pairs | 38,552 | 38,572 |
+| Correct matches within 3 px | 34,983 | 34,995 |
+| Pooled match precision | 90.742% | 90.726% |
 | Accurate fitted homographies² | 33 / 40 | 32 / 40 |
 
 | Numerical agreement with OpenCV | Measured value |
 |---|---:|
-| Geometry-paired feature instances | 249,484 (≥99.9647% overall coverage) |
-| Position difference: worst image's p95 | 0.000438 px |
-| Relative scale difference: worst image's p95 | 2.04067e-05 |
-| Orientation difference: worst image's p95 | 0.002935° |
-| Descriptor cosine: lowest per-image median | 0.99998057 (1 means identical directions) |
+| Geometry-paired feature instances | 249,471 (≥99.9595% overall coverage) |
+| Position difference: worst image's p95 | 0.000581 px |
+| Relative scale difference: worst image's p95 | 2.70769e-05 |
+| Orientation difference: worst image's p95 | 0.002931° |
+| Descriptor cosine: lowest per-image median | 0.99998051 (1 means identical directions) |
 
 ² Mean fitted-homography error below 3 px at five fixed image probes, evaluated
 against independent reference geometry. Severe viewpoint pairs still fail in
