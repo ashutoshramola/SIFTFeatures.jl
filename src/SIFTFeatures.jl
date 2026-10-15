@@ -894,6 +894,15 @@ function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=noth
     return kp, desc
 end
 
+@inline function sqdist128(a::AbstractMatrix{Float32}, i::Int, b::AbstractMatrix{Float32}, j::Int)
+    s = 0f0
+    @inbounds @simd for k in 1:128
+        diff = a[k, i] - b[k, j]
+        s = muladd(diff, diff, s)
+    end
+    return Float64(s)
+end
+
 @inline function sqdist128(a::AbstractMatrix, i::Int, b::AbstractMatrix, j::Int)
     s = 0.0
     @inbounds @simd for k in 1:128
@@ -901,6 +910,78 @@ end
         s = muladd(diff, diff, s)
     end
     return s
+end
+
+function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
+                       rev_dist::AbstractVector{Float64}, rev_idx::AbstractVector{Int},
+                       a::AbstractMatrix{Float32}, b::AbstractMatrix{Float32},
+                       qrange::UnitRange{Int}, r2::Float64, crosscheck::Bool)
+    nb = size(b, 2)
+    i = first(qrange)
+    i_end = last(qrange)
+    @inbounds while i + 3 <= i_end
+        b1, s1, idx1 = Inf32, Inf32, 0
+        b2, s2, idx2 = Inf32, Inf32, 0
+        b3, s3, idx3 = Inf32, Inf32, 0
+        b4, s4, idx4 = Inf32, Inf32, 0
+        for j in 1:nb
+            d1 = 0f0; d2 = 0f0; d3 = 0f0; d4 = 0f0
+            @simd for k in 1:128
+                bj = b[k, j]
+                df1 = a[k, i]     - bj; d1 = muladd(df1, df1, d1)
+                df2 = a[k, i + 1] - bj; d2 = muladd(df2, df2, d2)
+                df3 = a[k, i + 2] - bj; d3 = muladd(df3, df3, d3)
+                df4 = a[k, i + 3] - bj; d4 = muladd(df4, df4, d4)
+            end
+            if d1 < b1; s1, b1, idx1 = b1, d1, j elseif d1 < s1; s1 = d1 end
+            if d2 < b2; s2, b2, idx2 = b2, d2, j elseif d2 < s2; s2 = d2 end
+            if d3 < b3; s3, b3, idx3 = b3, d3, j elseif d3 < s3; s3 = d3 end
+            if d4 < b4; s4, b4, idx4 = b4, d4, j elseif d4 < s4; s4 = d4 end
+            if crosscheck
+                rd = rev_dist[j]
+                ri = rev_idx[j]
+                if Float64(d1) < rd; rd = Float64(d1); ri = i     end
+                if Float64(d2) < rd; rd = Float64(d2); ri = i + 1 end
+                if Float64(d3) < rd; rd = Float64(d3); ri = i + 2 end
+                if Float64(d4) < rd; rd = Float64(d4); ri = i + 3 end
+                rev_dist[j] = rd
+                rev_idx[j] = ri
+            end
+        end
+        if (b1 == 0f0 && s1 > 0f0) || Float64(b1) < r2 * Float64(s1)
+            push!(chunk_matches, DescriptorMatch(i, idx1, sqrt(b1)))
+        end
+        if (b2 == 0f0 && s2 > 0f0) || Float64(b2) < r2 * Float64(s2)
+            push!(chunk_matches, DescriptorMatch(i + 1, idx2, sqrt(b2)))
+        end
+        if (b3 == 0f0 && s3 > 0f0) || Float64(b3) < r2 * Float64(s3)
+            push!(chunk_matches, DescriptorMatch(i + 2, idx3, sqrt(b3)))
+        end
+        if (b4 == 0f0 && s4 > 0f0) || Float64(b4) < r2 * Float64(s4)
+            push!(chunk_matches, DescriptorMatch(i + 3, idx4, sqrt(b4)))
+        end
+        i += 4
+    end
+    @inbounds while i <= i_end
+        best, second, index = Inf, Inf, 0
+        for j in 1:nb
+            d = sqdist128(a, i, b, j)
+            if d < best
+                second, best, index = best, d, j
+            elseif d < second
+                second = d
+            end
+            if crosscheck && d < rev_dist[j]
+                rev_dist[j] = d
+                rev_idx[j] = i
+            end
+        end
+        if (best == 0.0 && second > 0.0) || best < r2 * second
+            push!(chunk_matches, DescriptorMatch(i, index, Float32(sqrt(best))))
+        end
+        i += 1
+    end
+    return chunk_matches
 end
 
 function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
