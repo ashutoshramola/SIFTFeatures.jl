@@ -14,7 +14,7 @@ benchmark sequences. See [validation results](docs/validation.md) and
 ### Detection and descriptor timing
 
 Median of **five measured runs after one warmup per image**, using the first
-original-resolution photograph from each Oxford sequence. Intel Core i9-14900HX;
+original-resolution photograph from each Oxford sequence. Intel64 Family 6 Model 183 Stepping 1, GenuineIntel;
 Julia 1.13.1 and OpenCV 4.10.0; one thread each; unlimited features.
 Measured 2026-10-15.
 
@@ -60,8 +60,8 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 | Numerical agreement with OpenCV | Measured value |
 |---|---:|
 | Geometry-paired feature instances | 249,484 (≥99.9647% overall coverage) |
-| Position difference: worst image's p95 | 0.000438 px |
-| Relative scale difference: worst image's p95 | 2.04067e-05 |
+| Position difference: worst image's p95 | 0.000409 px |
+| Relative scale difference: worst image's p95 | 2.03981e-05 |
 | Orientation difference: worst image's p95 | 0.002935° |
 | Descriptor cosine: lowest per-image median | 0.99998057 (1 means identical directions) |
 

@@ -2,7 +2,7 @@
 
 Five measured samples after one warmup per image, using img1 from each of eight
 Oxford sequences at original resolution. The samples run sequentially on
-Intel(R) Core(TM) i9-14900HX (`raptorlake`). Julia 1.13.1, OpenCV 4.10.0,
+Intel64 Family 6 Model 183 Stepping 1, GenuineIntel (`raptorlake`). Julia 1.13.1, OpenCV 4.10.0,
 NumPy 2.5.4, Python 3.15.0; Julia/OpenCV/BLAS each use one thread.
 ImageFiltering 0.7.12, ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
 
