@@ -382,23 +382,32 @@ end
 
 @inline function is_extremum(d, y::Int, x::Int, l::Int)
     @inbounds begin
-        v = d[l][y, x]
+        dl = d[l]
+        v = dl[y, x]
         iszero(v) && return false
         if v > 0f0
-            for k in l-1:l+1
-                dk = d[k]
-                for j in x-1:x+1, i in y-1:y+1
-                    (k == l && j == x && i == y) && continue
-                    dk[i, j] >= v && return false
-                end
+            (v > dl[y - 1, x] && v > dl[y + 1, x]) || return false
+            (v > dl[y - 1, x - 1] && v > dl[y, x - 1] && v > dl[y + 1, x - 1] &&
+             v > dl[y - 1, x + 1] && v > dl[y, x + 1] && v > dl[y + 1, x + 1]) || return false
+            dp_prev = d[l - 1]
+            for j in x-1:x+1, i in y-1:y+1
+                dp_prev[i, j] >= v && return false
+            end
+            dp_next = d[l + 1]
+            for j in x-1:x+1, i in y-1:y+1
+                dp_next[i, j] >= v && return false
             end
         else
-            for k in l-1:l+1
-                dk = d[k]
-                for j in x-1:x+1, i in y-1:y+1
-                    (k == l && j == x && i == y) && continue
-                    dk[i, j] <= v && return false
-                end
+            (v < dl[y - 1, x] && v < dl[y + 1, x]) || return false
+            (v < dl[y - 1, x - 1] && v < dl[y, x - 1] && v < dl[y + 1, x - 1] &&
+             v < dl[y - 1, x + 1] && v < dl[y, x + 1] && v < dl[y + 1, x + 1]) || return false
+            dp_prev = d[l - 1]
+            for j in x-1:x+1, i in y-1:y+1
+                dp_prev[i, j] <= v && return false
+            end
+            dp_next = d[l + 1]
+            for j in x-1:x+1, i in y-1:y+1
+                dp_next[i, j] <= v && return false
             end
         end
     end
@@ -591,7 +600,7 @@ end
 
 function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix{Float32}},
                                o::Int, octave::Int, l::Int, cols::UnitRange{Int},
-                               h::Int, prelim_thresh::Float64, c::SIFTConfig)
+                               h::Int, prelim_thresh::Float32, c::SIFTConfig)
     dl = d[l]
     for x in cols, y in 6:h-5
         @inbounds abs(dl[y, x]) >= prelim_thresh || continue
@@ -606,7 +615,7 @@ function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix
 end
 
 function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
-    prelim_thresh = 0.5 * c.contrast_threshold / c.octave_layers
+    prelim_thresh = Float32(0.5 * c.contrast_threshold / c.octave_layers)
     nt = Threads.nthreads()
     raw_candidates = LocalizedCandidate[]
     for o in eachindex(dp)
@@ -641,10 +650,11 @@ function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
     # Converged candidates at the same lattice extremum are the same feature.
     unique_candidates = LocalizedCandidate[]
     sizehint!(unique_candidates, length(raw_candidates))
-    seen = Set{NTuple{4,Int}}()
+    seen = Set{UInt64}()
     sizehint!(seen, length(raw_candidates))
     for cand in raw_candidates
-        id = (cand.o, cand.layer, cand.iy, cand.ix)
+        id = (UInt64(cand.o) << 48) | (UInt64(cand.layer) << 36) |
+             (UInt64(cand.ix) << 18) | UInt64(cand.iy)
         id in seen && continue
         push!(seen, id)
         push!(unique_candidates, cand)
