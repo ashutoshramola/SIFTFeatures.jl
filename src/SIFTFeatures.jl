@@ -366,12 +366,15 @@ function gaussian_pyramid(img::AbstractMatrix, config::SIFTConfig=SIFTConfig(); 
     return pyramid
 end
 
-function _diff_matrix(next_lvl::Matrix{Float32}, prev_lvl::Matrix{Float32})
-    dst = similar(next_lvl)
+function _diff_matrix!(dst::Matrix{Float32}, next_lvl::Matrix{Float32}, prev_lvl::Matrix{Float32})
     @inbounds @simd for i in eachindex(dst, next_lvl, prev_lvl)
         dst[i] = next_lvl[i] - prev_lvl[i]
     end
     return dst
+end
+
+function _diff_matrix(next_lvl::Matrix{Float32}, prev_lvl::Matrix{Float32})
+    return _diff_matrix!(similar(next_lvl), next_lvl, prev_lvl)
 end
 
 """Adjacent Gaussian differences, with `octave_layers + 2` levels per octave."""
@@ -746,39 +749,7 @@ function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix
     return out
 end
 
-function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
-    prelim_thresh = Float32(0.5 * c.contrast_threshold / c.octave_layers)
-    nt = Threads.nthreads()
-    raw_candidates = LocalizedCandidate[]
-    for o in eachindex(dp)
-        d = dp[o]
-        h, w = size(d[1])
-        (h >= 11 && w >= 11) || continue
-        octave = o - 1 + c.first_octave
-        ncols = w - 10
-        if nt > 1 && h * ncols * c.octave_layers >= 16_384
-            nchunks = min(nt, ncols)
-            for l in 2:c.octave_layers+1
-                chunk_lists = [LocalizedCandidate[] for _ in 1:nchunks]
-                @sync for chunk in 1:nchunks
-                    rel_cols = _chunk_range(ncols, chunk, nchunks)
-                    cols = (first(rel_cols) + 5):(last(rel_cols) + 5)
-                    Threads.@spawn _scan_octave_columns!(
-                        chunk_lists[chunk], d, o, octave, l, cols, h, prelim_thresh, c
-                    )
-                end
-                for list in chunk_lists
-                    append!(raw_candidates, list)
-                end
-            end
-        else
-            for l in 2:c.octave_layers+1
-                _scan_octave_columns!(
-                    raw_candidates, d, o, octave, l, 6:w-5, h, prelim_thresh, c
-                )
-            end
-        end
-    end
+function _dedup_candidates(raw_candidates::Vector{LocalizedCandidate})
     # Converged candidates at the same lattice extremum are the same feature.
     unique_candidates = LocalizedCandidate[]
     sizehint!(unique_candidates, length(raw_candidates))
@@ -792,6 +763,101 @@ function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
         push!(unique_candidates, cand)
     end
     return unique_candidates
+end
+
+function _scan_octave!(raw_candidates::Vector{LocalizedCandidate}, d::Vector{Matrix{Float32}},
+                       o::Int, c::SIFTConfig, prelim_thresh::Float32, nt::Int)
+    h, w = size(d[1])
+    (h >= 11 && w >= 11) || return raw_candidates
+    octave = o - 1 + c.first_octave
+    ncols = w - 10
+    if nt > 1 && h * ncols * c.octave_layers >= 16_384
+        nchunks = min(nt, ncols)
+        for l in 2:c.octave_layers+1
+            chunk_lists = [LocalizedCandidate[] for _ in 1:nchunks]
+            @sync for chunk in 1:nchunks
+                rel_cols = _chunk_range(ncols, chunk, nchunks)
+                cols = (first(rel_cols) + 5):(last(rel_cols) + 5)
+                Threads.@spawn _scan_octave_columns!(
+                    chunk_lists[chunk], d, o, octave, l, cols, h, prelim_thresh, c
+                )
+            end
+            for list in chunk_lists
+                append!(raw_candidates, list)
+            end
+        end
+    else
+        for l in 2:c.octave_layers+1
+            _scan_octave_columns!(
+                raw_candidates, d, o, octave, l, 6:w-5, h, prelim_thresh, c
+            )
+        end
+    end
+    return raw_candidates
+end
+
+function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
+    prelim_thresh = Float32(0.5 * c.contrast_threshold / c.octave_layers)
+    nt = Threads.nthreads()
+    raw_candidates = LocalizedCandidate[]
+    for o in eachindex(dp)
+        _scan_octave!(raw_candidates, dp[o], o, c, prelim_thresh, nt)
+    end
+    return _dedup_candidates(raw_candidates)
+end
+
+function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=nothing)
+    a = grayscale_float(img)
+    n = isnothing(octaves) ? default_octaves(a, c) : octaves
+    n isa Integer && n >= 0 || throw(ArgumentError("octaves must be a nonnegative integer"))
+    pyramid = Vector{Matrix{Float32}}[]
+    raw_candidates = LocalizedCandidate[]
+    (isempty(a) || n == 0) && return pyramid, raw_candidates
+    raw_base = c.first_octave == -1 ? double_image(a) : a
+    n <= floor(Int, log2(minimum(size(raw_base)))) ||
+        throw(ArgumentError("too many octaves: every octave must have at least two pixels along each axis"))
+    blur = sqrt(max(0.0, c.sigma^2 - (c.assumed_input_sigma * 2.0^(-c.first_octave))^2))
+    s = c.octave_layers
+    delta_sigmas = Memory{Float64}(undef, s + 2)
+    @inbounds for l in 1:s+2
+        delta_sigmas[l] = sqrt((c.sigma * 2.0^(l / s))^2 - (c.sigma * 2.0^((l - 1) / s))^2)
+    end
+    prelim_thresh = Float32(0.5 * c.contrast_threshold / s)
+    nt = Threads.nthreads()
+    sizehint!(pyramid, n)
+    tmp = similar(raw_base)
+    base = similar(raw_base)
+    gaussian_blur!(base, tmp, raw_base, blur)
+    dogs = Vector{Matrix{Float32}}(undef, s + 2)
+    for o in 1:n
+        h, w = size(base)
+        o > 1 && (tmp = Matrix{Float32}(undef, h, w))
+        levels = Vector{Matrix{Float32}}(undef, s + 3)
+        levels[1] = base
+        for l in 1:s+2
+            dst = (o == 1 && l == 1) ? raw_base : Matrix{Float32}(undef, h, w)
+            gaussian_blur!(dst, tmp, levels[l], delta_sigmas[l])
+            levels[l + 1] = dst
+        end
+        next_base = o < n ? downsample_2x(levels[s + 1]) : base
+        # Reuse levels[1], levels[s+2], levels[s+3], and tmp in-place for DoG;
+        # only levels[2..s+1] are accessed during orientation and descriptor extraction.
+        dogs[s + 2] = _diff_matrix!(levels[s + 3], levels[s + 3], levels[s + 2])
+        dogs[s + 1] = _diff_matrix!(levels[s + 2], levels[s + 2], levels[s + 1])
+        dogs[1]     = _diff_matrix!(levels[1],     levels[2],     levels[1])
+        if s >= 2
+            dogs[s] = _diff_matrix!(tmp, levels[s + 1], levels[s])
+            for l in 2:(s - 1)
+                dogs[l] = _diff_matrix(levels[l + 1], levels[l])
+            end
+        end
+        _scan_octave!(raw_candidates, dogs, o, c, prelim_thresh, nt)
+        push!(pyramid, levels)
+        if o < n
+            base = next_base
+        end
+    end
+    return pyramid, _dedup_candidates(raw_candidates)
 end
 
 function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
@@ -853,9 +919,7 @@ separate features. `nfeatures=0` keeps all features; otherwise keep the stronges
 """
 function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=nothing)
     c = validate(config)
-    gp = gaussian_pyramid(img, c; octaves)
-    dp = dog_pyramid(gp)
-    unique_cands = _detect_candidates(dp, c)
+    gp, unique_cands = _build_pyramid_and_detect(img, c; octaves)
     ncands = length(unique_cands)
     nt = Threads.nthreads()
     kp = SIFTKeypoint{Float32}[]
