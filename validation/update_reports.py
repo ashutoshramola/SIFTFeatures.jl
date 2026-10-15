@@ -61,7 +61,7 @@ def update_report_md(latest: dict, path: Path):
 The synthetic validation harness passed all {len(latest['checks'])} explicit checks on {date} and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
 
 Executed with Julia {julia_ver}, OpenCV {opencv_ver}, and NumPy {numpy_ver}. All reference gates passed.
-Julia runtime dependencies: ImageFiltering 0.7.12, ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
+Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
 
 The six images are generated reproducibly by `validate.py`: shapes and lettering, four known geometric transforms, and an independent smoothed random texture. OpenCV precise upscaling is explicitly enabled. Keypoints are paired one-to-one using position, scale, and orientation only; descriptors do not choose the pairs.
 
@@ -108,7 +108,6 @@ def update_comparison_md(comp: dict, path: Path):
     cpu_target = jenv.get("cpu_target", "")
     cpu_desc = f"{cpu} (`{cpu_target}`)" if cpu_target and cpu_target not in cpu else cpu
     pkg_line = (
-        f"ImageFiltering {jenv.get('ImageFiltering', '0.7.12')}, "
         f"ImageCore {jenv.get('ImageCore', '0.10.5')}, "
         f"ColorTypes {jenv.get('ColorTypes', '0.12.4')}"
     )
@@ -323,13 +322,13 @@ Data: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/researc
 
 This extends the synthetic baseline with the eight Oxford sequences used for real-photo validation. Each row summarizes six original-resolution photographs with unlimited features. Timings are one observational sample per photograph after a separate Julia/OpenCV warmup, not a controlled multi-repeat speed benchmark.
 
-Julia {julia_ver}, ImageFiltering 0.7.12, ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23, OpenCV {rw['opencv']}; Julia and OpenCV each used one thread. Julia timings exclude file interchange. OpenCV timing includes detection, descriptor computation, conversion to the reference frame array, and unit normalization. Hardware and system load were not controlled; avoid treating these numbers as a universal speed ratio.
+Julia {julia_ver}, ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23, OpenCV {rw['opencv']}; Julia and OpenCV each used one thread. Julia timings exclude file interchange. OpenCV timing includes detection, descriptor computation, conversion to the reference frame array, and unit normalization. Hardware and system load were not controlled; avoid treating these numbers as a universal speed ratio.
 
 | Sequence | Features: median / maximum | Julia SIFT median (s) | OpenCV observation median (s) | Julia allocations median (MiB) | Julia matcher median (s) |
 |---|---:|---:|---:|---:|---:|
 {chr(10).join(timing_rows)}
 
-The implementation uses in-place `imfilter!` into Float32 buffers, `StaticArrays` 3D localization, `Memory` work buffers, and `@simd` Float64 L2 distance accumulation.
+The implementation uses a separable symmetric Float32 FIR Gaussian filter with DoG buffer reuse, `StaticArrays` 3D localization, branchless SIMD orientation/descriptor kernels with padded trilinear splatting, and `4×1` register-blocked Float32 L2 distance accumulation.
 
 [Full raw observations](../validation/real-world-results.json) and [geometric validation report](../docs/validation.md).
 """

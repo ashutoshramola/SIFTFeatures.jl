@@ -6,14 +6,12 @@ authors = ["Ashutosh Ramola and contributors"]
 [deps]
 ColorTypes = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 ImageCore = "a09fc81d-aa75-5fe9-8630-4744c3626534"
-ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 ColorTypes = "0.11, 0.12"
 ImageCore = "0.10"
-ImageFiltering = "0.7"
 LinearAlgebra = "1"
 StaticArrays = "1"
 Test = "1"
