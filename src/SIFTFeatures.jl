@@ -1017,21 +1017,25 @@ function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
         i += 4
     end
     @inbounds while i <= i_end
-        best, second, index = Inf, Inf, 0
+        b1, s1, idx1 = Inf32, Inf32, 0
         for j in 1:nb
-            d = sqdist128(a, i, b, j)
-            if d < best
-                second, best, index = best, d, j
-            elseif d < second
-                second = d
+            d1 = 0f0
+            @simd for k in 1:128
+                df1 = a[k, i] - b[k, j]
+                d1 = muladd(df1, df1, d1)
             end
-            if crosscheck && d < rev_dist[j]
-                rev_dist[j] = d
+            if d1 < b1
+                s1, b1, idx1 = b1, d1, j
+            elseif d1 < s1
+                s1 = d1
+            end
+            if crosscheck && Float64(d1) < rev_dist[j]
+                rev_dist[j] = Float64(d1)
                 rev_idx[j] = i
             end
         end
-        if (best == 0.0 && second > 0.0) || best < r2 * second
-            push!(chunk_matches, DescriptorMatch(i, index, Float32(sqrt(best))))
+        if (b1 == 0f0 && s1 > 0f0) || Float64(b1) < r2 * Float64(s1)
+            push!(chunk_matches, DescriptorMatch(i, idx1, sqrt(b1)))
         end
         i += 1
     end
@@ -1101,12 +1105,14 @@ function match_descriptors(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real};
     (na >= 1 && nb >= 2) || return matches
     r2 = Float64(ratio)^2
     nt = Threads.nthreads()
-    if nt > 1 && na * nb >= 4096 && na >= 2
-        nchunks = min(nt, na)
+    nblocks = cld(na, 4)
+    if nt > 1 && na * nb >= 4096 && nblocks >= 2
+        nchunks = min(nt, nblocks)
         chunk_matches = [DescriptorMatch[] for _ in 1:nchunks]
         chunk_rev = [_alloc_rev_buffers(nb, crosscheck) for _ in 1:nchunks]
         @sync for chunk in 1:nchunks
-            qrange = _chunk_range(na, chunk, nchunks)
+            brange = _chunk_range(nblocks, chunk, nchunks)
+            qrange = (4 * (first(brange) - 1) + 1):min(na, 4 * last(brange))
             rdist, ridx = chunk_rev[chunk]
             Threads.@spawn _match_chunk!(
                 chunk_matches[chunk], rdist, ridx, a, b, qrange, r2, crosscheck
