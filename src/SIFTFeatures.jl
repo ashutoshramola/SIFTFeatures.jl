@@ -2,7 +2,6 @@ module SIFTFeatures
 
 using ColorTypes: Colorant, Gray, AbstractGray, color
 using ImageCore: ImageCore, Normed, gray
-using ImageFiltering: imfilter!, KernelFactors, Algorithm, CPU1, CPUThreads
 using LinearAlgebra: norm, dot, det
 using StaticArrays: SVector, SMatrix
 
@@ -176,19 +175,131 @@ function double_image(a::Matrix{Float32})
     return b
 end
 
+@inline function _reflect101(i::Int, n::Int)
+    (1 <= i <= n) && return i
+    i < 1 && (2 - i <= n) && return 2 - i
+    i > n && (2n - i >= 1) && return 2n - i
+    p = 2n - 2
+    m = mod(i - 1, p)
+    return m < n ? m + 1 : p - m + 1
+end
+
+function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
+                     k::Memory{Float32}, r::Int, cols::UnitRange{Int})
+    h = size(src, 1)
+    k0 = @inbounds k[1]
+    y_lo = r + 1
+    y_hi = h - r
+    @inbounds for x in cols
+        if y_lo <= y_hi
+            for y in 1:r
+                acc = k0 * src[y, x]
+                for d in 1:r
+                    acc = muladd(k[d + 1], src[_reflect101(y - d, h), x] + src[y + d, x], acc)
+                end
+                tmp[y, x] = acc
+            end
+            @simd for y in y_lo:y_hi
+                tmp[y, x] = k0 * src[y, x]
+            end
+            for d in 1:r
+                kd = k[d + 1]
+                @simd for y in y_lo:y_hi
+                    tmp[y, x] = muladd(kd, src[y - d, x] + src[y + d, x], tmp[y, x])
+                end
+            end
+            for y in (y_hi + 1):h
+                acc = k0 * src[y, x]
+                for d in 1:r
+                    acc = muladd(k[d + 1], src[y - d, x] + src[_reflect101(y + d, h), x], acc)
+                end
+                tmp[y, x] = acc
+            end
+        else
+            for y in 1:h
+                acc = k0 * src[y, x]
+                for d in 1:r
+                    y1 = _reflect101(y - d, h)
+                    y2 = _reflect101(y + d, h)
+                    acc = muladd(k[d + 1], src[y1, x] + src[y2, x], acc)
+                end
+                tmp[y, x] = acc
+            end
+        end
+    end
+    return tmp
+end
+
+function _blur_rows!(dst::Matrix{Float32}, tmp::Matrix{Float32},
+                     k::Memory{Float32}, r::Int, cols::UnitRange{Int})
+    h, w = size(tmp)
+    k0 = @inbounds k[1]
+    @inbounds for x in cols
+        @simd for y in 1:h
+            dst[y, x] = k0 * tmp[y, x]
+        end
+        for d in 1:r
+            kd = k[d + 1]
+            x1 = _reflect101(x - d, w)
+            x2 = _reflect101(x + d, w)
+            @simd for y in 1:h
+                dst[y, x] = muladd(kd, tmp[y, x1] + tmp[y, x2], dst[y, x])
+            end
+        end
+    end
+    return dst
+end
+
+function gaussian_blur!(dst::Matrix{Float32}, tmp::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
+    size(dst) == size(src) == size(tmp) ||
+        throw(DimensionMismatch("dst, tmp, and src must have the same size"))
+    if sigma <= eps(Float32)
+        copyto!(dst, src)
+        return dst
+    end
+    h, w = size(src)
+    (h >= 2 && w >= 2) ||
+        throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
+    # A four-sigma finite symmetric FIR kernel, with reflect-101 (no repeated endpoint).
+    s64 = Float64(sigma)
+    len = (round(Int, 8 * s64 + 1) | 1)
+    r = len ÷ 2
+    k = Memory{Float32}(undef, r + 1)
+    inv2s2 = -0.5 / (s64 * s64)
+    s = 1.0
+    @inbounds for d in 1:r
+        s += 2.0 * exp((d * d) * inv2s2)
+    end
+    invs = 1.0 / s
+    @inbounds k[1] = Float32(invs)
+    @inbounds for d in 1:r
+        k[d + 1] = Float32(exp((d * d) * inv2s2) * invs)
+    end
+    nt = Threads.nthreads()
+    if nt > 1 && length(src) >= 16_384
+        nchunks = min(nt, w)
+        @sync for chunk in 1:nchunks
+            cols = _chunk_range(w, chunk, nchunks)
+            Threads.@spawn _blur_cols!(tmp, src, k, r, cols)
+        end
+        @sync for chunk in 1:nchunks
+            cols = _chunk_range(w, chunk, nchunks)
+            Threads.@spawn _blur_rows!(dst, tmp, k, r, cols)
+        end
+    else
+        _blur_cols!(tmp, src, k, r, 1:w)
+        _blur_rows!(dst, tmp, k, r, 1:w)
+    end
+    return dst
+end
+
 function gaussian_blur!(dst::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) || throw(DimensionMismatch("dst and src must have the same size"))
     if sigma <= eps(Float32)
         copyto!(dst, src)
         return dst
     end
-    # A four-sigma finite FIR kernel, with reflect-101 (no repeated endpoint).
-    len = (round(Int, 8 * sigma + 1) | 1)
-    kernels = KernelFactors.gaussian((sigma, sigma), (len, len))
-    use_threads = Threads.nthreads() > 1 && length(src) >= 16_384 && minimum(size(src)) > len
-    resource = use_threads ? CPUThreads(Algorithm.FIR()) : CPU1(Algorithm.FIR())
-    imfilter!(resource, dst, src, kernels, "reflect")
-    return dst
+    return gaussian_blur!(dst, similar(src), src, sigma)
 end
 
 gaussian_blur(a::Matrix{Float32}, sigma::Real) =
@@ -234,14 +345,17 @@ function gaussian_pyramid(img::AbstractMatrix, config::SIFTConfig=SIFTConfig(); 
         delta_sigmas[l] = sqrt((c.sigma * 2.0^(l / s))^2 - (c.sigma * 2.0^((l - 1) / s))^2)
     end
     sizehint!(pyramid, n)
-    base = gaussian_blur(raw_base, blur)
+    tmp = similar(raw_base)
+    base = similar(raw_base)
+    gaussian_blur!(base, tmp, raw_base, blur)
     for o in 1:n
         h, w = size(base)
+        o > 1 && (tmp = Matrix{Float32}(undef, h, w))
         levels = Vector{Matrix{Float32}}(undef, s + 3)
         levels[1] = base
         for l in 1:s+2
-            dst = Matrix{Float32}(undef, h, w)
-            gaussian_blur!(dst, levels[l], delta_sigmas[l])
+            dst = (o == 1 && l == 1) ? raw_base : Matrix{Float32}(undef, h, w)
+            gaussian_blur!(dst, tmp, levels[l], delta_sigmas[l])
             levels[l + 1] = dst
         end
         push!(pyramid, levels)
