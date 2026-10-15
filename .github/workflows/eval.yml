@@ -1,0 +1,84 @@
+name: Evaluation & Benchmarks
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'
+permissions:
+  contents: write
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  evaluate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 50
+      - name: Check for recent commits
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          RECENT=$(git log --since="7 days ago" --invert-grep --grep="\[skip ci\]" --oneline)
+          LAST_MSG=$(git log -1 --pretty=%B)
+          if [ -n "$RECENT" ] && ! echo "$LAST_MSG" | grep -q "\[skip ci\]"; then
+            echo "Found recent commits in the past 7 days; running evaluation."
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No new non-bot commits in the past 7 days; skipping scheduled run."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: julia-actions/setup-julia@v3
+        if: steps.check.outputs.should_run == 'true'
+        with:
+          version: '1.13'
+      - uses: actions/setup-python@v7
+        if: steps.check.outputs.should_run == 'true'
+        with:
+          python-version: '3.11'
+      - uses: julia-actions/cache@v3
+        if: steps.check.outputs.should_run == 'true'
+      - if: steps.check.outputs.should_run == 'true'
+        run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+      - if: steps.check.outputs.should_run == 'true'
+        run: python -m pip install -r validation/requirements.txt
+      - if: steps.check.outputs.should_run == 'true'
+        run: python -m unittest discover -s validation -p 'test_*.py'
+      - if: steps.check.outputs.should_run == 'true'
+        run: python -O -m unittest discover -s validation -p 'test_*.py'
+      - if: steps.check.outputs.should_run == 'true'
+        run: python validation/validate.py
+      - if: steps.check.outputs.should_run == 'true'
+        run: julia --project=. benchmark/run.jl
+      - if: steps.check.outputs.should_run == 'true'
+        run: python validation/download_oxford.py --data-dir validation-data
+      - if: steps.check.outputs.should_run == 'true'
+        run: python -O validation/real_world.py --data-dir validation-data --work-dir validation-work --max-side 0
+      - if: steps.check.outputs.should_run == 'true'
+        run: python benchmark/compare.py --data-dir validation-data --samples 5 --warmups 1
+      - if: steps.check.outputs.should_run == 'true'
+        run: python validation/update_reports.py
+      - name: Commit updated validation and benchmark reports
+        if: steps.check.outputs.should_run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/validation.md validation/REPORT.md validation/latest-results.json validation/real-world-results.json benchmark/baseline.md benchmark/comparison.md benchmark/comparison-results.json benchmark/real-world-baseline.md
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(ci): update evaluation and benchmark reports [skip ci]"
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
+      - uses: actions/upload-artifact@v7
+        if: always() && steps.check.outputs.should_run == 'true'
+        with:
+          name: evaluation-results
+          path: |
+            validation/latest-results.json
+            validation/real-world-results.json
+            benchmark/comparison-results.json

@@ -85,6 +85,6 @@ python -O validation/real_world.py --data-dir validation-data \
     --work-dir validation-work --max-side 0
 ```
 
-Use `--julia /path/to/julia` if required. The manually triggered GitHub workflow (`Real photographs`) also executes this full 48-photograph suite on Ubuntu 24.04.
+Use `--julia /path/to/julia` if required. The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) also executes this full 48-photograph suite weekly (when commits were made) or on demand on Ubuntu 24.04.
 
 Data: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/research/affine/). K. Mikolajczyk et al., *A comparison of affine region detectors*, IJCV 65(1/2), 2005. The benchmark documentation describes gradually changing camera focus, zoom, viewpoint, aperture, and JPEG quality. Images are retained only in local scratch storage; plots are diagnostic derivatives.

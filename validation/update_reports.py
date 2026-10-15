@@ -93,7 +93,7 @@ Julia ratio/mutual matches agreed exactly with OpenCV BFMatcher when supplied th
 
 This is a synthetic reference suite, not a natural-image benchmark or proof of bitwise identity. Shape repetition produces some incorrect ratio-test matches in both implementations; RANSAC remains necessary for geometric use. Exact keypoint counts can differ around histogram peaks and plateau/tie cases. The descriptor comparison separates detector variation from descriptor arithmetic and quantization.
 
-All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia {julia_ver} (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Real photographs` workflows.
+All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia {julia_ver} (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
 
 Run `python validation/validate.py` to regenerate the JSON. This Markdown report records the run; the JSON includes minima, p05, medians, p95, maxima, and per-transform details. See the README for setup and numerical conventions.
 """
@@ -313,7 +313,7 @@ python -O validation/real_world.py --data-dir validation-data \\
     --work-dir validation-work --max-side 0
 ```
 
-Use `--julia /path/to/julia` if required. The manually triggered GitHub workflow (`Real photographs`) also executes this full 48-photograph suite on Ubuntu 24.04.
+Use `--julia /path/to/julia` if required. The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) also executes this full 48-photograph suite weekly (when commits were made) or on demand on Ubuntu 24.04.
 
 Data: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/research/affine/). K. Mikolajczyk et al., *A comparison of affine region detectors*, IJCV 65(1/2), 2005. The benchmark documentation describes gradually changing camera focus, zoom, viewpoint, aperture, and JPEG quality. Images are retained only in local scratch storage; plots are diagnostic derivatives.
 """

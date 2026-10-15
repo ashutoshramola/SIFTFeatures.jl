@@ -48,6 +48,6 @@ Julia ratio/mutual matches agreed exactly with OpenCV BFMatcher when supplied th
 
 This is a synthetic reference suite, not a natural-image benchmark or proof of bitwise identity. Shape repetition produces some incorrect ratio-test matches in both implementations; RANSAC remains necessary for geometric use. Exact keypoint counts can differ around histogram peaks and plateau/tie cases. The descriptor comparison separates detector variation from descriptor arithmetic and quantization.
 
-All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia 1.13.2 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Real photographs` workflows.
+All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia 1.13.2 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
 
 Run `python validation/validate.py` to regenerate the JSON. This Markdown report records the run; the JSON includes minima, p05, medians, p95, maxima, and per-transform details. See the README for setup and numerical conventions.

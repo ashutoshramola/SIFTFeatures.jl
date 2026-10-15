@@ -177,7 +177,7 @@ python -O validation/real_world.py --data-dir validation-data \
 `--sequences graf,leuven` selects a subset. `--julia /path/to/julia` selects the
 runtime. Optional `--figures /path/to/figures` needs matplotlib and generates
 local diagnostic match plots. Dataset archives and extracted images stay local.
-The `Real photographs` GitHub workflow can run this benchmark manually.
+The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) runs this benchmark weekly (when commits were made) or manually on demand.
 
 Validation uses explicit checks that remain active under Python `-O`, writes
 failures with a nonzero exit status, and replaces stale success reports before
