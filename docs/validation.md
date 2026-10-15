@@ -1,38 +1,33 @@
-# Real-photograph validation — 2026-10-09
+# Real-photograph validation — 2026-10-15
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 4.10.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.1; OpenCV 4.10.0; NumPy 2.3.5; Python 3.14.4. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `d287935e32204b6f9db0c1cd1bf82709`.
-
-The initial photo run preceded the final octave and tiny-ratio repairs.
-Prepublication verification recomputed all 48 original photographs with the
-current package and confirmed byte-identical keypoint and descriptor outputs.
-The ordinary 0.8 matching predicate is unchanged for these Float32 descriptors.
+Runtime: julia version 1.13.1; OpenCV 4.10.0; NumPy 2.5.4; Python 3.15.0 (and verified on GitHub Actions Ubuntu 24.04 with Python 3.11.17 / NumPy 2.4.6). The photo run used Python optimization level 1; explicit gates remained active. Run ID: `a467287b0e2d4a91b326b8c57bd2522b`.
 
 ## Numerical agreement
 
-- 249,561 Julia feature instances and 249,572 OpenCV instances; 249,484 geometry-only one-to-one pairs (99.9647% coverage across all frames).
+- 249,563 Julia feature instances and 249,572 OpenCV instances; 249,484 geometry-only one-to-one pairs (99.9647% coverage across all frames).
 - Lowest coverage on any individual photograph: 99.5497%.
 - Lowest per-image median descriptor cosine similarity: 0.99998057 (1 means identical directions).
-- Worst per-image p95 position difference: 0.000430 px; relative scale difference: 2.10241e-05; orientation difference: 0.002935°.
+- Worst per-image p95 position difference: 0.000438 px; relative scale difference: 2.04067e-05; orientation difference: 0.002935°.
 - Fixed-frame descriptors, descriptor norms, cross-library retrieval, and matching the same descriptors with Julia versus BFMatcher were also checked.
 
 ## Matching against independent geometry
 
-Across 40 reference/target pairs, Julia returned 38,554 descriptor matches, of which 34,989 landed within 3 pixels of the published transformation (90.753% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
+Across 40 reference/target pairs, Julia returned 38,555 descriptor matches, of which 34,990 landed within 3 pixels of the published transformation (90.753% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
 
 A separately fitted homography had mean error below 3 pixels at five fixed source-image probes on 33/40 Julia pairs and 32/40 OpenCV pairs. Fit accuracy is scored against the supplied homography, not the RANSAC mask.
 
 | Scene | Change | Lowest frame coverage | Correct matches: Julia / OpenCV¹ | Accurate homographies: Julia / OpenCV² |
 |---|---|---:|---:|---:|
-| bikes | blur | 99.7249% | 1,850 / 1,843 | 5 / 4 |
+| bikes | blur | 99.7249% | 1,849 / 1,843 | 5 / 4 |
 | trees | blur | 99.9217% | 3,721 / 3,722 | 3 / 3 |
 | graf | viewpoint | 99.9356% | 1,434 / 1,435 | 3 / 3 |
-| wall | viewpoint | 99.9308% | 10,466 / 10,473 | 3 / 3 |
-| bark | zoom rotation | 99.9286% | 2,444 / 2,444 | 5 / 5 |
+| wall | viewpoint | 99.9209% | 10,468 / 10,473 | 3 / 3 |
+| bark | zoom rotation | 99.9286% | 2,443 / 2,444 | 5 / 5 |
 | boat | zoom rotation | 99.9230% | 4,914 / 4,912 | 4 / 4 |
 | leuven | illumination | 99.9078% | 3,084 / 3,090 | 5 / 5 |
-| ubc | jpeg compression | 99.5497% | 7,076 / 7,076 | 5 / 5 |
+| ubc | jpeg compression | 99.5497% | 7,077 / 7,076 | 5 / 5 |
 
 ¹ Sum of correct descriptor matches across the five target images. ² Out of five pairs, using the mean error at the five probes.
 
@@ -68,9 +63,7 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 ## Validation integrity and Julia regression tests
 
-The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed with bounds checking enabled for this historical
-run. Publication preparation expands the suite to 132 Julia checks on both Julia 1.10.0 and 1.13.1; see the
-[prepublication verification](../validation/prepublication-results.json).
+The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed under `Pkg.test()` with bounds checking enabled for the original 0.1.0 run. The current suite expands to 170 Julia checks on Julia 1.13.1 (both single-threaded and multi-threaded).
 
 - [Descriptor-corruption control](../validation/guard-negative-control.txt)
 - [Machine-readable original-resolution results](../validation/real-world-results.json)
@@ -82,7 +75,7 @@ The current manifest labels its retrieval date in the user’s local timezone. T
 
 ## Scope and reproduction
 
-This strengthens the photographic evidence across eight scenes. It remains a small benchmark of planar scenes or fixed-center camera acquisitions; it does not establish robustness to arbitrary 3D viewpoint changes, moving objects, every camera pipeline, or every platform. Publication preparation adds independent Julia descriptor-layout tests and explicit singleton-octave guards. Float64 filtering allocations remain a profiling target; see the [implementation notes](implementation.md).
+This strengthens the photographic evidence across eight scenes. It remains a small benchmark of planar scenes or fixed-center camera acquisitions; it does not establish robustness to arbitrary 3D viewpoint changes, moving objects, every camera pipeline, or every platform. Publication preparation adds independent Julia descriptor-layout tests and explicit singleton-octave guards; see the [implementation notes](implementation.md).
 
 From the package directory, after installing `validation/requirements.txt`:
 
@@ -92,6 +85,6 @@ python -O validation/real_world.py --data-dir validation-data \
     --work-dir validation-work --max-side 0
 ```
 
-Use `--julia /path/to/julia` if required. The optional manually triggered GitHub workflow is included; hosted execution has not been run here.
+Use `--julia /path/to/julia` if required. The manually triggered GitHub workflow (`Real photographs`) also executes this full 48-photograph suite on Ubuntu 24.04.
 
 Data: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/research/affine/). K. Mikolajczyk et al., *A comparison of affine region detectors*, IJCV 65(1/2), 2005. The benchmark documentation describes gradually changing camera focus, zoom, viewpoint, aperture, and JPEG quality. Images are retained only in local scratch storage; plots are diagnostic derivatives.
