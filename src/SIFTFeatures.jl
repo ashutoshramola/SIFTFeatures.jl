@@ -132,17 +132,28 @@ end
 function _double_image_cols!(b::Matrix{Float32}, a::Matrix{Float32}, cols::UnitRange{Int})
     h, w = size(a)
     @inbounds for x in cols
-        x0 = (x + 1) ÷ 2
-        x1 = min(x0 + 1, w)
-        fx = iseven(x) ? 0.5f0 : 0f0
-        omfx = 1f0 - fx
-        for y in 1:2h
-            y0 = (y + 1) ÷ 2
-            y1 = min(y0 + 1, h)
-            fy = iseven(y) ? 0.5f0 : 0f0
-            v0 = muladd(fx, a[y0, x1], omfx * a[y0, x0])
-            v1 = muladd(fx, a[y1, x1], omfx * a[y1, x0])
-            b[y, x] = muladd(fy, v1, (1f0 - fy) * v0)
+        x0 = (x + 1) >> 1
+        if isodd(x)
+            for y0 in 1:h-1
+                v0 = a[y0, x0]
+                v1 = a[y0 + 1, x0]
+                b[2y0 - 1, x] = v0
+                b[2y0,     x] = 0.5f0 * (v0 + v1)
+            end
+            vend = a[h, x0]
+            b[2h - 1, x] = vend
+            b[2h,     x] = vend
+        else
+            x1 = min(x0 + 1, w)
+            for y0 in 1:h-1
+                v0 = 0.5f0 * (a[y0, x0] + a[y0, x1])
+                v1 = 0.5f0 * (a[y0 + 1, x0] + a[y0 + 1, x1])
+                b[2y0 - 1, x] = v0
+                b[2y0,     x] = 0.5f0 * (v0 + v1)
+            end
+            vend = 0.5f0 * (a[h, x0] + a[h, x1])
+            b[2h - 1, x] = vend
+            b[2h,     x] = vend
         end
     end
     return b
