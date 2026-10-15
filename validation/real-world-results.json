@@ -1,22 +1,23 @@
 {
   "suite": "Oxford real-photo reference",
-  "run_id": "a467287b0e2d4a91b326b8c57bd2522b",
-  "started_utc": "2026-10-15T08:57:25.614347+00:00",
+  "run_id": "28e0880eccc84284bb4ba0284ac72701",
+  "started_utc": "2026-10-15T14:35:48.277574+00:00",
   "state": "complete",
   "passed": true,
-  "python": "3.15.0",
+  "python": "3.11.17",
   "python_optimization": 1,
-  "platform": "Windows-11-10.0.26300-SP0",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "source_sha256": {
     "Project.toml": "74a524e075dacb5a6f03e39309be9d6f5a2b01eec1bae42128c69dde528d43ac",
-    "src/SIFTFeatures.jl": "63b870e5b4f41ffb279d78979b08a92cf6a2508931cb7a48c8201799a81c7512",
-    "validation/check_guards.py": "a67312c526dbe5f0f18ba3d82ae3669605b71bab3f138459dde6740c9998cb79",
-    "validation/common.py": "e65f1f0069e55503e57ec1f09da08b478924ef07182a40962d59e09e95f7b5c9",
-    "validation/download_oxford.py": "148a0d4ccff0b90acb57f2ffcfc02422a1f2c73315bfab87927fdb11a457665c",
-    "validation/real_world.py": "299f04d0b5b7ff849da905b870478749e7a44864cf864acdae621dcee3432fc5",
-    "validation/test_validation.py": "a45faa9e1d39d216d92a1b688d40e15dbbb4ac5616edbd87ec10000abc693f5a",
-    "validation/validate.py": "7dfdb855dece8bab8e5d6de814cf75d2b871e4ff7131f560d32a46d582832d3e",
-    "validation/export.jl": "ed206cf3758ce00bc86238dc088270d5b5ae81af405bb6c8325426f62fbde66b"
+    "src/SIFTFeatures.jl": "a1fc412baba650437398c30f8ea002ad6efd18ee1e6a1dbacb0ac4d9d843dff5",
+    "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
+    "validation/common.py": "153a8bb914a0ce408cbe079102eedca95ee0eb2c80a4a7a4fe1d258da65ec86f",
+    "validation/download_oxford.py": "499e912c9298013b1fe8cdfda7002d0c0c9437ded3e384ff7a7f601ac9eb2fb1",
+    "validation/real_world.py": "7427347939fdf047730a4cf172dc201d29f42aec2b57fb95feb2f43e6f2b1338",
+    "validation/test_validation.py": "eefc6cf13db257bb0ce9e05586983badef7370f098d122f5d701dedf621cb734",
+    "validation/update_reports.py": "82f267c9e3352b296cdbf6f42e8248d07b06e0181ce15af3ba6c1bc092986047",
+    "validation/validate.py": "3bc73cdfd1b7f38993542a269e38b689151285b2bd48e5d76db7c3b5424fd949",
+    "validation/export.jl": "d7c168019662605d1fb20f45775e1f682b89992c912144bc8bf76583b13feed1"
   },
   "checks": [
     {
@@ -47,7 +48,7 @@
     {
       "name": "bikes_1: position_px p95",
       "passed": true,
-      "detail": "0.00012867232583258347"
+      "detail": "0.0001286390334824266"
     },
     {
       "name": "bikes_1: relative_scale_error p95",
@@ -57,7 +58,7 @@
     {
       "name": "bikes_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00023757510512734478"
+      "detail": "0.0002390394824297671"
     },
     {
       "name": "bikes_1: detected descriptor cosine",
@@ -227,7 +228,7 @@
     {
       "name": "bikes_4: position_px p95",
       "passed": true,
-      "detail": "0.0002847871455591714"
+      "detail": "0.0002859673791242004"
     },
     {
       "name": "bikes_4: relative_scale_error p95",
@@ -297,7 +298,7 @@
     {
       "name": "bikes_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0015954639719700818"
+      "detail": "0.001566284682659822"
     },
     {
       "name": "bikes_5: detected descriptor cosine",
@@ -347,7 +348,7 @@
     {
       "name": "bikes_6: position_px p95",
       "passed": true,
-      "detail": "0.0004093707610208188"
+      "detail": "0.00043840758200553787"
     },
     {
       "name": "bikes_6: relative_scale_error p95",
@@ -357,7 +358,7 @@
     {
       "name": "bikes_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0010846989579678505"
+      "detail": "0.0010801213212540271"
     },
     {
       "name": "bikes_6: detected descriptor cosine",
@@ -412,7 +413,7 @@
     {
       "name": "trees_1: relative_scale_error p95",
       "passed": true,
-      "detail": "1.2563621859551507e-05"
+      "detail": "1.2550446722880953e-05"
     },
     {
       "name": "trees_1: angle_error_deg p95",
@@ -477,7 +478,7 @@
     {
       "name": "trees_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0002219460917456144"
+      "detail": "0.0002185169748812509"
     },
     {
       "name": "trees_2: detected descriptor cosine",
@@ -527,12 +528,12 @@
     {
       "name": "trees_3: position_px p95",
       "passed": true,
-      "detail": "8.838684973283012e-05"
+      "detail": "8.841229808050996e-05"
     },
     {
       "name": "trees_3: relative_scale_error p95",
       "passed": true,
-      "detail": "1.3432527240736495e-05"
+      "detail": "1.344348531437944e-05"
     },
     {
       "name": "trees_3: angle_error_deg p95",
@@ -587,17 +588,17 @@
     {
       "name": "trees_4: position_px p95",
       "passed": true,
-      "detail": "0.00011466420948737765"
+      "detail": "0.00011462718241661603"
     },
     {
       "name": "trees_4: relative_scale_error p95",
       "passed": true,
-      "detail": "1.6964763315030496e-05"
+      "detail": "1.695776312815589e-05"
     },
     {
       "name": "trees_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0005821366434085667"
+      "detail": "0.0005678216092084561"
     },
     {
       "name": "trees_4: detected descriptor cosine",
@@ -652,7 +653,7 @@
     {
       "name": "trees_5: relative_scale_error p95",
       "passed": true,
-      "detail": "1.8310737466553647e-05"
+      "detail": "1.8326046525507507e-05"
     },
     {
       "name": "trees_5: angle_error_deg p95",
@@ -712,12 +713,12 @@
     {
       "name": "trees_6: relative_scale_error p95",
       "passed": true,
-      "detail": "2.0398100300578214e-05"
+      "detail": "2.0406689455243494e-05"
     },
     {
       "name": "trees_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0003048033305843784"
+      "detail": "0.00030458241642390205"
     },
     {
       "name": "trees_6: detected descriptor cosine",
@@ -772,7 +773,7 @@
     {
       "name": "graf_1: relative_scale_error p95",
       "passed": true,
-      "detail": "1.681662750722121e-05"
+      "detail": "1.685464174572821e-05"
     },
     {
       "name": "graf_1: angle_error_deg p95",
@@ -887,7 +888,7 @@
     {
       "name": "graf_3: position_px p95",
       "passed": true,
-      "detail": "0.00012195312869826379"
+      "detail": "0.00012267608265105774"
     },
     {
       "name": "graf_3: relative_scale_error p95",
@@ -897,7 +898,7 @@
     {
       "name": "graf_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00039462181240481004"
+      "detail": "0.00038555986987854533"
     },
     {
       "name": "graf_3: detected descriptor cosine",
@@ -947,12 +948,12 @@
     {
       "name": "graf_4: position_px p95",
       "passed": true,
-      "detail": "0.00013198599127920379"
+      "detail": "0.00013171671111320685"
     },
     {
       "name": "graf_4: relative_scale_error p95",
       "passed": true,
-      "detail": "1.8357956910941538e-05"
+      "detail": "1.8375808867754358e-05"
     },
     {
       "name": "graf_4: angle_error_deg p95",
@@ -1007,7 +1008,7 @@
     {
       "name": "graf_5: position_px p95",
       "passed": true,
-      "detail": "0.00013370756099171695"
+      "detail": "0.00013448260729588947"
     },
     {
       "name": "graf_5: relative_scale_error p95",
@@ -1017,7 +1018,7 @@
     {
       "name": "graf_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0004620288532107584"
+      "detail": "0.00045935856512769555"
     },
     {
       "name": "graf_5: detected descriptor cosine",
@@ -1077,7 +1078,7 @@
     {
       "name": "graf_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0016439831309682997"
+      "detail": "0.0016390240245283273"
     },
     {
       "name": "graf_6: detected descriptor cosine",
@@ -1132,12 +1133,12 @@
     {
       "name": "wall_1: relative_scale_error p95",
       "passed": true,
-      "detail": "1.0958079238232413e-05"
+      "detail": "1.0984918560930076e-05"
     },
     {
       "name": "wall_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0001502428555861357"
+      "detail": "0.00014930008397938716"
     },
     {
       "name": "wall_1: detected descriptor cosine",
@@ -1197,7 +1198,7 @@
     {
       "name": "wall_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00017108281409130863"
+      "detail": "0.0001717748792742458"
     },
     {
       "name": "wall_2: detected descriptor cosine",
@@ -1247,17 +1248,17 @@
     {
       "name": "wall_3: position_px p95",
       "passed": true,
-      "detail": "8.925123606999392e-05"
+      "detail": "8.924288684690677e-05"
     },
     {
       "name": "wall_3: relative_scale_error p95",
       "passed": true,
-      "detail": "1.496472880302413e-05"
+      "detail": "1.4943430517444511e-05"
     },
     {
       "name": "wall_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00018692903148340268"
+      "detail": "0.00018795489398963793"
     },
     {
       "name": "wall_3: detected descriptor cosine",
@@ -1307,7 +1308,7 @@
     {
       "name": "wall_4: position_px p95",
       "passed": true,
-      "detail": "8.88010122179782e-05"
+      "detail": "8.866116677700472e-05"
     },
     {
       "name": "wall_4: relative_scale_error p95",
@@ -1317,7 +1318,7 @@
     {
       "name": "wall_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00023976129370965364"
+      "detail": "0.00023943560731731414"
     },
     {
       "name": "wall_4: detected descriptor cosine",
@@ -1367,7 +1368,7 @@
     {
       "name": "wall_5: position_px p95",
       "passed": true,
-      "detail": "9.090753946236759e-05"
+      "detail": "9.090175737924595e-05"
     },
     {
       "name": "wall_5: relative_scale_error p95",
@@ -1432,12 +1433,12 @@
     {
       "name": "wall_6: relative_scale_error p95",
       "passed": true,
-      "detail": "1.4994030524129176e-05"
+      "detail": "1.5008975470076624e-05"
     },
     {
       "name": "wall_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00022081160852872053"
+      "detail": "0.00022018742719148265"
     },
     {
       "name": "wall_6: detected descriptor cosine",
@@ -1487,7 +1488,7 @@
     {
       "name": "bark_1: position_px p95",
       "passed": true,
-      "detail": "0.00011837598259754356"
+      "detail": "0.0001185206475273369"
     },
     {
       "name": "bark_1: relative_scale_error p95",
@@ -1497,7 +1498,7 @@
     {
       "name": "bark_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0007164313103707509"
+      "detail": "0.0007179571892753573"
     },
     {
       "name": "bark_1: detected descriptor cosine",
@@ -1547,12 +1548,12 @@
     {
       "name": "bark_2: position_px p95",
       "passed": true,
-      "detail": "0.0001293483461547765"
+      "detail": "0.0001298112361593981"
     },
     {
       "name": "bark_2: relative_scale_error p95",
       "passed": true,
-      "detail": "2.006300767843916e-05"
+      "detail": "2.006137085032167e-05"
     },
     {
       "name": "bark_2: angle_error_deg p95",
@@ -1612,12 +1613,12 @@
     {
       "name": "bark_3: relative_scale_error p95",
       "passed": true,
-      "detail": "1.8885451988404068e-05"
+      "detail": "1.8849988693858675e-05"
     },
     {
       "name": "bark_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0007092739768166806"
+      "detail": "0.0007207180686266867"
     },
     {
       "name": "bark_3: detected descriptor cosine",
@@ -1677,7 +1678,7 @@
     {
       "name": "bark_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00039087368650638453"
+      "detail": "0.0003908359396376249"
     },
     {
       "name": "bark_4: detected descriptor cosine",
@@ -1727,7 +1728,7 @@
     {
       "name": "bark_5: position_px p95",
       "passed": true,
-      "detail": "0.00011782249873430305"
+      "detail": "0.00011672805194772165"
     },
     {
       "name": "bark_5: relative_scale_error p95",
@@ -1792,12 +1793,12 @@
     {
       "name": "bark_6: relative_scale_error p95",
       "passed": true,
-      "detail": "1.560863848450999e-05"
+      "detail": "1.5616153472403078e-05"
     },
     {
       "name": "bark_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00026665956239328806"
+      "detail": "0.00026239656207677474"
     },
     {
       "name": "bark_6: detected descriptor cosine",
@@ -1857,7 +1858,7 @@
     {
       "name": "boat_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00013412434988998434"
+      "detail": "0.00013525546027112816"
     },
     {
       "name": "boat_1: detected descriptor cosine",
@@ -1907,17 +1908,17 @@
     {
       "name": "boat_2: position_px p95",
       "passed": true,
-      "detail": "7.901781559534496e-05"
+      "detail": "7.905699864317402e-05"
     },
     {
       "name": "boat_2: relative_scale_error p95",
       "passed": true,
-      "detail": "1.1708429250445446e-05"
+      "detail": "1.1731462725483855e-05"
     },
     {
       "name": "boat_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0001692558388737604"
+      "detail": "0.00017108904503201707"
     },
     {
       "name": "boat_2: detected descriptor cosine",
@@ -1967,7 +1968,7 @@
     {
       "name": "boat_3: position_px p95",
       "passed": true,
-      "detail": "8.237035882651101e-05"
+      "detail": "8.221757618078417e-05"
     },
     {
       "name": "boat_3: relative_scale_error p95",
@@ -1977,7 +1978,7 @@
     {
       "name": "boat_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0009502777030871473"
+      "detail": "0.0009495147636348407"
     },
     {
       "name": "boat_3: detected descriptor cosine",
@@ -2027,7 +2028,7 @@
     {
       "name": "boat_4: position_px p95",
       "passed": true,
-      "detail": "7.544738251942585e-05"
+      "detail": "7.549596336662316e-05"
     },
     {
       "name": "boat_4: relative_scale_error p95",
@@ -2097,7 +2098,7 @@
     {
       "name": "boat_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00014540157704610076"
+      "detail": "0.00014534211260190972"
     },
     {
       "name": "boat_5: detected descriptor cosine",
@@ -2152,12 +2153,12 @@
     {
       "name": "boat_6: relative_scale_error p95",
       "passed": true,
-      "detail": "1.4330864287298572e-05"
+      "detail": "1.433995110020625e-05"
     },
     {
       "name": "boat_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00037778672387900385"
+      "detail": "0.000368145067942088"
     },
     {
       "name": "boat_6: detected descriptor cosine",
@@ -2217,7 +2218,7 @@
     {
       "name": "leuven_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0001641766309206922"
+      "detail": "0.00016500794560167162"
     },
     {
       "name": "leuven_1: detected descriptor cosine",
@@ -2267,7 +2268,7 @@
     {
       "name": "leuven_2: position_px p95",
       "passed": true,
-      "detail": "9.450056522432429e-05"
+      "detail": "9.536843941201365e-05"
     },
     {
       "name": "leuven_2: relative_scale_error p95",
@@ -2277,7 +2278,7 @@
     {
       "name": "leuven_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0001142737480111123"
+      "detail": "0.00011553314294330122"
     },
     {
       "name": "leuven_2: detected descriptor cosine",
@@ -2337,7 +2338,7 @@
     {
       "name": "leuven_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00019565599044379155"
+      "detail": "0.00019525852021469285"
     },
     {
       "name": "leuven_3: detected descriptor cosine",
@@ -2397,7 +2398,7 @@
     {
       "name": "leuven_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00011246308543869225"
+      "detail": "0.00011312183725271765"
     },
     {
       "name": "leuven_4: detected descriptor cosine",
@@ -2517,7 +2518,7 @@
     {
       "name": "leuven_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0001234303814579346"
+      "detail": "0.00012400258604716285"
     },
     {
       "name": "leuven_6: detected descriptor cosine",
@@ -2567,7 +2568,7 @@
     {
       "name": "ubc_1: position_px p95",
       "passed": true,
-      "detail": "7.44240219898365e-05"
+      "detail": "7.444420998661804e-05"
     },
     {
       "name": "ubc_1: relative_scale_error p95",
@@ -2577,7 +2578,7 @@
     {
       "name": "ubc_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00015169967007785202"
+      "detail": "0.00015841703066717832"
     },
     {
       "name": "ubc_1: detected descriptor cosine",
@@ -2627,17 +2628,17 @@
     {
       "name": "ubc_2: position_px p95",
       "passed": true,
-      "detail": "7.252620025890782e-05"
+      "detail": "7.244429022618143e-05"
     },
     {
       "name": "ubc_2: relative_scale_error p95",
       "passed": true,
-      "detail": "9.190480102605482e-06"
+      "detail": "9.187903578622425e-06"
     },
     {
       "name": "ubc_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00011723269243335822"
+      "detail": "0.00011285949395029517"
     },
     {
       "name": "ubc_2: detected descriptor cosine",
@@ -2697,7 +2698,7 @@
     {
       "name": "ubc_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00010662982842154332"
+      "detail": "0.0001059448481251702"
     },
     {
       "name": "ubc_3: detected descriptor cosine",
@@ -2757,7 +2758,7 @@
     {
       "name": "ubc_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00010387934384044227"
+      "detail": "0.00010353071804605291"
     },
     {
       "name": "ubc_4: detected descriptor cosine",
@@ -2817,7 +2818,7 @@
     {
       "name": "ubc_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00012018253135374454"
+      "detail": "0.00012192140958433162"
     },
     {
       "name": "ubc_5: detected descriptor cosine",
@@ -2922,7 +2923,7 @@
     {
       "name": "bikes_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.32586523462397177"
+      "detail": "0.3258652346239802"
     },
     {
       "name": "bikes_3: same-descriptor matcher equality",
@@ -2947,7 +2948,7 @@
     {
       "name": "bikes_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.8844273031037622"
+      "detail": "0.8844273031037588"
     },
     {
       "name": "bikes_4: same-descriptor matcher equality",
@@ -2972,7 +2973,7 @@
     {
       "name": "bikes_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.8190664581108502"
+      "detail": "0.819066458110794"
     },
     {
       "name": "bikes_5: same-descriptor matcher equality",
@@ -2997,7 +2998,7 @@
     {
       "name": "bikes_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "1.1896715035854148"
+      "detail": "1.1896715191032574"
     },
     {
       "name": "bikes_6: same-descriptor matcher equality",
@@ -3042,7 +3043,7 @@
     {
       "name": "trees_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.8948343819962135"
+      "detail": "0.8948343819962116"
     },
     {
       "name": "trees_3: same-descriptor matcher equality",
@@ -3067,7 +3068,7 @@
     {
       "name": "trees_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "1.2254731209974359"
+      "detail": "1.225473120997457"
     },
     {
       "name": "trees_4: same-descriptor matcher equality",
@@ -3112,7 +3113,7 @@
     {
       "name": "trees_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "2.251297410270244"
+      "detail": "2.2512974102701904"
     },
     {
       "name": "trees_6: same-descriptor matcher equality",
@@ -3157,7 +3158,7 @@
     {
       "name": "graf_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.7992651527697758"
+      "detail": "0.7992651527697745"
     },
     {
       "name": "graf_3: same-descriptor matcher equality",
@@ -3182,7 +3183,7 @@
     {
       "name": "graf_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "2.535624236665122"
+      "detail": "2.5356242527508606"
     },
     {
       "name": "graf_4: same-descriptor matcher equality",
@@ -3207,7 +3208,7 @@
     {
       "name": "graf_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.9205845867326831"
+      "detail": "0.9205845867326372"
     },
     {
       "name": "graf_5: same-descriptor matcher equality",
@@ -3272,7 +3273,7 @@
     {
       "name": "wall_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "1.728165779568338"
+      "detail": "1.728165776999683"
     },
     {
       "name": "wall_3: same-descriptor matcher equality",
@@ -3322,7 +3323,7 @@
     {
       "name": "wall_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "2.3476081515040983"
+      "detail": "2.34760815029554"
     },
     {
       "name": "wall_5: same-descriptor matcher equality",
@@ -3387,7 +3388,7 @@
     {
       "name": "bark_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "1.3591890038913268"
+      "detail": "1.359189003733321"
     },
     {
       "name": "bark_3: same-descriptor matcher equality",
@@ -3412,7 +3413,7 @@
     {
       "name": "bark_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "2.1653350489233905"
+      "detail": "2.1653350489233705"
     },
     {
       "name": "bark_4: same-descriptor matcher equality",
@@ -3462,7 +3463,7 @@
     {
       "name": "bark_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.7060890179704404"
+      "detail": "0.7060890179704435"
     },
     {
       "name": "bark_6: same-descriptor matcher equality",
@@ -3487,7 +3488,7 @@
     {
       "name": "bark_6: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "1.298751796835671"
+      "detail": "1.2987517968356919"
     },
     {
       "name": "boat_2: same-descriptor matcher equality",
@@ -3512,7 +3513,7 @@
     {
       "name": "boat_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.21464868374646712"
+      "detail": "0.21464868374647178"
     },
     {
       "name": "boat_3: same-descriptor matcher equality",
@@ -3562,7 +3563,7 @@
     {
       "name": "boat_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.7164064269072113"
+      "detail": "0.7164064269072309"
     },
     {
       "name": "boat_5: same-descriptor matcher equality",
@@ -3587,7 +3588,7 @@
     {
       "name": "boat_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.8130402264856832"
+      "detail": "0.8130402264856451"
     },
     {
       "name": "boat_6: same-descriptor matcher equality",
@@ -3632,7 +3633,7 @@
     {
       "name": "leuven_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.10812966269999744"
+      "detail": "0.10812966269997899"
     },
     {
       "name": "leuven_3: same-descriptor matcher equality",
@@ -3657,7 +3658,7 @@
     {
       "name": "leuven_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.0980047248296828"
+      "detail": "0.09800472483339116"
     },
     {
       "name": "leuven_4: same-descriptor matcher equality",
@@ -3682,7 +3683,7 @@
     {
       "name": "leuven_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.24694252218688878"
+      "detail": "0.24694252218696086"
     },
     {
       "name": "leuven_5: same-descriptor matcher equality",
@@ -3707,7 +3708,7 @@
     {
       "name": "leuven_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.3961152181220903"
+      "detail": "0.39611521902426483"
     },
     {
       "name": "leuven_6: same-descriptor matcher equality",
@@ -3732,7 +3733,7 @@
     {
       "name": "leuven_6: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.5919151027015965"
+      "detail": "0.5919151027016125"
     },
     {
       "name": "ubc_2: same-descriptor matcher equality",
@@ -3757,7 +3758,7 @@
     {
       "name": "ubc_2: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.025465494911705196"
+      "detail": "0.025465494929478534"
     },
     {
       "name": "ubc_3: same-descriptor matcher equality",
@@ -3782,7 +3783,7 @@
     {
       "name": "ubc_3: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.028047019974240816"
+      "detail": "0.028047019974238262"
     },
     {
       "name": "ubc_4: same-descriptor matcher equality",
@@ -3807,7 +3808,7 @@
     {
       "name": "ubc_4: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.06267177419064159"
+      "detail": "0.06267177209043079"
     },
     {
       "name": "ubc_5: same-descriptor matcher equality",
@@ -3832,7 +3833,7 @@
     {
       "name": "ubc_5: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.31059189109164287"
+      "detail": "0.3105918910916271"
     },
     {
       "name": "ubc_6: same-descriptor matcher equality",
@@ -3857,16 +3858,16 @@
     {
       "name": "ubc_6: accurate homography when OpenCV succeeds",
       "passed": true,
-      "detail": "0.5029906185674795"
+      "detail": "0.5029906240235518"
     }
   ],
   "failures": [],
   "dataset": "Oxford affine covariant regions",
   "dataset_homepage": "https://www.robots.ox.ac.uk/~vgg/research/affine/",
-  "dataset_manifest_sha256": "e64dbd70f98b6fd69fa9d49c9893f11d433180ce7502dabd505e0b770de70ca6",
+  "dataset_manifest_sha256": "64588c8fb619acdc37b3e20fa68323305ae7ece94fe7278075c170835e10193d",
   "opencv": "4.10.0",
-  "numpy": "2.5.4",
-  "julia": "julia version 1.13.1",
+  "numpy": "2.4.6",
+  "julia": "julia version 1.13.2",
   "configuration": {
     "max_side": 0,
     "octave_layers": 3,
@@ -4056,10 +4057,10 @@
       "native_count": 3226,
       "opencv_count": 3225,
       "native_sift": {
-        "seconds": 0.7188226,
-        "bytes": 359153646
+        "seconds": 0.898578728,
+        "bytes": 359179816
       },
-      "opencv_seconds": 0.16500930000000835,
+      "opencv_seconds": 0.24845123000000058,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3223,
       "native_coverage": 0.9990700557966522,
@@ -4068,21 +4069,21 @@
         "min": 4.5596163661514383e-07,
         "p05": 3.1232447233648935e-06,
         "median": 2.733136574941895e-05,
-        "p95": 0.00012867232583258347,
+        "p95": 0.0001286390334824266,
         "max": 0.0013732301870144367
       },
       "relative_scale_error": {
         "min": 6.675172636860793e-10,
-        "p05": 2.0337548110038738e-07,
-        "median": 2.825656549410027e-06,
+        "p05": 2.0314484050487636e-07,
+        "median": 2.8197121617612453e-06,
         "p95": 1.6673577834480623e-05,
         "max": 0.00012643218646446464
       },
       "angle_error_deg": {
         "min": 2.0225274441613763e-09,
-        "p05": 1.2400187080911578e-06,
-        "median": 1.336127511022618e-05,
-        "p95": 0.00023757510512734478,
+        "p05": 1.0052292836724287e-06,
+        "median": 1.2437614169070166e-05,
+        "p95": 0.0002390394824297671,
         "max": 1.0075303626204004
       },
       "detected_descriptor_cosine": {
@@ -4115,10 +4116,10 @@
       "native_count": 1830,
       "opencv_count": 1828,
       "native_sift": {
-        "seconds": 0.6250392,
-        "bytes": 358034599
+        "seconds": 0.757938909,
+        "bytes": 358029672
       },
-      "opencv_seconds": 0.12715239999999994,
+      "opencv_seconds": 0.19151409699998112,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1828,
       "native_coverage": 0.9989071038251366,
@@ -4126,21 +4127,21 @@
       "position_px": {
         "min": 5.94741819340363e-07,
         "p05": 3.4508048745625863e-06,
-        "median": 3.458648197620729e-05,
+        "median": 3.4615263609455085e-05,
         "p95": 0.00018592000731391142,
-        "max": 0.0014675524135497858
+        "max": 0.001474260382584546
       },
       "relative_scale_error": {
         "min": 2.8358606574130363e-09,
         "p05": 2.678246247833638e-07,
-        "median": 3.257173216586473e-06,
+        "median": 3.2537748874128525e-06,
         "p95": 1.6994055859753665e-05,
-        "max": 0.00010519183932644616
+        "max": 0.00010508642478335162
       },
       "angle_error_deg": {
         "min": 3.464763958911606e-08,
-        "p05": 1.3246949257978975e-06,
-        "median": 1.4691828559225128e-05,
+        "p05": 1.1949393147800467e-06,
+        "median": 1.4211635677804659e-05,
         "p95": 0.0011580841322118129,
         "max": 1.078504761995125
       },
@@ -4174,10 +4175,10 @@
       "native_count": 1250,
       "opencv_count": 1249,
       "native_sift": {
-        "seconds": 0.5638805,
-        "bytes": 357267033
+        "seconds": 0.709798049,
+        "bytes": 357262360
       },
-      "opencv_seconds": 0.1146349999999643,
+      "opencv_seconds": 0.17045611200001076,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1248,
       "native_coverage": 0.9984,
@@ -4191,17 +4192,17 @@
       },
       "relative_scale_error": {
         "min": 2.7017890147362777e-09,
-        "p05": 2.1254172588580644e-07,
-        "median": 2.7638828050680075e-06,
+        "p05": 2.1272012930007022e-07,
+        "median": 2.7578391985638717e-06,
         "p95": 1.5017283654589199e-05,
         "max": 5.83818143630177e-05
       },
       "angle_error_deg": {
-        "min": 3.4611610265684444e-08,
-        "p05": 1.0729221167077177e-06,
-        "median": 1.3478082024124863e-05,
+        "min": 6.298974046669962e-08,
+        "p05": 1.2854523159604775e-06,
+        "median": 1.2900253798203575e-05,
         "p95": 0.0019191749417299497,
-        "max": 0.5704012229210045
+        "max": 0.5704088523155275
       },
       "detected_descriptor_cosine": {
         "min": 0.9997902512550354,
@@ -4233,10 +4234,10 @@
       "native_count": 727,
       "opencv_count": 726,
       "native_sift": {
-        "seconds": 0.5167215,
-        "bytes": 357048096
+        "seconds": 0.567544139,
+        "bytes": 357043232
       },
-      "opencv_seconds": 0.0984101000000237,
+      "opencv_seconds": 0.15151034100000516,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 725,
       "native_coverage": 0.9972489683631361,
@@ -4244,23 +4245,23 @@
       "position_px": {
         "min": 4.1015624674400897e-07,
         "p05": 4.466714583205862e-06,
-        "median": 5.289778649895351e-05,
-        "p95": 0.0002847871455591714,
+        "median": 5.2675432345845045e-05,
+        "p95": 0.0002859673791242004,
         "max": 0.0010269521750641112
       },
       "relative_scale_error": {
         "min": 1.550708450537286e-10,
         "p05": 2.0984432982373847e-07,
-        "median": 2.401682287267448e-06,
+        "median": 2.379654910678042e-06,
         "p95": 1.4061137652676675e-05,
-        "max": 4.9302606506151925e-05
+        "max": 4.93671954610031e-05
       },
       "angle_error_deg": {
         "min": 8.885477446948449e-08,
-        "p05": 1.1878584840593605e-06,
-        "median": 1.3644756905763088e-05,
+        "p05": 1.0628032417830695e-06,
+        "median": 1.2191026706060485e-05,
         "p95": 0.00043176910584496173,
-        "max": 0.49028937777615084
+        "max": 0.49029700717069935
       },
       "detected_descriptor_cosine": {
         "min": 0.9997643828392029,
@@ -4292,18 +4293,18 @@
       "native_count": 517,
       "opencv_count": 517,
       "native_sift": {
-        "seconds": 0.48167,
-        "bytes": 356629956
+        "seconds": 0.562307308,
+        "bytes": 356625216
       },
-      "opencv_seconds": 0.09324509999999009,
+      "opencv_seconds": 0.14203763500000832,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 517,
       "native_coverage": 1.0,
       "opencv_coverage": 1.0,
       "position_px": {
         "min": 1.1078282612247061e-06,
-        "p05": 4.598035490812692e-06,
-        "median": 5.880779908211541e-05,
+        "p05": 4.625888234372032e-06,
+        "median": 5.957361033375666e-05,
         "p95": 0.0003134726338570369,
         "max": 0.0016699695794762904
       },
@@ -4316,10 +4317,10 @@
       },
       "angle_error_deg": {
         "min": 9.422655321541421e-08,
-        "p05": 1.2338954864072978e-06,
-        "median": 1.194644884472074e-05,
-        "p95": 0.0015954639719700818,
-        "max": 0.8027036887684562
+        "p05": 1.3477282051011382e-06,
+        "median": 1.1893603776021599e-05,
+        "p95": 0.001566284682659822,
+        "max": 0.8026960593739332
       },
       "detected_descriptor_cosine": {
         "min": 0.9991987943649292,
@@ -4351,10 +4352,10 @@
       "native_count": 355,
       "opencv_count": 355,
       "native_sift": {
-        "seconds": 0.4679752,
-        "bytes": 356582386
+        "seconds": 0.511974086,
+        "bytes": 356577424
       },
-      "opencv_seconds": 0.091723600000023,
+      "opencv_seconds": 0.13610507300001018,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 355,
       "native_coverage": 1.0,
@@ -4363,22 +4364,22 @@
         "min": 9.3958307883549e-07,
         "p05": 8.222795872927119e-06,
         "median": 6.452132400283171e-05,
-        "p95": 0.0004093707610208188,
+        "p95": 0.00043840758200553787,
         "max": 0.0012986763010569707
       },
       "relative_scale_error": {
         "min": 1.5156387256354265e-09,
         "p05": 1.6856849196500432e-07,
-        "median": 2.3016086386773438e-06,
+        "median": 2.311221269257757e-06,
         "p95": 1.344509103884395e-05,
         "max": 5.017022193043452e-05
       },
       "angle_error_deg": {
         "min": 4.864658385298449e-08,
-        "p05": 1.2420156104423613e-06,
-        "median": 1.2270322005379363e-05,
-        "p95": 0.0010846989579678505,
-        "max": 0.5922052689804816
+        "p05": 1.1533404380790733e-06,
+        "median": 1.1956533925615787e-05,
+        "p95": 0.0010801213212540271,
+        "max": 0.5921900101913846
       },
       "detected_descriptor_cosine": {
         "min": 0.9998478889465332,
@@ -4410,10 +4411,10 @@
       "native_count": 12478,
       "opencv_count": 12477,
       "native_sift": {
-        "seconds": 1.2919675,
-        "bytes": 367168387
+        "seconds": 1.594438644,
+        "bytes": 367163080
       },
-      "opencv_seconds": 0.3340043000000037,
+      "opencv_seconds": 0.48316098599997304,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 12475,
       "native_coverage": 0.9997595768552653,
@@ -4427,15 +4428,15 @@
       },
       "relative_scale_error": {
         "min": 3.5078606686056446e-10,
-        "p05": 1.818922375718124e-07,
-        "median": 2.2099813378195776e-06,
-        "p95": 1.2563621859551507e-05,
-        "max": 0.000705797290186827
+        "p05": 1.8249268641801213e-07,
+        "median": 2.206655017600312e-06,
+        "p95": 1.2550446722880953e-05,
+        "max": 0.0007059239043769594
       },
       "angle_error_deg": {
         "min": 1.1634723469168061e-09,
-        "p05": 1.072052490718934e-06,
-        "median": 1.2214879466727402e-05,
+        "p05": 1.0301289557182956e-06,
+        "median": 1.1361432756052624e-05,
         "p95": 0.0002679264981203818,
         "max": 3.628025880519089
       },
@@ -4469,10 +4470,10 @@
       "native_count": 10728,
       "opencv_count": 10732,
       "native_sift": {
-        "seconds": 1.2331582,
-        "bytes": 366100899
+        "seconds": 1.465147562,
+        "bytes": 366095688
       },
-      "opencv_seconds": 0.31065680000000384,
+      "opencv_seconds": 0.4507791999999995,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10728,
       "native_coverage": 1.0,
@@ -4480,23 +4481,23 @@
       "position_px": {
         "min": 9.096194705009534e-08,
         "p05": 2.530627253173829e-06,
-        "median": 1.8677615148398183e-05,
+        "median": 1.8664119983924864e-05,
         "p95": 9.023647233150395e-05,
         "max": 0.0020952144498463457
       },
       "relative_scale_error": {
         "min": 2.7285462778081637e-10,
-        "p05": 1.6687708286333703e-07,
-        "median": 1.940857187632261e-06,
+        "p05": 1.6720371157630253e-07,
+        "median": 1.9386386792552557e-06,
         "p95": 1.1508642115742873e-05,
-        "max": 0.0001529825619970282
+        "max": 0.00015275547747384266
       },
       "angle_error_deg": {
         "min": 2.2856229274120383e-09,
-        "p05": 1.0497194105288175e-06,
-        "median": 1.160667550598742e-05,
-        "p95": 0.0002219460917456144,
-        "max": 4.044319396440932
+        "p05": 9.438610675878734e-07,
+        "median": 1.0957190311814725e-05,
+        "p95": 0.0002185169748812509,
+        "max": 4.0442888788627895
       },
       "detected_descriptor_cosine": {
         "min": 0.9940974712371826,
@@ -4528,34 +4529,34 @@
       "native_count": 15234,
       "opencv_count": 15236,
       "native_sift": {
-        "seconds": 1.4546922,
-        "bytes": 370500842
+        "seconds": 1.837857704,
+        "bytes": 370495728
       },
-      "opencv_seconds": 0.38667320000001837,
+      "opencv_seconds": 0.5555446719999964,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 15232,
       "native_coverage": 0.9998687147170802,
       "opencv_coverage": 0.9997374639012864,
       "position_px": {
         "min": 9.291341339663246e-08,
-        "p05": 2.526920538462949e-06,
-        "median": 1.8823092278877213e-05,
-        "p95": 8.838684973283012e-05,
+        "p05": 2.529309280538571e-06,
+        "median": 1.8831836070616042e-05,
+        "p95": 8.841229808050996e-05,
         "max": 0.0012505684315690644
       },
       "relative_scale_error": {
-        "min": 1.6978174421922176e-10,
-        "p05": 1.9010141514841374e-07,
-        "median": 2.3937225118730865e-06,
-        "p95": 1.3432527240736495e-05,
-        "max": 0.00028455444887653947
+        "min": 6.576295064064652e-11,
+        "p05": 1.8924315191570785e-07,
+        "median": 2.393720462456894e-06,
+        "p95": 1.344348531437944e-05,
+        "max": 0.00028442408600404256
       },
       "angle_error_deg": {
         "min": 3.028905834251336e-10,
-        "p05": 1.0866732397841375e-06,
-        "median": 1.242262378230099e-05,
+        "p05": 1.0097104307742362e-06,
+        "median": 1.1604498848863394e-05,
         "p95": 0.00025658060664734126,
-        "max": 2.1182981641771623
+        "max": 2.118286720085378
       },
       "detected_descriptor_cosine": {
         "min": 0.9972475171089172,
@@ -4587,10 +4588,10 @@
       "native_count": 10266,
       "opencv_count": 10267,
       "native_sift": {
-        "seconds": 1.2059097,
-        "bytes": 365828739
+        "seconds": 1.534489097,
+        "bytes": 365823688
       },
-      "opencv_seconds": 0.328803999999991,
+      "opencv_seconds": 0.46189785000001393,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10261,
       "native_coverage": 0.9995129553867135,
@@ -4598,22 +4599,22 @@
       "position_px": {
         "min": 4.026466530664574e-08,
         "p05": 3.1890718971908858e-06,
-        "median": 2.93015946430021e-05,
-        "p95": 0.00011466420948737765,
-        "max": 0.0013733413748948948
+        "median": 2.9298866607940536e-05,
+        "p95": 0.00011462718241661603,
+        "max": 0.0016336008313155965
       },
       "relative_scale_error": {
         "min": 4.782259033220271e-10,
-        "p05": 2.2310964364891106e-07,
-        "median": 3.152157689534363e-06,
-        "p95": 1.6964763315030496e-05,
+        "p05": 2.245051087257366e-07,
+        "median": 3.1562040068155994e-06,
+        "p95": 1.695776312815589e-05,
         "max": 0.00023155551061271318
       },
       "angle_error_deg": {
         "min": 2.631158388006235e-09,
-        "p05": 1.1387337381600083e-06,
-        "median": 1.3770684352821899e-05,
-        "p95": 0.0005821366434085667,
+        "p05": 1.06059789096693e-06,
+        "median": 1.2973971587777506e-05,
+        "p95": 0.0005678216092084561,
         "max": 4.217002303807901
       },
       "detected_descriptor_cosine": {
@@ -4646,32 +4647,32 @@
       "native_count": 5109,
       "opencv_count": 5111,
       "native_sift": {
-        "seconds": 0.7980779,
-        "bytes": 360898645
+        "seconds": 1.000784915,
+        "bytes": 360893560
       },
-      "opencv_seconds": 0.22032649999999876,
+      "opencv_seconds": 0.28614253000000645,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 5107,
       "native_coverage": 0.999608533959679,
       "opencv_coverage": 0.9992173742907454,
       "position_px": {
         "min": 2.2124044555235864e-07,
-        "p05": 3.967835691943866e-06,
+        "p05": 3.965612107500714e-06,
         "median": 3.443617078933904e-05,
         "p95": 0.00015392503382557883,
         "max": 0.002977883735729154
       },
       "relative_scale_error": {
         "min": 4.869116221328795e-11,
-        "p05": 2.4561834065517375e-07,
+        "p05": 2.4744411056820683e-07,
         "median": 3.1272893538103474e-06,
-        "p95": 1.8310737466553647e-05,
+        "p95": 1.8326046525507507e-05,
         "max": 0.0002882203974980957
       },
       "angle_error_deg": {
         "min": 3.928621142543736e-09,
-        "p05": 1.183934463271108e-06,
-        "median": 1.4206395561300323e-05,
+        "p05": 1.1065988181914484e-06,
+        "median": 1.354684335178317e-05,
         "p95": 0.000556434070314542,
         "max": 3.000328731497823
       },
@@ -4705,10 +4706,10 @@
       "native_count": 3008,
       "opencv_count": 3009,
       "native_sift": {
-        "seconds": 0.6632517,
-        "bytes": 358748279
+        "seconds": 0.808319045,
+        "bytes": 358743400
       },
-      "opencv_seconds": 0.17610530000001745,
+      "opencv_seconds": 0.22781010600004947,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3008,
       "native_coverage": 1.0,
@@ -4716,22 +4717,22 @@
       "position_px": {
         "min": 2.9763381564471655e-07,
         "p05": 4.701324393506556e-06,
-        "median": 4.84278233945824e-05,
+        "median": 4.8413804815087064e-05,
         "p95": 0.00020351179454961281,
         "max": 0.0021550479307239994
       },
       "relative_scale_error": {
         "min": 2.421596256851899e-11,
         "p05": 3.019751143529259e-07,
-        "median": 3.596168053010551e-06,
-        "p95": 2.0398100300578214e-05,
+        "median": 3.5922634787355356e-06,
+        "p95": 2.0406689455243494e-05,
         "max": 0.0004936423015647895
       },
       "angle_error_deg": {
         "min": 1.3373596324617794e-10,
-        "p05": 1.1245578939892007e-06,
-        "median": 1.4323831754303842e-05,
-        "p95": 0.0003048033305843784,
+        "p05": 1.0721046721712598e-06,
+        "median": 1.32573790473904e-05,
+        "p95": 0.00030458241642390205,
         "max": 3.5274780705219926
       },
       "detected_descriptor_cosine": {
@@ -4764,10 +4765,10 @@
       "native_count": 2731,
       "opencv_count": 2731,
       "native_sift": {
-        "seconds": 0.5144287,
-        "bytes": 263691380
+        "seconds": 0.62232686,
+        "bytes": 263686432
       },
-      "opencv_seconds": 0.1331270999999674,
+      "opencv_seconds": 0.17034878199996228,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 2730,
       "native_coverage": 0.9996338337605273,
@@ -4775,21 +4776,21 @@
       "position_px": {
         "min": 5.4863777836668605e-08,
         "p05": 2.74502990340486e-06,
-        "median": 2.836561249051583e-05,
+        "median": 2.8420741237682953e-05,
         "p95": 0.00013108398435739788,
-        "max": 0.001698542360307336
+        "max": 0.001696624849222404
       },
       "relative_scale_error": {
         "min": 5.946034775661246e-10,
-        "p05": 2.014351910384349e-07,
-        "median": 2.321313673725456e-06,
-        "p95": 1.681662750722121e-05,
+        "p05": 2.002045612958803e-07,
+        "median": 2.312346184918379e-06,
+        "p95": 1.685464174572821e-05,
         "max": 0.0002113799481012757
       },
       "angle_error_deg": {
-        "min": 1.4024668590132103e-08,
-        "p05": 1.0168994257985296e-06,
-        "median": 1.2141351021934767e-05,
+        "min": 2.155652740908713e-10,
+        "p05": 1.0077431533815575e-06,
+        "median": 1.1279988495879888e-05,
         "p95": 0.00047308136663690327,
         "max": 0.6944479720506218
       },
@@ -4823,10 +4824,10 @@
       "native_count": 3105,
       "opencv_count": 3106,
       "native_sift": {
-        "seconds": 0.558593,
-        "bytes": 264181995
+        "seconds": 0.656331426,
+        "bytes": 264176968
       },
-      "opencv_seconds": 0.14161599999999908,
+      "opencv_seconds": 0.18053486299999122,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3104,
       "native_coverage": 0.9996779388083736,
@@ -4834,21 +4835,21 @@
       "position_px": {
         "min": 1.3101958885857603e-07,
         "p05": 2.9311357174990206e-06,
-        "median": 2.6171109562928002e-05,
+        "median": 2.6112138130305144e-05,
         "p95": 0.0001272499385967788,
         "max": 0.0009155351606272279
       },
       "relative_scale_error": {
         "min": 1.027613105719638e-09,
         "p05": 1.7484375736120938e-07,
-        "median": 2.2168308858594443e-06,
+        "median": 2.2231828916696728e-06,
         "p95": 1.6213883661114756e-05,
-        "max": 0.000147035403401663
+        "max": 0.00014697173413280584
       },
       "angle_error_deg": {
         "min": 3.4307752793636145e-09,
-        "p05": 1.0629809902619978e-06,
-        "median": 1.3210938687097758e-05,
+        "p05": 1.1578174339209107e-06,
+        "median": 1.2068886409071986e-05,
         "p95": 0.0029351025505505923,
         "max": 1.53618674937666
       },
@@ -4882,10 +4883,10 @@
       "native_count": 3476,
       "opencv_count": 3475,
       "native_sift": {
-        "seconds": 0.5802827,
-        "bytes": 264543931
+        "seconds": 0.709875478,
+        "bytes": 264539208
       },
-      "opencv_seconds": 0.1552432999999951,
+      "opencv_seconds": 0.1944393520000176,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3475,
       "native_coverage": 0.9997123130034522,
@@ -4893,22 +4894,22 @@
       "position_px": {
         "min": 9.912110464217129e-08,
         "p05": 2.6906283820058504e-06,
-        "median": 2.4730372785324405e-05,
-        "p95": 0.00012195312869826379,
+        "median": 2.47051291874186e-05,
+        "p95": 0.00012267608265105774,
         "max": 0.001065835384415557
       },
       "relative_scale_error": {
-        "min": 1.5428611721546304e-09,
-        "p05": 1.6183511398759624e-07,
+        "min": 1.6459433815896318e-10,
+        "p05": 1.6007333728529363e-07,
         "median": 2.2242248612913684e-06,
         "p95": 1.666577511048039e-05,
-        "max": 0.00023919533990723885
+        "max": 0.00023950541464601294
       },
       "angle_error_deg": {
         "min": 5.328192424574942e-09,
-        "p05": 1.0834907983976377e-06,
-        "median": 1.2721292166664264e-05,
-        "p95": 0.00039462181240481004,
+        "p05": 9.371217890010983e-07,
+        "median": 1.1890657106609192e-05,
+        "p95": 0.00038555986987854533,
         "max": 1.1236356075433247
       },
       "detected_descriptor_cosine": {
@@ -4941,10 +4942,10 @@
       "native_count": 3649,
       "opencv_count": 3647,
       "native_sift": {
-        "seconds": 0.5905899,
-        "bytes": 265122418
+        "seconds": 0.699640134,
+        "bytes": 265117584
       },
-      "opencv_seconds": 0.150717899999961,
+      "opencv_seconds": 0.1947738270000059,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3647,
       "native_coverage": 0.9994519046314059,
@@ -4953,20 +4954,20 @@
         "min": 1.4503266734093736e-07,
         "p05": 2.9838778942414548e-06,
         "median": 2.7963737125605085e-05,
-        "p95": 0.00013198599127920379,
+        "p95": 0.00013171671111320685,
         "max": 0.0013090249676143066
       },
       "relative_scale_error": {
-        "min": 2.0299992797845334e-09,
-        "p05": 1.9164038422836427e-07,
-        "median": 2.6569927602526633e-06,
-        "p95": 1.8357956910941538e-05,
+        "min": 1.1763364726746772e-09,
+        "p05": 1.9586124677672956e-07,
+        "median": 2.6506148640415006e-06,
+        "p95": 1.8375808867754358e-05,
         "max": 0.00027045531839353654
       },
       "angle_error_deg": {
-        "min": 1.8213637216681717e-09,
-        "p05": 1.1065276679110021e-06,
-        "median": 1.2393663457926643e-05,
+        "min": 1.498168477156575e-10,
+        "p05": 1.1369760745875005e-06,
+        "median": 1.192663391272191e-05,
         "p95": 0.0005381087698813167,
         "max": 2.6684330547314676
       },
@@ -5000,33 +5001,33 @@
       "native_count": 3896,
       "opencv_count": 3895,
       "native_sift": {
-        "seconds": 0.5971458,
-        "bytes": 265275170
+        "seconds": 0.752327736,
+        "bytes": 265270224
       },
-      "opencv_seconds": 0.15545539999999392,
+      "opencv_seconds": 0.20196496500000194,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3894,
       "native_coverage": 0.9994866529774127,
       "opencv_coverage": 0.9997432605905007,
       "position_px": {
         "min": 3.416573362690272e-07,
-        "p05": 2.99031603578817e-06,
+        "p05": 2.983116105644532e-06,
         "median": 2.894000252058803e-05,
-        "p95": 0.00013370756099171695,
+        "p95": 0.00013448260729588947,
         "max": 0.002013943430121561
       },
       "relative_scale_error": {
         "min": 1.3686940469881392e-09,
         "p05": 1.702192114483303e-07,
-        "median": 2.5775620290380274e-06,
+        "median": 2.561500195730204e-06,
         "p95": 1.7561059072518365e-05,
         "max": 0.00019339161487597067
       },
       "angle_error_deg": {
         "min": 2.895627870879289e-09,
-        "p05": 1.1170217935825226e-06,
-        "median": 1.2327092616444115e-05,
-        "p95": 0.0004620288532107584,
+        "p05": 1.0613520704541082e-06,
+        "median": 1.1570986489184498e-05,
+        "p95": 0.00045935856512769555,
         "max": 1.3482077588245491
       },
       "detected_descriptor_cosine": {
@@ -5059,10 +5060,10 @@
       "native_count": 4568,
       "opencv_count": 4570,
       "native_sift": {
-        "seconds": 0.6524681,
-        "bytes": 265686466
+        "seconds": 0.774075301,
+        "bytes": 265681616
       },
-      "opencv_seconds": 0.17137330000002748,
+      "opencv_seconds": 0.2224304810000035,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4568,
       "native_coverage": 1.0,
@@ -5076,17 +5077,17 @@
       },
       "relative_scale_error": {
         "min": 9.625722441342077e-11,
-        "p05": 2.0649066845845887e-07,
-        "median": 2.7488242301254573e-06,
+        "p05": 2.0870662749139517e-07,
+        "median": 2.747615682752169e-06,
         "p95": 1.7935947563885128e-05,
         "max": 0.0001549843764168113
       },
       "angle_error_deg": {
-        "min": 4.783452463171323e-09,
-        "p05": 1.0820313232765135e-06,
-        "median": 1.264473797114762e-05,
-        "p95": 0.0016439831309682997,
-        "max": 1.3519217689386405
+        "min": 3.857376717678953e-09,
+        "p05": 1.0648699051484349e-06,
+        "median": 1.165847108069721e-05,
+        "p95": 0.0016390240245283273,
+        "max": 1.3519141395441174
       },
       "detected_descriptor_cosine": {
         "min": 0.9981254935264587,
@@ -5118,17 +5119,17 @@
       "native_count": 9173,
       "opencv_count": 9175,
       "native_sift": {
-        "seconds": 1.0414869,
-        "bytes": 365169043
+        "seconds": 1.328633645,
+        "bytes": 365163720
       },
-      "opencv_seconds": 0.2849133000000279,
+      "opencv_seconds": 0.3954405750000092,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 9173,
       "native_coverage": 1.0,
       "opencv_coverage": 0.9997820163487738,
       "position_px": {
         "min": 9.765642516867956e-09,
-        "p05": 2.3962598331171765e-06,
+        "p05": 2.4040996868625742e-06,
         "median": 1.7684299172665295e-05,
         "p95": 8.231326931731806e-05,
         "max": 0.014326720064950603
@@ -5137,14 +5138,14 @@
         "min": 4.34539071392237e-11,
         "p05": 1.657498572393834e-07,
         "median": 2.0090402134131935e-06,
-        "p95": 1.0958079238232413e-05,
-        "max": 0.0010931510740292971
+        "p95": 1.0984918560930076e-05,
+        "max": 0.0010929690336483056
       },
       "angle_error_deg": {
         "min": 5.104154152812652e-11,
-        "p05": 1.0496277660262258e-06,
-        "median": 1.1623584861340326e-05,
-        "p95": 0.0001502428555861357,
+        "p05": 9.185729645765341e-07,
+        "median": 1.0601652184858387e-05,
+        "p95": 0.00014930008397938716,
         "max": 3.7941879409971113
       },
       "detected_descriptor_cosine": {
@@ -5177,33 +5178,33 @@
       "native_count": 10395,
       "opencv_count": 10397,
       "native_sift": {
-        "seconds": 1.0117528,
-        "bytes": 314638189
+        "seconds": 1.331373035,
+        "bytes": 314632536
       },
-      "opencv_seconds": 0.2915232999999944,
+      "opencv_seconds": 0.37872885199999473,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10393,
       "native_coverage": 0.9998075998075998,
       "opencv_coverage": 0.999615273636626,
       "position_px": {
         "min": 0.0,
-        "p05": 2.6341646457950396e-06,
-        "median": 1.9442424924195556e-05,
+        "p05": 2.6369367534635912e-06,
+        "median": 1.944907481001181e-05,
         "p95": 8.617075486436573e-05,
         "max": 0.04041405716206754
       },
       "relative_scale_error": {
         "min": 1.7375856309342907e-10,
-        "p05": 2.1643076864030775e-07,
-        "median": 2.6106291695082717e-06,
+        "p05": 2.1722983749583592e-07,
+        "median": 2.614573822778965e-06,
         "p95": 1.4448559403135164e-05,
         "max": 0.0053186384928094466
       },
       "angle_error_deg": {
         "min": 2.9212758638306108e-09,
-        "p05": 1.1788767961055195e-06,
-        "median": 1.2811477557990284e-05,
-        "p95": 0.00017108281409130863,
+        "p05": 1.0751626431864123e-06,
+        "median": 1.1633384430202727e-05,
+        "p95": 0.0001717748792742458,
         "max": 1.7831976403729675
       },
       "detected_descriptor_cosine": {
@@ -5236,10 +5237,10 @@
       "native_count": 10231,
       "opencv_count": 10233,
       "native_sift": {
-        "seconds": 1.0009889,
-        "bytes": 314542253
+        "seconds": 1.32148423,
+        "bytes": 314536600
       },
-      "opencv_seconds": 0.2867511000000036,
+      "opencv_seconds": 0.3772359799999663,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10231,
       "native_coverage": 1.0,
@@ -5247,22 +5248,22 @@
       "position_px": {
         "min": 9.369531131407484e-08,
         "p05": 2.726422344583065e-06,
-        "median": 2.042314242049927e-05,
-        "p95": 8.925123606999392e-05,
+        "median": 2.0488562879607658e-05,
+        "p95": 8.924288684690677e-05,
         "max": 0.0018877489169061943
       },
       "relative_scale_error": {
         "min": 5.604665620495553e-10,
-        "p05": 2.0964989505545262e-07,
+        "p05": 2.082593245633646e-07,
         "median": 2.672995254249244e-06,
-        "p95": 1.496472880302413e-05,
+        "p95": 1.4943430517444511e-05,
         "max": 0.00023845112553710912
       },
       "angle_error_deg": {
         "min": 2.616756836408568e-09,
-        "p05": 1.153581597912797e-06,
-        "median": 1.2720213449738497e-05,
-        "p95": 0.00018692903148340268,
+        "p05": 1.02817193243391e-06,
+        "median": 1.1761096880882089e-05,
+        "p95": 0.00018795489398963793,
         "max": 2.616852442773704
       },
       "detected_descriptor_cosine": {
@@ -5295,10 +5296,10 @@
       "native_count": 10031,
       "opencv_count": 10032,
       "native_sift": {
-        "seconds": 0.9719494,
-        "bytes": 314413005
+        "seconds": 1.30420286,
+        "bytes": 314407448
       },
-      "opencv_seconds": 0.28685189999998784,
+      "opencv_seconds": 0.3866427510000108,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10029,
       "native_coverage": 0.9998006180839398,
@@ -5306,23 +5307,23 @@
       "position_px": {
         "min": 1.0126275698745534e-07,
         "p05": 2.6426584964679035e-06,
-        "median": 1.9956533169814722e-05,
-        "p95": 8.88010122179782e-05,
+        "median": 1.9944698681029706e-05,
+        "p95": 8.866116677700472e-05,
         "max": 0.0023349444467259802
       },
       "relative_scale_error": {
-        "min": 1.570987784305089e-11,
-        "p05": 2.183054823579056e-07,
-        "median": 2.584141492567582e-06,
+        "min": 7.941948210188343e-10,
+        "p05": 2.181872387208017e-07,
+        "median": 2.5888050443345634e-06,
         "p95": 1.4492005720390115e-05,
-        "max": 0.0005934525741921881
+        "max": 0.0005936623824757126
       },
       "angle_error_deg": {
         "min": 2.4291295546396723e-09,
-        "p05": 1.1294585129979497e-06,
-        "median": 1.2487203138553048e-05,
-        "p95": 0.00023976129370965364,
-        "max": 1.8930832777816682
+        "p05": 1.044054752313378e-06,
+        "median": 1.1519347321431726e-05,
+        "p95": 0.00023943560731731414,
+        "max": 1.8930985365707398
       },
       "detected_descriptor_cosine": {
         "min": 0.9973952174186707,
@@ -5354,34 +5355,34 @@
       "native_count": 10403,
       "opencv_count": 10400,
       "native_sift": {
-        "seconds": 0.984898,
-        "bytes": 314641757
+        "seconds": 1.29368698,
+        "bytes": 314636312
       },
-      "opencv_seconds": 0.28230069999995067,
+      "opencv_seconds": 0.3814943840000069,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10399,
       "native_coverage": 0.9996154955301355,
       "opencv_coverage": 0.9999038461538462,
       "position_px": {
         "min": 3.9062513224052964e-08,
-        "p05": 2.5156692538542747e-06,
-        "median": 2.025721802767821e-05,
-        "p95": 9.090753946236759e-05,
+        "p05": 2.51288273823003e-06,
+        "median": 2.0232282252855107e-05,
+        "p95": 9.090175737924595e-05,
         "max": 0.0045641060421124785
       },
       "relative_scale_error": {
         "min": 5.186584495220359e-11,
-        "p05": 2.3502476504955182e-07,
-        "median": 2.7146589447468727e-06,
+        "p05": 2.3515972640275607e-07,
+        "median": 2.720022788227361e-06,
         "p95": 1.5067040624749956e-05,
-        "max": 0.0009913870313683626
+        "max": 0.0009905894803852178
       },
       "angle_error_deg": {
-        "min": 1.545851352941076e-09,
-        "p05": 1.122546554464187e-06,
-        "median": 1.2921718331249056e-05,
+        "min": 2.335952024691517e-09,
+        "p05": 1.0454486571191885e-06,
+        "median": 1.1919626082092273e-05,
         "p95": 0.00024744215759190183,
-        "max": 1.939462301982539
+        "max": 1.9394584872852774
       },
       "detected_descriptor_cosine": {
         "min": 0.997550368309021,
@@ -5413,34 +5414,34 @@
       "native_count": 10119,
       "opencv_count": 10114,
       "native_sift": {
-        "seconds": 1.0244008,
-        "bytes": 314463325
+        "seconds": 1.296380615,
+        "bytes": 314457944
       },
-      "opencv_seconds": 0.2788917999999967,
+      "opencv_seconds": 0.3702940939999735,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 10111,
       "native_coverage": 0.9992094080442732,
       "opencv_coverage": 0.9997033814514534,
       "position_px": {
         "min": 3.2227484513267857e-08,
-        "p05": 2.6661078413442432e-06,
-        "median": 2.0410151933110627e-05,
+        "p05": 2.666249238150299e-06,
+        "median": 2.0412548457277644e-05,
         "p95": 9.086610290492535e-05,
         "max": 0.0036257145694028638
       },
       "relative_scale_error": {
-        "min": 2.2049184700279056e-10,
-        "p05": 2.1225048740802777e-07,
-        "median": 2.7292574120707513e-06,
-        "p95": 1.4994030524129176e-05,
-        "max": 0.0005747691436038815
+        "min": 9.322814742418473e-10,
+        "p05": 2.118605404444196e-07,
+        "median": 2.7263293468360317e-06,
+        "p95": 1.5008975470076624e-05,
+        "max": 0.0005746637204916416
       },
       "angle_error_deg": {
-        "min": 8.175806641982857e-10,
-        "p05": 1.138141009989571e-06,
-        "median": 1.304597384976735e-05,
-        "p95": 0.00022081160852872053,
-        "max": 3.770311506903475
+        "min": 1.4032098365868002e-09,
+        "p05": 1.055075951873379e-06,
+        "median": 1.2189953332466585e-05,
+        "p95": 0.00022018742719148265,
+        "max": 3.770296248114429
       },
       "detected_descriptor_cosine": {
         "min": 0.9900780320167542,
@@ -5472,33 +5473,33 @@
       "native_count": 3757,
       "opencv_count": 3758,
       "native_sift": {
-        "seconds": 0.513834,
-        "bytes": 204422676
+        "seconds": 0.634046764,
+        "bytes": 204417936
       },
-      "opencv_seconds": 0.1363202000000001,
+      "opencv_seconds": 0.17862530799999377,
       "descriptor_max_norm_error": 1.7881393432617188e-07,
       "paired_count": 3757,
       "native_coverage": 1.0,
       "opencv_coverage": 0.9997339010111762,
       "position_px": {
         "min": 2.9333468935954347e-07,
-        "p05": 3.0544020224243142e-06,
-        "median": 2.863077778174667e-05,
-        "p95": 0.00011837598259754356,
+        "p05": 3.058312416813316e-06,
+        "median": 2.8631933172593944e-05,
+        "p95": 0.0001185206475273369,
         "max": 0.001697561743744632
       },
       "relative_scale_error": {
         "min": 2.0225154884201402e-11,
-        "p05": 2.766882978733065e-07,
-        "median": 3.4679804927773006e-06,
+        "p05": 2.673171927813911e-07,
+        "median": 3.46416106422609e-06,
         "p95": 1.7708107470237862e-05,
         "max": 0.00012692944396608397
       },
       "angle_error_deg": {
         "min": 2.4119291149223172e-09,
-        "p05": 1.2878212261650002e-06,
-        "median": 1.4990769351735758e-05,
-        "p95": 0.0007164313103707509,
+        "p05": 1.2004461983999574e-06,
+        "median": 1.3564422226618746e-05,
+        "p95": 0.0007179571892753573,
         "max": 3.709167334861328
       },
       "detected_descriptor_cosine": {
@@ -5531,10 +5532,10 @@
       "native_count": 3121,
       "opencv_count": 3121,
       "native_sift": {
-        "seconds": 0.505871,
-        "bytes": 203424333
+        "seconds": 0.577274614,
+        "bytes": 203419400
       },
-      "opencv_seconds": 0.12470760000002201,
+      "opencv_seconds": 0.15783057600003758,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3119,
       "native_coverage": 0.9993591797500802,
@@ -5542,21 +5543,21 @@
       "position_px": {
         "min": 1.1016129307890855e-07,
         "p05": 3.0049502324246247e-06,
-        "median": 3.072640269411756e-05,
-        "p95": 0.0001293483461547765,
+        "median": 3.07367535821713e-05,
+        "p95": 0.0001298112361593981,
         "max": 0.001599014662666002
       },
       "relative_scale_error": {
         "min": 3.855234798066931e-09,
         "p05": 2.919961794356496e-07,
         "median": 3.925702645735107e-06,
-        "p95": 2.006300767843916e-05,
+        "p95": 2.006137085032167e-05,
         "max": 0.00021282755420926058
       },
       "angle_error_deg": {
         "min": 2.6433717179830544e-09,
-        "p05": 1.3351783546279133e-06,
-        "median": 1.6001640186257753e-05,
+        "p05": 1.2154230843506197e-06,
+        "median": 1.4696355124647787e-05,
         "p95": 0.001677232800157985,
         "max": 0.8684539942314312
       },
@@ -5590,10 +5591,10 @@
       "native_count": 4159,
       "opencv_count": 4158,
       "native_sift": {
-        "seconds": 0.5222351,
-        "bytes": 204662452
+        "seconds": 0.652001293,
+        "bytes": 204657648
       },
-      "opencv_seconds": 0.1431369000000018,
+      "opencv_seconds": 0.1819805659999929,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4157,
       "native_coverage": 0.9995191151719163,
@@ -5601,22 +5602,22 @@
       "position_px": {
         "min": 1.8243692616999811e-07,
         "p05": 2.8181429557274457e-06,
-        "median": 2.7783723567501347e-05,
+        "median": 2.7708428944324358e-05,
         "p95": 0.0001124237227523975,
         "max": 0.0010594568331543793
       },
       "relative_scale_error": {
-        "min": 3.1175568793173625e-09,
-        "p05": 3.084143387788174e-07,
+        "min": 3.908515289197112e-09,
+        "p05": 3.071616418992562e-07,
         "median": 3.758380521801108e-06,
-        "p95": 1.8885451988404068e-05,
-        "max": 0.0001363257113334848
+        "p95": 1.8849988693858675e-05,
+        "max": 0.00013641226594063305
       },
       "angle_error_deg": {
-        "min": 3.146891690714907e-09,
-        "p05": 1.211667851782647e-06,
-        "median": 1.526008264127762e-05,
-        "p95": 0.0007092739768166806,
+        "min": 5.804232404858949e-09,
+        "p05": 1.0996141623554423e-06,
+        "median": 1.4089433639888683e-05,
+        "p95": 0.0007207180686266867,
         "max": 3.0863251201652324
       },
       "detected_descriptor_cosine": {
@@ -5649,10 +5650,10 @@
       "native_count": 4589,
       "opencv_count": 4589,
       "native_sift": {
-        "seconds": 0.5515532,
-        "bytes": 204932580
+        "seconds": 0.713270439,
+        "bytes": 204927856
       },
-      "opencv_seconds": 0.15305060000002868,
+      "opencv_seconds": 0.19547177499998725,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4587,
       "native_coverage": 0.9995641752015689,
@@ -5660,22 +5661,22 @@
       "position_px": {
         "min": 1.3138304216719197e-07,
         "p05": 2.92592820762659e-06,
-        "median": 2.5788887524082697e-05,
+        "median": 2.58130566146192e-05,
         "p95": 0.00011075248353034536,
         "max": 0.004236490465315119
       },
       "relative_scale_error": {
         "min": 7.196387930008541e-10,
-        "p05": 2.6724336115169224e-07,
+        "p05": 2.6152152856617764e-07,
         "median": 3.0452053541019097e-06,
         "p95": 1.6986318799161447e-05,
-        "max": 0.0004552368579597843
+        "max": 0.00045534433792648876
       },
       "angle_error_deg": {
         "min": 1.9844116768587173e-09,
-        "p05": 1.1145587720371973e-06,
-        "median": 1.3407122449737352e-05,
-        "p95": 0.00039087368650638453,
+        "p05": 1.0296752661318694e-06,
+        "median": 1.2969026741247579e-05,
+        "p95": 0.0003908359396376249,
         "max": 0.9914582151201529
       },
       "detected_descriptor_cosine": {
@@ -5708,10 +5709,10 @@
       "native_count": 4202,
       "opencv_count": 4204,
       "native_sift": {
-        "seconds": 0.534003,
-        "bytes": 204695668
+        "seconds": 0.67769227,
+        "bytes": 204690800
       },
-      "opencv_seconds": 0.1386221000000205,
+      "opencv_seconds": 0.18610322899996845,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4201,
       "native_coverage": 0.9997620180866255,
@@ -5719,21 +5720,21 @@
       "position_px": {
         "min": 1.7304732955811086e-07,
         "p05": 2.7397843364589038e-06,
-        "median": 2.5892521832084995e-05,
-        "p95": 0.00011782249873430305,
-        "max": 0.0011741310062375902
+        "median": 2.58823606724144e-05,
+        "p95": 0.00011672805194772165,
+        "max": 0.0015481778971531445
       },
       "relative_scale_error": {
         "min": 2.2827117973633904e-10,
-        "p05": 3.1673367040241374e-07,
-        "median": 3.0577873140202882e-06,
+        "p05": 3.1442323966679453e-07,
+        "median": 3.0512079455258245e-06,
         "p95": 1.7691870836999968e-05,
         "max": 0.00019929799782381075
       },
       "angle_error_deg": {
         "min": 3.992842902671847e-09,
-        "p05": 1.1825330803451302e-06,
-        "median": 1.3460246185915464e-05,
+        "p05": 1.083366896709466e-06,
+        "median": 1.2370180761158024e-05,
         "p95": 0.00043076963461204137,
         "max": 1.778611949703496
       },
@@ -5767,10 +5768,10 @@
       "native_count": 4345,
       "opencv_count": 4346,
       "native_sift": {
-        "seconds": 0.5171189,
-        "bytes": 204781476
+        "seconds": 0.675973784,
+        "bytes": 204776496
       },
-      "opencv_seconds": 0.1407180999999582,
+      "opencv_seconds": 0.18798314600002186,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4344,
       "native_coverage": 0.9997698504027618,
@@ -5778,22 +5779,22 @@
       "position_px": {
         "min": 1.2785512403388746e-07,
         "p05": 2.6037296726894075e-06,
-        "median": 2.1600720490961902e-05,
+        "median": 2.1599830483461488e-05,
         "p95": 9.562624938120484e-05,
         "max": 0.0014796702064733328
       },
       "relative_scale_error": {
         "min": 4.007028042707361e-10,
-        "p05": 2.1891104673987804e-07,
-        "median": 2.732275646954996e-06,
-        "p95": 1.560863848450999e-05,
+        "p05": 2.1932785693734582e-07,
+        "median": 2.732389508430799e-06,
+        "p95": 1.5616153472403078e-05,
         "max": 0.00012240998881107856
       },
       "angle_error_deg": {
         "min": 3.928621142543736e-09,
-        "p05": 1.1331648362682527e-06,
-        "median": 1.3086341564284455e-05,
-        "p95": 0.00026665956239328806,
+        "p05": 1.1561151209054135e-06,
+        "median": 1.1781825293629871e-05,
+        "p95": 0.00026239656207677474,
         "max": 1.9175716104873406
       },
       "detected_descriptor_cosine": {
@@ -5826,10 +5827,10 @@
       "native_count": 8357,
       "opencv_count": 8359,
       "native_sift": {
-        "seconds": 0.8362995,
-        "bytes": 303084989
+        "seconds": 1.058823781,
+        "bytes": 303079352
       },
-      "opencv_seconds": 0.2363293000000226,
+      "opencv_seconds": 0.3103560800000196,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 8354,
       "native_coverage": 0.9996410195046069,
@@ -5837,22 +5838,22 @@
       "position_px": {
         "min": 7.250976352679572e-08,
         "p05": 2.4295024434274656e-06,
-        "median": 1.630328460375427e-05,
+        "median": 1.6304701625123752e-05,
         "p95": 7.949349853182924e-05,
         "max": 0.0014734481050661951
       },
       "relative_scale_error": {
         "min": 1.74730230284581e-10,
-        "p05": 1.2977630848842735e-07,
-        "median": 1.760570536246675e-06,
+        "p05": 1.287103269520529e-07,
+        "median": 1.7646645911750802e-06,
         "p95": 1.1554279976699886e-05,
         "max": 0.00010050787116200333
       },
       "angle_error_deg": {
-        "min": 3.970350019964538e-09,
-        "p05": 1.028396592822168e-06,
-        "median": 1.1553982111579927e-05,
-        "p95": 0.00013412434988998434,
+        "min": 3.693056540615822e-09,
+        "p05": 9.468125727156184e-07,
+        "median": 1.0338390994708822e-05,
+        "p95": 0.00013525546027112816,
         "max": 2.58890319688779
       },
       "detected_descriptor_cosine": {
@@ -5885,10 +5886,10 @@
       "native_count": 7951,
       "opencv_count": 7949,
       "native_sift": {
-        "seconds": 0.8547085,
-        "bytes": 302833997
+        "seconds": 1.072593649,
+        "bytes": 302828280
       },
-      "opencv_seconds": 0.23407459999998537,
+      "opencv_seconds": 0.30601894500000526,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 7949,
       "native_coverage": 0.9997484593132939,
@@ -5896,22 +5897,22 @@
       "position_px": {
         "min": 5.6235074156078464e-08,
         "p05": 2.3183239237339066e-06,
-        "median": 1.5701728161495138e-05,
-        "p95": 7.901781559534496e-05,
+        "median": 1.5670712581133813e-05,
+        "p95": 7.905699864317402e-05,
         "max": 0.0024408251066388408
       },
       "relative_scale_error": {
         "min": 2.513673713622211e-10,
-        "p05": 1.2666579773945585e-07,
+        "p05": 1.244867150029805e-07,
         "median": 1.7305960451352576e-06,
-        "p95": 1.1708429250445446e-05,
+        "p95": 1.1731462725483855e-05,
         "max": 0.0002006790601862818
       },
       "angle_error_deg": {
         "min": 4.4635649955284475e-09,
-        "p05": 9.87719811084448e-07,
-        "median": 1.1158286606548682e-05,
-        "p95": 0.0001692558388737604,
+        "p05": 8.97181637722046e-07,
+        "median": 1.0299494146787488e-05,
+        "p95": 0.00017108904503201707,
         "max": 4.685474176961106
       },
       "detected_descriptor_cosine": {
@@ -5944,33 +5945,33 @@
       "native_count": 6145,
       "opencv_count": 6145,
       "native_sift": {
-        "seconds": 0.7134241,
-        "bytes": 299948143
+        "seconds": 0.937319524,
+        "bytes": 299942440
       },
-      "opencv_seconds": 0.19496559999998908,
+      "opencv_seconds": 0.26002553200004286,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 6143,
       "native_coverage": 0.9996745321399512,
       "opencv_coverage": 0.9996745321399512,
       "position_px": {
         "min": 6.176322050829519e-08,
-        "p05": 2.344636270615164e-06,
-        "median": 1.7098560822779443e-05,
-        "p95": 8.237035882651101e-05,
-        "max": 0.0008767072605718032
+        "p05": 2.3257774432866366e-06,
+        "median": 1.7044104508793826e-05,
+        "p95": 8.221757618078417e-05,
+        "max": 0.0008725972919857775
       },
       "relative_scale_error": {
         "min": 8.050093924794055e-11,
-        "p05": 1.308996905091675e-07,
+        "p05": 1.3112666930048533e-07,
         "median": 1.7930019912126838e-06,
         "p95": 1.2189950278140837e-05,
-        "max": 0.00010210889505946064
+        "max": 0.0001020241496925145
       },
       "angle_error_deg": {
-        "min": 1.204387002339153e-09,
-        "p05": 9.867407142201937e-07,
-        "median": 1.1496194333683605e-05,
-        "p95": 0.0009502777030871473,
+        "min": 7.194414689470475e-10,
+        "p05": 9.03513989781765e-07,
+        "median": 1.0725725266760155e-05,
+        "p95": 0.0009495147636348407,
         "max": 3.873713516140987
       },
       "detected_descriptor_cosine": {
@@ -6003,10 +6004,10 @@
       "native_count": 4915,
       "opencv_count": 4912,
       "native_sift": {
-        "seconds": 0.6437198,
-        "bytes": 299187151
+        "seconds": 0.779461281,
+        "bytes": 299181544
       },
-      "opencv_seconds": 0.1608686000000148,
+      "opencv_seconds": 0.21479530800002067,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4912,
       "native_coverage": 0.9993896236012207,
@@ -6014,21 +6015,21 @@
       "position_px": {
         "min": 1.9683247566975057e-07,
         "p05": 2.268674068939609e-06,
-        "median": 1.647272682676899e-05,
-        "p95": 7.544738251942585e-05,
+        "median": 1.64861249932164e-05,
+        "p95": 7.549596336662316e-05,
         "max": 0.0022129689841014952
       },
       "relative_scale_error": {
         "min": 9.234444320327384e-10,
-        "p05": 1.2935224604770923e-07,
+        "p05": 1.2865037450904283e-07,
         "median": 1.864950094909723e-06,
         "p95": 1.2080054409707715e-05,
-        "max": 7.46217425091622e-05
+        "max": 7.449196048825435e-05
       },
       "angle_error_deg": {
         "min": 1.5046568087067605e-09,
-        "p05": 9.955488074995203e-07,
-        "median": 1.1600814672431448e-05,
+        "p05": 9.507617415136263e-07,
+        "median": 1.0977557184550756e-05,
         "p95": 0.00017908418106173064,
         "max": 2.7845718800309704
       },
@@ -6062,10 +6063,10 @@
       "native_count": 4673,
       "opencv_count": 4674,
       "native_sift": {
-        "seconds": 0.6192656,
-        "bytes": 299046655
+        "seconds": 0.793698149,
+        "bytes": 299041384
       },
-      "opencv_seconds": 0.16252979999995887,
+      "opencv_seconds": 0.21199089100002766,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4673,
       "native_coverage": 1.0,
@@ -6079,17 +6080,17 @@
       },
       "relative_scale_error": {
         "min": 1.1992762338763896e-10,
-        "p05": 1.3858342355899118e-07,
-        "median": 2.115325862028783e-06,
+        "p05": 1.4279339550782315e-07,
+        "median": 2.115772707922403e-06,
         "p95": 1.466642140477425e-05,
         "max": 0.00018170096559777527
       },
       "angle_error_deg": {
         "min": 1.2790918706973678e-10,
-        "p05": 1.0337635969194098e-06,
-        "median": 1.2086738658943541e-05,
-        "p95": 0.00014540157704610076,
-        "max": 0.8093661987261326
+        "p05": 1.0210773057392376e-06,
+        "median": 1.0927767712900754e-05,
+        "p95": 0.00014534211260190972,
+        "max": 0.8093814575152042
       },
       "detected_descriptor_cosine": {
         "min": 0.9995003938674927,
@@ -6121,10 +6122,10 @@
       "native_count": 3897,
       "opencv_count": 3896,
       "native_sift": {
-        "seconds": 0.6065217,
-        "bytes": 298568943
+        "seconds": 0.730313131,
+        "bytes": 298563176
       },
-      "opencv_seconds": 0.14850369999999202,
+      "opencv_seconds": 0.19308036999996148,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 3894,
       "native_coverage": 0.9992301770592764,
@@ -6138,17 +6139,17 @@
       },
       "relative_scale_error": {
         "min": 5.006730585677133e-10,
-        "p05": 1.1714580838706468e-07,
-        "median": 2.0965813798401456e-06,
-        "p95": 1.4330864287298572e-05,
-        "max": 9.943612526985834e-05
+        "p05": 1.18000144883057e-07,
+        "median": 2.0940559157245353e-06,
+        "p95": 1.433995110020625e-05,
+        "max": 9.953234479109785e-05
       },
       "angle_error_deg": {
         "min": 2.25078949254065e-09,
-        "p05": 1.0398419740544828e-06,
-        "median": 1.1452816911160308e-05,
-        "p95": 0.00037778672387900385,
-        "max": 3.6333926423235323
+        "p05": 9.268296107407447e-07,
+        "median": 1.0355661470240261e-05,
+        "p95": 0.000368145067942088,
+        "max": 3.633404086415317
       },
       "detected_descriptor_cosine": {
         "min": 0.9878590106964111,
@@ -6180,10 +6181,10 @@
       "native_count": 2313,
       "opencv_count": 2314,
       "native_sift": {
-        "seconds": 0.4788939,
-        "bytes": 277633585
+        "seconds": 0.598113193,
+        "bytes": 277628152
       },
-      "opencv_seconds": 0.11361579999999094,
+      "opencv_seconds": 0.15407182100000227,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 2313,
       "native_coverage": 1.0,
@@ -6191,22 +6192,22 @@
       "position_px": {
         "min": 2.586195929552194e-07,
         "p05": 2.427788398752771e-06,
-        "median": 1.90528227974209e-05,
+        "median": 1.9058737482634046e-05,
         "p95": 0.00012148809059540504,
         "max": 0.001123009821115303
       },
       "relative_scale_error": {
         "min": 5.151908899492241e-10,
-        "p05": 1.2994596889637223e-07,
+        "p05": 1.3086105394854998e-07,
         "median": 1.9296254221146114e-06,
         "p95": 1.4710915820570496e-05,
         "max": 0.0001346868270617474
       },
       "angle_error_deg": {
         "min": 3.1580109098813034e-09,
-        "p05": 1.0292602012014945e-06,
-        "median": 1.1898710169284907e-05,
-        "p95": 0.0001641766309206922,
+        "p05": 9.680412968925715e-07,
+        "median": 1.0729581625700336e-05,
+        "p95": 0.00016500794560167162,
         "max": 1.5009729772335778
       },
       "detected_descriptor_cosine": {
@@ -6239,10 +6240,10 @@
       "native_count": 1927,
       "opencv_count": 1928,
       "native_sift": {
-        "seconds": 0.485947,
-        "bytes": 277399105
+        "seconds": 0.577879982,
+        "bytes": 277393848
       },
-      "opencv_seconds": 0.10993130000002793,
+      "opencv_seconds": 0.14274036299997306,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1927,
       "native_coverage": 1.0,
@@ -6250,22 +6251,22 @@
       "position_px": {
         "min": 2.0531054212959817e-07,
         "p05": 2.108654324819234e-06,
-        "median": 1.6129797365649162e-05,
-        "p95": 9.450056522432429e-05,
+        "median": 1.608368791203226e-05,
+        "p95": 9.536843941201365e-05,
         "max": 0.0005842941751598902
       },
       "relative_scale_error": {
         "min": 1.166164498300759e-09,
-        "p05": 1.2111221248112258e-07,
-        "median": 1.608235592032159e-06,
+        "p05": 1.2138043647969e-07,
+        "median": 1.6090430825510538e-06,
         "p95": 1.3045404386480246e-05,
         "max": 7.525425644583361e-05
       },
       "angle_error_deg": {
-        "min": 3.2326648893646152e-09,
-        "p05": 1.1762001481522372e-06,
-        "median": 1.1571060341664203e-05,
-        "p95": 0.0001142737480111123,
+        "min": 2.5720789486871135e-08,
+        "p05": 1.0095128801618612e-06,
+        "median": 1.0416087225633827e-05,
+        "p95": 0.00011553314294330122,
         "max": 0.9538082330972912
       },
       "detected_descriptor_cosine": {
@@ -6298,34 +6299,34 @@
       "native_count": 1697,
       "opencv_count": 1697,
       "native_sift": {
-        "seconds": 0.4448922,
-        "bytes": 277257009
+        "seconds": 0.528561515,
+        "bytes": 277251832
       },
-      "opencv_seconds": 0.10499079999999594,
+      "opencv_seconds": 0.1376562709999689,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1697,
       "native_coverage": 1.0,
       "opencv_coverage": 1.0,
       "position_px": {
         "min": 1.906430358253393e-07,
-        "p05": 1.953665652189791e-06,
-        "median": 1.4166516780587412e-05,
+        "p05": 1.9250128800939655e-06,
+        "median": 1.4125615369223095e-05,
         "p95": 8.50225847828208e-05,
         "max": 0.0004722365757784168
       },
       "relative_scale_error": {
         "min": 3.2055824661370025e-10,
-        "p05": 1.0771216802929473e-07,
-        "median": 1.4994738354312531e-06,
+        "p05": 1.1164878526148674e-07,
+        "median": 1.5029014492906612e-06,
         "p95": 1.0925102326275702e-05,
         "max": 0.0002999483011585369
       },
       "angle_error_deg": {
-        "min": 2.4915956485836157e-08,
-        "p05": 8.974323773864702e-07,
-        "median": 1.1200238097352748e-05,
-        "p95": 0.00019565599044379155,
-        "max": 1.1460942087462718
+        "min": 7.195763244655416e-09,
+        "p05": 8.47380884008477e-07,
+        "median": 1.0140041897719868e-05,
+        "p95": 0.00019525852021469285,
+        "max": 1.1460636911681796
       },
       "detected_descriptor_cosine": {
         "min": 0.9994592666625977,
@@ -6357,33 +6358,33 @@
       "native_count": 1458,
       "opencv_count": 1458,
       "native_sift": {
-        "seconds": 0.4309551,
-        "bytes": 276820938
+        "seconds": 0.494003268,
+        "bytes": 276815536
       },
-      "opencv_seconds": 0.09683630000000676,
+      "opencv_seconds": 0.129838785000004,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1458,
       "native_coverage": 1.0,
       "opencv_coverage": 1.0,
       "position_px": {
         "min": 9.874859286645334e-08,
-        "p05": 2.2665491141028996e-06,
-        "median": 1.3403738842660769e-05,
+        "p05": 2.27652280673722e-06,
+        "median": 1.3397884128864827e-05,
         "p95": 8.218456924330227e-05,
         "max": 0.0005154128329024163
       },
       "relative_scale_error": {
         "min": 5.119096257999445e-10,
-        "p05": 9.841347852201923e-08,
-        "median": 1.3382669468153807e-06,
+        "p05": 1.0889308167949531e-07,
+        "median": 1.3371907504056146e-06,
         "p95": 9.840021751744697e-06,
         "max": 8.573150592461332e-05
       },
       "angle_error_deg": {
-        "min": 7.708061548308107e-09,
-        "p05": 8.555771556115022e-07,
-        "median": 1.0291162887354894e-05,
-        "p95": 0.00011246308543869225,
+        "min": 1.0399854030761762e-08,
+        "p05": 7.885724050482229e-07,
+        "median": 9.608486340526194e-06,
+        "p95": 0.00011312183725271765,
         "max": 0.8507186184491762
       },
       "detected_descriptor_cosine": {
@@ -6416,10 +6417,10 @@
       "native_count": 1329,
       "opencv_count": 1328,
       "native_sift": {
-        "seconds": 0.4140032,
-        "bytes": 276616883
+        "seconds": 0.492895135,
+        "bytes": 276611560
       },
-      "opencv_seconds": 0.09742490000002135,
+      "opencv_seconds": 0.12287196199997652,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1328,
       "native_coverage": 0.999247554552295,
@@ -6427,23 +6428,23 @@
       "position_px": {
         "min": 1.983507363397213e-07,
         "p05": 2.2295279220530068e-06,
-        "median": 1.3683330620639933e-05,
+        "median": 1.369459976326988e-05,
         "p95": 8.087636860783256e-05,
         "max": 0.0004430031464028128
       },
       "relative_scale_error": {
         "min": 1.0200202904542266e-09,
         "p05": 9.731293661996432e-08,
-        "median": 1.4348768697658443e-06,
+        "median": 1.4377640394913627e-06,
         "p95": 9.330727251033451e-06,
         "max": 4.8610118788872114e-05
       },
       "angle_error_deg": {
-        "min": 1.66872508583912e-08,
-        "p05": 8.505764941635808e-07,
-        "median": 1.1083285068772e-05,
+        "min": 1.0034242909018168e-08,
+        "p05": 7.191726599153674e-07,
+        "median": 1.0160176768075217e-05,
         "p95": 0.00013801855964962938,
-        "max": 1.7086377941424955
+        "max": 1.7086301647479725
       },
       "detected_descriptor_cosine": {
         "min": 0.9984550476074219,
@@ -6475,10 +6476,10 @@
       "native_count": 1085,
       "opencv_count": 1085,
       "native_sift": {
-        "seconds": 0.382518,
-        "bytes": 276467539
+        "seconds": 0.449387642,
+        "bytes": 276462280
       },
-      "opencv_seconds": 0.0933145000000195,
+      "opencv_seconds": 0.11476311100000203,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 1084,
       "native_coverage": 0.9990783410138249,
@@ -6492,16 +6493,16 @@
       },
       "relative_scale_error": {
         "min": 3.804720982714116e-10,
-        "p05": 8.569021317517134e-08,
-        "median": 1.1501183410089766e-06,
+        "p05": 8.630313506619025e-08,
+        "median": 1.1560566479662526e-06,
         "p95": 9.22042614855955e-06,
-        "max": 0.00010752277136849564
+        "max": 0.00010740861256142153
       },
       "angle_error_deg": {
-        "min": 2.3381046240999314e-08,
-        "p05": 9.303622630032215e-07,
-        "median": 1.0844034432968205e-05,
-        "p95": 0.0001234303814579346,
+        "min": 1.7251939258756957e-08,
+        "p05": 9.740977282003425e-07,
+        "median": 9.688383400790805e-06,
+        "p95": 0.00012400258604716285,
         "max": 2.3264595632959035
       },
       "detected_descriptor_cosine": {
@@ -6534,33 +6535,33 @@
       "native_count": 5036,
       "opencv_count": 5037,
       "native_sift": {
-        "seconds": 0.6086654,
-        "bytes": 265945714
+        "seconds": 0.78775613,
+        "bytes": 265940816
       },
-      "opencv_seconds": 0.179429999999968,
+      "opencv_seconds": 0.21540268100000048,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 5036,
       "native_coverage": 1.0,
       "opencv_coverage": 0.9998014691284495,
       "position_px": {
         "min": 2.6533941082746744e-07,
-        "p05": 2.0779154800119015e-06,
-        "median": 1.48109667223386e-05,
-        "p95": 7.44240219898365e-05,
+        "p05": 2.0994276626441088e-06,
+        "median": 1.48396536936445e-05,
+        "p95": 7.444420998661804e-05,
         "max": 0.0013757919044257603
       },
       "relative_scale_error": {
         "min": 1.2799539206298505e-10,
-        "p05": 7.42740434711564e-08,
-        "median": 9.633226407679274e-07,
+        "p05": 7.122623663091687e-08,
+        "median": 9.660709517911314e-07,
         "p95": 9.143933972194374e-06,
         "max": 0.00010893552819246644
       },
       "angle_error_deg": {
         "min": 6.123814539252404e-09,
-        "p05": 9.369924142144314e-07,
-        "median": 1.0258068592505549e-05,
-        "p95": 0.00015169967007785202,
+        "p05": 8.129491786377948e-07,
+        "median": 9.136328227230912e-06,
+        "p95": 0.00015841703066717832,
         "max": 4.74132126152049
       },
       "detected_descriptor_cosine": {
@@ -6593,10 +6594,10 @@
       "native_count": 6072,
       "opencv_count": 6071,
       "native_sift": {
-        "seconds": 0.6473782,
-        "bytes": 266578130
+        "seconds": 0.850102906,
+        "bytes": 266573200
       },
-      "opencv_seconds": 0.17953900000003387,
+      "opencv_seconds": 0.2340754339999762,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 6070,
       "native_coverage": 0.9996706192358367,
@@ -6605,21 +6606,21 @@
         "min": 1.7054931177867955e-07,
         "p05": 2.146764815758467e-06,
         "median": 1.4100001402501501e-05,
-        "p95": 7.252620025890782e-05,
+        "p95": 7.244429022618143e-05,
         "max": 0.0007767472920394706
       },
       "relative_scale_error": {
         "min": 1.2728995635313822e-10,
         "p05": 7.989304840472222e-08,
-        "median": 1.0494134652372367e-06,
-        "p95": 9.190480102605482e-06,
+        "median": 1.0484799385368504e-06,
+        "p95": 9.187903578622425e-06,
         "max": 0.00011845926260245498
       },
       "angle_error_deg": {
         "min": 3.6793928777042546e-09,
-        "p05": 9.464474895659518e-07,
-        "median": 1.0027411370173415e-05,
-        "p95": 0.00011723269243335822,
+        "p05": 8.180158556786848e-07,
+        "median": 9.071951001589972e-06,
+        "p95": 0.00011285949395029517,
         "max": 1.9208249555897499
       },
       "detected_descriptor_cosine": {
@@ -6652,10 +6653,10 @@
       "native_count": 7221,
       "opencv_count": 7220,
       "native_sift": {
-        "seconds": 0.7003472,
-        "bytes": 268083801
+        "seconds": 0.968381444,
+        "bytes": 268078712
       },
-      "opencv_seconds": 0.1980517000000077,
+      "opencv_seconds": 0.26023955200003,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 7219,
       "native_coverage": 0.9997230300512394,
@@ -6669,16 +6670,16 @@
       },
       "relative_scale_error": {
         "min": 7.736700169402866e-12,
-        "p05": 8.765752026462794e-08,
-        "median": 1.0213775382128532e-06,
+        "p05": 8.705371876693848e-08,
+        "median": 1.019657756229364e-06,
         "p95": 7.796453267283608e-06,
         "max": 8.70729746196286e-05
       },
       "angle_error_deg": {
-        "min": 1.7496358524918064e-09,
-        "p05": 8.844229062284486e-07,
-        "median": 1.0007937737136344e-05,
-        "p95": 0.00010662982842154332,
+        "min": 7.350643535423963e-10,
+        "p05": 7.279563914180555e-07,
+        "median": 8.835245649197785e-06,
+        "p95": 0.0001059448481251702,
         "max": 2.86456981075265
       },
       "detected_descriptor_cosine": {
@@ -6711,10 +6712,10 @@
       "native_count": 6961,
       "opencv_count": 6958,
       "native_sift": {
-        "seconds": 0.717785,
-        "bytes": 267928281
+        "seconds": 0.892093265,
+        "bytes": 267923512
       },
-      "opencv_seconds": 0.20582209999997758,
+      "opencv_seconds": 0.26170952199998965,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 6957,
       "native_coverage": 0.9994253699181153,
@@ -6728,17 +6729,17 @@
       },
       "relative_scale_error": {
         "min": 1.7775125815688853e-10,
-        "p05": 7.109627255807994e-08,
-        "median": 1.1109047945989659e-06,
+        "p05": 7.091459188757199e-08,
+        "median": 1.1098578011070614e-06,
         "p95": 8.764819365913996e-06,
         "max": 0.00011204749045790052
       },
       "angle_error_deg": {
-        "min": 4.543943973438394e-09,
-        "p05": 8.767552911579137e-07,
-        "median": 1.0096118437568858e-05,
-        "p95": 0.00010387934384044227,
-        "max": 1.2392669504088438
+        "min": 1.3734678336494986e-08,
+        "p05": 8.175768831548805e-07,
+        "median": 9.18837075292839e-06,
+        "p95": 0.00010353071804605291,
+        "max": 1.2392631357115569
       },
       "detected_descriptor_cosine": {
         "min": 0.999311625957489,
@@ -6770,10 +6771,10 @@
       "native_count": 4972,
       "opencv_count": 4971,
       "native_sift": {
-        "seconds": 0.6060586,
-        "bytes": 265910402
+        "seconds": 0.824021856,
+        "bytes": 265905424
       },
-      "opencv_seconds": 0.1632343999999648,
+      "opencv_seconds": 0.22059225300000662,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 4970,
       "native_coverage": 0.999597747385358,
@@ -6781,22 +6782,22 @@
       "position_px": {
         "min": 1.051789565795187e-07,
         "p05": 2.2420114021955735e-06,
-        "median": 1.6102998160040962e-05,
+        "median": 1.6129918614318304e-05,
         "p95": 8.217572143729423e-05,
         "max": 0.003236787134346708
       },
       "relative_scale_error": {
         "min": 4.387585850196274e-10,
-        "p05": 9.007329409005396e-08,
-        "median": 1.2996234377560256e-06,
+        "p05": 8.825213231866691e-08,
+        "median": 1.3013018886898209e-06,
         "p95": 1.0549698940093285e-05,
-        "max": 0.00015615787379652524
+        "max": 0.00015605173644983594
       },
       "angle_error_deg": {
         "min": 1.3297008567888154e-09,
-        "p05": 9.830471513352726e-07,
-        "median": 1.1107763469989197e-05,
-        "p95": 0.00012018253135374454,
+        "p05": 8.433916580325889e-07,
+        "median": 9.756403442930615e-06,
+        "p95": 0.00012192140958433162,
         "max": 1.120783587613048
       },
       "detected_descriptor_cosine": {
@@ -6829,10 +6830,10 @@
       "native_count": 2876,
       "opencv_count": 2887,
       "native_sift": {
-        "seconds": 0.4945126,
-        "bytes": 263766884
+        "seconds": 0.617703847,
+        "bytes": 263761856
       },
-      "opencv_seconds": 0.12808180000001812,
+      "opencv_seconds": 0.1643730440000013,
       "descriptor_max_norm_error": 1.1920928955078125e-07,
       "paired_count": 2874,
       "native_coverage": 0.9993045897079277,
@@ -6846,17 +6847,17 @@
       },
       "relative_scale_error": {
         "min": 2.37313724227306e-10,
-        "p05": 9.266586911693686e-08,
-        "median": 1.3216247112257662e-06,
+        "p05": 9.213433505017576e-08,
+        "median": 1.3231184639028726e-06,
         "p95": 1.0003623749871275e-05,
         "max": 6.768128982681532e-05
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 1.0837925643369269e-06,
-        "median": 1.179907652044438e-05,
+        "p05": 8.903647701399276e-07,
+        "median": 1.0364724397193998e-05,
         "p95": 0.00030426126790194787,
-        "max": 3.6103767057471607
+        "max": 3.610361446958064
       },
       "detected_descriptor_cosine": {
         "min": 0.9871037006378174,
@@ -6898,8 +6899,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.093092,
-        "bytes": 774691
+        "seconds": 0.136546109,
+        "bytes": 775320
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -6915,23 +6916,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.32586523462397177,
-        "homography_max_probe_error_px": 1.144088386973948,
+        "homography_mean_probe_error_px": 0.3258652346239802,
+        "homography_max_probe_error_px": 1.1440883869739793,
         "ransac_inliers": 692,
         "homography": [
           [
-            1.01367824817215,
-            0.010291249849737411,
-            17.165579833784058
+            1.0136782481721498,
+            0.010291249849737413,
+            17.165579833784054
           ],
           [
-            -0.004160598819615675,
+            -0.004160598819615677,
             1.0174058949369436,
-            -29.61474412220117
+            -29.614744122201163
           ],
           [
-            -6.867569347193187e-07,
-            1.0685256440350365e-05,
+            -6.867569347193218e-07,
+            1.0685256440350368e-05,
             1.0
           ]
         ]
@@ -6949,23 +6950,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.2624604722006142,
-        "homography_max_probe_error_px": 0.8345600278953006,
+        "homography_mean_probe_error_px": 0.2624601998899408,
+        "homography_max_probe_error_px": 0.8345594697495521,
         "ransac_inliers": 702,
         "homography": [
           [
-            1.0130352802614793,
-            0.009676108974934934,
-            17.549202385742777
+            1.0130352776171236,
+            0.00967610803834785,
+            17.54920306081195
           ],
           [
-            -0.0042881230651950755,
-            1.0167638698937902,
-            -29.4351144643962
+            -0.004288125325392337,
+            1.0167638688902028,
+            -29.43511371296796
           ],
           [
-            -9.378023351624513e-07,
-            1.0086041812491037e-05,
+            -9.378043641482055e-07,
+            1.0086040416258407e-05,
             1.0
           ]
         ]
@@ -6992,8 +6993,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0534594,
-        "bytes": 84746
+        "seconds": 0.075198143,
+        "bytes": 84656
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7009,23 +7010,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8844273031037622,
-        "homography_max_probe_error_px": 2.619672775453851,
+        "homography_mean_probe_error_px": 0.8844273031037588,
+        "homography_max_probe_error_px": 2.6196727754539184,
         "ransac_inliers": 444,
         "homography": [
           [
-            1.0179229983503069,
-            0.013166492507895238,
-            -6.864189221916217
+            1.017922998350307,
+            0.013166492507895368,
+            -6.8641892219163285
           ],
           [
-            -0.003383024602779243,
-            1.0238594511359858,
-            -34.128712144384494
+            -0.0033830246027792576,
+            1.0238594511359862,
+            -34.12871214438449
           ],
           [
-            -1.5945036606746942e-06,
-            1.6201733448268377e-05,
+            -1.594503660674672e-06,
+            1.620173344826865e-05,
             1.0
           ]
         ]
@@ -7043,23 +7044,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.5472423775487391,
-        "homography_max_probe_error_px": 1.4273436615724067,
+        "homography_mean_probe_error_px": 0.5472423519473827,
+        "homography_max_probe_error_px": 1.427343428858675,
         "ransac_inliers": 503,
         "homography": [
           [
-            1.0149050344003399,
-            0.01084010356486919,
-            -5.399506552618566
+            1.014905033030486,
+            0.01084010274159659,
+            -5.399506150379641
           ],
           [
-            -0.004308809977528091,
-            1.0206808725516934,
-            -33.02909796589705
+            -0.004308810305789622,
+            1.0206808713772118,
+            -33.029097722386986
           ],
           [
-            -3.0220219142926703e-06,
-            1.3264459417354203e-05,
+            -3.022022312046788e-06,
+            1.3264457770466033e-05,
             1.0
           ]
         ]
@@ -7086,8 +7087,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0315956,
-        "bytes": 38387
+        "seconds": 0.043165253,
+        "bytes": 38344
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7103,23 +7104,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8190664581108502,
-        "homography_max_probe_error_px": 2.5654125910299816,
+        "homography_mean_probe_error_px": 0.819066458110794,
+        "homography_max_probe_error_px": 2.565412591029931,
         "ransac_inliers": 284,
         "homography": [
           [
-            1.025424194593801,
+            1.0254241945938007,
             0.018472644752441404,
-            -13.038711845642837
+            -13.038711845642794
           ],
           [
-            -0.0070343701649480585,
-            1.0325068858054487,
-            -44.98074971275346
+            -0.0070343701649481505,
+            1.0325068858054482,
+            -44.980749712753365
           ],
           [
-            -5.711509839341457e-07,
-            1.9322944435345463e-05,
+            -5.711509839343756e-07,
+            1.9322944435345293e-05,
             1.0
           ]
         ]
@@ -7137,23 +7138,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.9140819698744039,
-        "homography_max_probe_error_px": 1.6437524452379946,
+        "homography_mean_probe_error_px": 0.9140816011379812,
+        "homography_max_probe_error_px": 1.6437509072138083,
         "ransac_inliers": 263,
         "homography": [
           [
-            1.020949615511225,
-            0.018725864498022424,
-            -12.14040832330819
+            1.0209496095651798,
+            0.01872586082256199,
+            -12.140406041988726
           ],
           [
-            -0.009209983474313892,
-            1.0293207610268678,
-            -43.20283606839372
+            -0.009209985876667968,
+            1.0293207553850605,
+            -43.20283394221519
           ],
           [
-            -4.775920345863669e-06,
-            1.941233801208109e-05,
+            -4.7759226103926395e-06,
+            1.9412331747626616e-05,
             1.0
           ]
         ]
@@ -7180,8 +7181,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0216715,
-        "bytes": 32787
+        "seconds": 0.030918265,
+        "bytes": 32712
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7197,24 +7198,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.1896715035854148,
-        "homography_max_probe_error_px": 2.7220742415175327,
+        "homography_mean_probe_error_px": 1.1896715191032574,
+        "homography_max_probe_error_px": 2.722074282812093,
         "ransac_inliers": 180,
         "homography": [
           [
-            1.0209337095124287,
-            0.0180259120114731,
-            -8.845771466739425
+            1.020933709225082,
+            0.01802591195809166,
+            -8.84577138069303
           ],
           [
-            -0.01085029142488953,
-            1.0315957035653476,
-            -40.45899570900307
+            -0.010850291488151111,
+            1.0315957033538252,
+            -40.45899564745676
           ],
           [
-            -7.472030163423214e-06,
-            1.8107050115058843e-05,
-            0.9999999999999999
+            -7.472030366504357e-06,
+            1.8107050012582656e-05,
+            1.0
           ]
         ]
       },
@@ -7231,24 +7232,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8180088885690072,
-        "homography_max_probe_error_px": 1.2359657061121105,
+        "homography_mean_probe_error_px": 0.818010319753555,
+        "homography_max_probe_error_px": 1.2359674611082359,
         "ransac_inliers": 198,
         "homography": [
           [
-            1.0214366240079054,
-            0.014162981507644203,
-            -8.350633502734649
+            1.0214366109943462,
+            0.014162978209240453,
+            -8.350630124358231
           ],
           [
-            -0.010230346048399487,
-            1.0275694569553566,
-            -39.87752966476066
+            -0.010230351437004105,
+            1.0275694460393403,
+            -39.877525349838464
           ],
           [
-            -5.002830040101846e-06,
-            1.0707400900347076e-05,
-            1.0
+            -5.002841573903849e-06,
+            1.0707396388470502e-05,
+            0.9999999999999999
           ]
         ]
       }
@@ -7274,8 +7275,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0155267,
-        "bytes": 28787
+        "seconds": 0.021390025,
+        "bytes": 28616
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7291,23 +7292,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.920583720704623,
-        "homography_max_probe_error_px": 5.672248432458294,
+        "homography_mean_probe_error_px": 2.9205837207046503,
+        "homography_max_probe_error_px": 5.6722484324582,
         "ransac_inliers": 121,
         "homography": [
           [
-            1.0305650519737395,
-            0.017901443442049737,
-            -15.972559105921551
+            1.0305650519737393,
+            0.017901443442049643,
+            -15.97255910592149
           ],
           [
-            -0.008759048129624957,
-            1.0413456463685753,
-            -46.96588597531557
+            -0.008759048129624988,
+            1.041345646368575,
+            -46.965885975315544
           ],
           [
-            -3.507142456414794e-06,
-            1.6586120334632256e-05,
+            -3.5071424564148663e-06,
+            1.6586120334632104e-05,
             1.0
           ]
         ]
@@ -7325,23 +7326,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.052668189378202,
-        "homography_max_probe_error_px": 6.112919762883854,
+        "homography_mean_probe_error_px": 3.052670665264721,
+        "homography_max_probe_error_px": 6.1129204415738485,
         "ransac_inliers": 130,
         "homography": [
           [
-            1.0267826970943135,
-            0.017588530512413693,
-            -14.785818512306777
+            1.0267826572540222,
+            0.01758851760538887,
+            -14.78580741296322
           ],
           [
-            -0.010397140371149716,
-            1.0384289279771264,
-            -45.36740015642374
+            -0.010397151296790468,
+            1.0384288918180675,
+            -45.367389375590996
           ],
           [
-            -7.281459681104152e-06,
-            1.738620720882747e-05,
+            -7.281488434973993e-06,
+            1.7386181968546896e-05,
             1.0
           ]
         ]
@@ -7368,8 +7369,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.9485718,
-        "bytes": 338017
+        "seconds": 2.453219724,
+        "bytes": 337944
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7385,23 +7386,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8948343819962135,
-        "homography_max_probe_error_px": 2.1170162222435454,
+        "homography_mean_probe_error_px": 0.8948343819962116,
+        "homography_max_probe_error_px": 2.1170162222435884,
         "ransac_inliers": 1499,
         "homography": [
           [
-            0.9886061776715166,
-            0.04901558913207225,
-            17.034886961515873
+            0.9886061776715167,
+            0.049015589132072324,
+            17.034886961515863
           ],
           [
             -0.04855985071857862,
             0.9990320347218453,
-            17.169282160975065
+            17.169282160975076
           ],
           [
-            -1.0876425216256776e-05,
-            5.695066730090929e-06,
+            -1.0876425216256793e-05,
+            5.69506673009105e-06,
             1.0
           ]
         ]
@@ -7419,23 +7420,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.4702947567254764,
-        "homography_max_probe_error_px": 0.7786359142089423,
+        "homography_mean_probe_error_px": 0.4702947574361717,
+        "homography_max_probe_error_px": 0.7786359159179984,
         "ransac_inliers": 1463,
         "homography": [
           [
-            0.9925999894413406,
-            0.04674302341528699,
-            16.183070809719755
+            0.992599989447824,
+            0.046743023447557326,
+            16.183070796964056
           ],
           [
-            -0.047031269660973866,
-            0.9986346494566832,
-            16.688742038853423
+            -0.047031269699762554,
+            0.9986346495235766,
+            16.688742037250968
           ],
           [
-            -7.057186197883806e-06,
-            2.3443253200585415e-06,
+            -7.057186221632022e-06,
+            2.3443253787433223e-06,
             1.0
           ]
         ]
@@ -7462,8 +7463,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 2.7344763,
-        "bytes": 406273
+        "seconds": 3.489826774,
+        "bytes": 406104
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7479,23 +7480,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.2254731209974359,
-        "homography_max_probe_error_px": 2.1191662777598346,
+        "homography_mean_probe_error_px": 1.225473120997457,
+        "homography_max_probe_error_px": 2.119166277759904,
         "ransac_inliers": 1322,
         "homography": [
           [
             0.9903939651765534,
-            0.04336175650975599,
-            9.094743269978997
+            0.0433617565097559,
+            9.094743269979013
           ],
           [
-            -0.04695075296619301,
+            -0.046950752966193006,
             0.9990578930465684,
-            18.01703799185618
+            18.017037991856174
           ],
           [
-            -1.3181586335487156e-05,
-            -9.04119877244311e-08,
+            -1.3181586335487115e-05,
+            -9.041198772455621e-08,
             1.0
           ]
         ]
@@ -7513,23 +7514,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.2624608545290124,
-        "homography_max_probe_error_px": 2.8595461416425514,
+        "homography_mean_probe_error_px": 1.262460831348179,
+        "homography_max_probe_error_px": 2.859546125934401,
         "ransac_inliers": 1295,
         "homography": [
           [
-            0.9940333645022311,
-            0.04571242823749458,
-            7.856366042038254
+            0.9940333652797818,
+            0.045712427611861034,
+            7.8563658886159
           ],
           [
-            -0.047068533025791254,
-            1.003261968131419,
-            17.718304538379588
+            -0.04706853305362987,
+            1.0032619674159435,
+            17.71830471042649
           ],
           [
-            -1.1024201197886757e-05,
-            3.601541882847058e-06,
+            -1.1024200356828637e-05,
+            3.6015406170859256e-06,
             1.0
           ]
         ]
@@ -7556,8 +7557,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.7894615,
-        "bytes": 232218
+        "seconds": 2.371258485,
+        "bytes": 231984
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7573,23 +7574,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.190175352002428,
-        "homography_max_probe_error_px": 5.922994177870942,
+        "homography_mean_probe_error_px": 3.190175352002399,
+        "homography_max_probe_error_px": 5.922994177870927,
         "ransac_inliers": 516,
         "homography": [
           [
             1.003753422504195,
             0.04399800495423952,
-            -8.002166353813381
+            -8.002166353813399
           ],
           [
-            -0.04192726867194981,
-            1.0108166797555338,
-            1.7104773468575116
+            -0.04192726867194978,
+            1.010816679755534,
+            1.710477346857487
           ],
           [
-            -7.585482203051916e-06,
-            3.8071033642692606e-06,
+            -7.5854822030518795e-06,
+            3.8071033642692195e-06,
             1.0
           ]
         ]
@@ -7607,23 +7608,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.598729994850564,
-        "homography_max_probe_error_px": 7.827565594872775,
+        "homography_mean_probe_error_px": 3.5987299952794407,
+        "homography_max_probe_error_px": 7.827565598412008,
         "ransac_inliers": 500,
         "homography": [
           [
-            1.0057340047917938,
-            0.05158273349056677,
-            -9.43272812608831
+            1.0057340048039938,
+            0.051582733504792325,
+            -9.432728131028796
           ],
           [
-            -0.04188018454988366,
-            1.0178741002781255,
-            0.6801040414566409
+            -0.041880184547767714,
+            1.0178741002966656,
+            0.6801040381888616
           ],
           [
-            -7.041866892408207e-06,
-            1.2319941444928676e-05,
+            -7.0418668882498676e-06,
+            1.2319941469375768e-05,
             1.0
           ]
         ]
@@ -7650,8 +7651,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.9069268,
-        "bytes": 109491
+        "seconds": 1.175070154,
+        "bytes": 109384
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7667,24 +7668,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.251297410270244,
-        "homography_max_probe_error_px": 5.416904611518635,
+        "homography_mean_probe_error_px": 2.2512974102701904,
+        "homography_max_probe_error_px": 5.416904611518661,
         "ransac_inliers": 244,
         "homography": [
           [
-            1.010833574045898,
-            0.05200937863890051,
-            -22.369598056569796
+            1.0108335740458982,
+            0.05200937863890056,
+            -22.369598056569824
           ],
           [
-            -0.04808722710930795,
+            -0.04808722710930793,
             1.0154537098719527,
-            10.392153376770386
+            10.392153376770379
           ],
           [
-            -3.614596411408437e-06,
-            1.2305528400865347e-06,
-            1.0
+            -3.6145964114083303e-06,
+            1.2305528400866588e-06,
+            0.9999999999999999
           ]
         ]
       },
@@ -7701,23 +7702,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.3391760208160806,
-        "homography_max_probe_error_px": 5.669797422425598,
+        "homography_mean_probe_error_px": 2.339175912828879,
+        "homography_max_probe_error_px": 5.669797253531674,
         "ransac_inliers": 243,
         "homography": [
           [
-            1.0113868585144477,
-            0.052376615260055735,
-            -22.6509548451861
+            1.0113868593505824,
+            0.05237661530097334,
+            -22.650955075213787
           ],
           [
-            -0.04820116648881023,
-            1.0169038697203272,
-            10.285553321651452
+            -0.048201166323542224,
+            1.016903869933008,
+            10.285553363759718
           ],
           [
-            -5.396417716189312e-06,
-            6.460136026411574e-06,
+            -5.396417091334504e-06,
+            6.4601361540109325e-06,
             1.0
           ]
         ]
@@ -7744,8 +7745,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.4863789,
-        "bytes": 72275
+        "seconds": 0.689345272,
+        "bytes": 72136
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7761,24 +7762,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 4.335248082929128,
-        "homography_max_probe_error_px": 7.325555206067223,
+        "homography_mean_probe_error_px": 4.335248082929132,
+        "homography_max_probe_error_px": 7.325555206067181,
         "ransac_inliers": 102,
         "homography": [
           [
             1.0037827941080315,
-            0.05257040010082328,
-            -17.163582523124226
+            0.052570400100823436,
+            -17.163582523124326
           ],
           [
-            -0.05464238082708255,
-            1.003519626640901,
-            11.664303224643405
+            -0.05464238082708258,
+            1.0035196266409012,
+            11.664303224643392
           ],
           [
-            -1.1428932003817961e-05,
-            -1.641485269877552e-05,
-            1.0
+            -1.1428932003817926e-05,
+            -1.641485269877527e-05,
+            0.9999999999999999
           ]
         ]
       },
@@ -7795,23 +7796,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.713910975557711,
-        "homography_max_probe_error_px": 6.880519285404987,
+        "homography_mean_probe_error_px": 3.713907117718455,
+        "homography_max_probe_error_px": 6.880514659243649,
         "ransac_inliers": 100,
         "homography": [
           [
-            1.0178357292834412,
-            0.06230776084274954,
-            -22.96807682058817
+            1.0178357481278781,
+            0.06230776264174744,
+            -22.96807996217136
           ],
           [
-            -0.0583322083053878,
-            1.023341547651793,
-            11.252774672318955
+            -0.05833220881379894,
+            1.0233415607507355,
+            11.252774230079696
           ],
           [
-            -1.3243899675416823e-05,
-            1.144161641425345e-05,
+            -1.3243874671428097e-05,
+            1.1441617822205128e-05,
             1.0
           ]
         ]
@@ -7838,8 +7839,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1143856,
-        "bytes": 126906
+        "seconds": 0.157450526,
+        "bytes": 126768
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7855,23 +7856,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7992651527697758,
-        "homography_max_probe_error_px": 1.47826910450863,
+        "homography_mean_probe_error_px": 0.7992651527697745,
+        "homography_max_probe_error_px": 1.4782691045085423,
         "ransac_inliers": 844,
         "homography": [
           [
-            0.8789458129157492,
-            0.315156891906676,
-            -39.76685070362667
+            0.8789458129157496,
+            0.3151568919066762,
+            -39.7668507036267
           ],
           [
-            -0.18274507683255986,
-            0.935836004684863,
-            153.394185433976
+            -0.18274507683255975,
+            0.9358360046848635,
+            153.39418543397596
           ],
           [
-            0.00019660795893467595,
-            -1.7212869399758634e-05,
+            0.00019660795893467647,
+            -1.7212869399758407e-05,
             0.9999999999999999
           ]
         ]
@@ -7889,24 +7890,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7574645954432789,
-        "homography_max_probe_error_px": 1.0702855317227504,
+        "homography_mean_probe_error_px": 0.757464590072463,
+        "homography_max_probe_error_px": 1.070285515283678,
         "ransac_inliers": 1005,
         "homography": [
           [
-            0.8800746453728314,
-            0.3142598513439796,
-            -39.92801328897589
+            0.8800746452714103,
+            0.31425985104641657,
+            -39.92801331180367
           ],
           [
-            -0.18271195335422044,
-            0.9352275790901768,
-            153.57684596769286
+            -0.18271195332760498,
+            0.9352275785894014,
+            153.5768459347713
           ],
           [
-            0.00019811452506870864,
-            -1.9011389827308774e-05,
-            1.0
+            0.00019811452486948516,
+            -1.90113905718284e-05,
+            0.9999999999999999
           ]
         ]
       }
@@ -7932,8 +7933,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1339676,
-        "bytes": 120650
+        "seconds": 0.176269671,
+        "bytes": 120496
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -7949,23 +7950,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.535624236665122,
-        "homography_max_probe_error_px": 5.479024890840784,
+        "homography_mean_probe_error_px": 2.5356242527508606,
+        "homography_max_probe_error_px": 5.479024915423991,
         "ransac_inliers": 371,
         "homography": [
           [
-            0.7556950359026855,
-            -0.282819912249383,
-            223.3012353889533
+            0.7556950360012001,
+            -0.2828199121056072,
+            223.30123535041716
           ],
           [
-            0.3293222272401462,
-            1.0236592959374569,
-            -77.77339512726786
+            0.32932222727232596,
+            1.0236592962722832,
+            -77.77339519408721
           ],
           [
-            0.00033097061022331983,
-            1.242751747577256e-06,
+            0.00033097061026276874,
+            1.2427521395760187e-06,
             1.0
           ]
         ]
@@ -7983,23 +7984,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8414661743207568,
-        "homography_max_probe_error_px": 1.5190970366003689,
+        "homography_mean_probe_error_px": 0.8414662323195964,
+        "homography_max_probe_error_px": 1.5190968351065133,
         "ransac_inliers": 360,
         "homography": [
           [
-            0.7555968651958431,
-            -0.29889629960596903,
-            226.00796824867328
+            0.7555968638076522,
+            -0.2988963000174703,
+            226.0079682050932
           ],
           [
-            0.32856822218003695,
-            1.0106030468594243,
-            -75.55699181635312
+            0.328568221382127,
+            1.0106030438816445,
+            -75.55699134001702
           ],
           [
-            0.0003319618333329009,
-            -1.4911660532577919e-05,
+            0.00033196183208857076,
+            -1.4911664884712998e-05,
             1.0
           ]
         ]
@@ -8026,8 +8027,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1275968,
-        "bytes": 81139
+        "seconds": 0.184713531,
+        "bytes": 81032
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8043,23 +8044,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.9205845867326831,
-        "homography_max_probe_error_px": 1.8224323502554662,
+        "homography_mean_probe_error_px": 0.9205845867326372,
+        "homography_max_probe_error_px": 1.8224323502553528,
         "ransac_inliers": 72,
         "homography": [
           [
-            0.6599109100207282,
-            0.6735536149725301,
-            -30.093217463642763
+            0.6599109100207284,
+            0.6735536149725302,
+            -30.09321746364277
           ],
           [
-            -0.14781298762829032,
-            0.9618694349388195,
-            150.62365724798966
+            -0.1478129876282902,
+            0.9618694349388197,
+            150.62365724798957
           ],
           [
-            0.0004150272262416918,
-            -2.2031521673905757e-05,
+            0.0004150272262416923,
+            -2.2031521673905676e-05,
             0.9999999999999999
           ]
         ]
@@ -8077,23 +8078,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.69196830009895,
+        "homography_mean_probe_error_px": 0.6919683000989999,
         "homography_max_probe_error_px": 0.9525041609542317,
         "ransac_inliers": 71,
         "homography": [
           [
-            0.6625388399541229,
-            0.6782195727733625,
-            -30.957979165399315
+            0.6625388399541222,
+            0.6782195727733619,
+            -30.95797916539923
           ],
           [
-            -0.147374715301878,
-            0.9673213558075693,
-            150.11572577423917
+            -0.14737471530187823,
+            0.9673213558075684,
+            150.11572577423922
           ],
           [
-            0.0004200548328507231,
-            -1.4404456082117253e-05,
+            0.0004200548328507219,
+            -1.4404456082118057e-05,
             1.0
           ]
         ]
@@ -8120,8 +8121,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1461647,
-        "bytes": 83363
+        "seconds": 0.197037181,
+        "bytes": 83208
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8214,8 +8215,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1718557,
-        "bytes": 80652
+        "seconds": 0.231434897,
+        "bytes": 80544
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8308,8 +8309,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.4188678,
-        "bytes": 562152
+        "seconds": 1.749599009,
+        "bytes": 561920
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8325,24 +8326,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.728165779568338,
-        "homography_max_probe_error_px": 2.2526833513341478,
+        "homography_mean_probe_error_px": 1.728165776999683,
+        "homography_max_probe_error_px": 2.2526833458063433,
         "ransac_inliers": 4726,
         "homography": [
           [
-            0.7915101785171449,
-            0.010349620489826464,
-            26.036590480509584
+            0.7915101785295258,
+            0.010349620474699962,
+            26.036590483850297
           ],
           [
-            -0.023907777945522284,
-            0.9228946453920447,
-            43.55792931097243
+            -0.02390777793925944,
+            0.9228946453991264,
+            43.5579293072898
           ],
           [
-            -0.00011555204924860043,
-            1.2122828335352265e-05,
-            1.0
+            -0.00011555204922096446,
+            1.2122828315277574e-05,
+            0.9999999999999999
           ]
         ]
       },
@@ -8359,23 +8360,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.7282502251914729,
-        "homography_max_probe_error_px": 2.252186075012878,
+        "homography_mean_probe_error_px": 1.7282500414230537,
+        "homography_max_probe_error_px": 2.252185447200173,
         "ransac_inliers": 4730,
         "homography": [
           [
-            0.7915121681967057,
-            0.010351526067511932,
-            26.03568302801745
+            0.7915121684699202,
+            0.010351525981906012,
+            26.035683053088963
           ],
           [
-            -0.023907488390387165,
-            0.9228961927666428,
-            43.55792945962348
+            -0.023907488358774192,
+            0.9228961930239754,
+            43.55792946711474
           ],
           [
-            -0.00011555146814192329,
-            1.2126243834351741e-05,
+            -0.00011555146740257676,
+            1.2126244069859467e-05,
             1.0
           ]
         ]
@@ -8402,8 +8403,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.3228781,
-        "bytes": 533400
+        "seconds": 1.728592331,
+        "bytes": 533248
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8425,7 +8426,7 @@
         "homography": [
           [
             0.6734878021958103,
-            0.02339070076280959,
+            0.023390700762809587,
             37.10513721595584
           ],
           [
@@ -8435,7 +8436,7 @@
           ],
           [
             -0.00018743818877097428,
-            1.130101887958966e-05,
+            1.1301018879589651e-05,
             1.0
           ]
         ]
@@ -8453,23 +8454,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.1116248727012414,
-        "homography_max_probe_error_px": 2.2038284888456987,
+        "homography_mean_probe_error_px": 1.1116249448970834,
+        "homography_max_probe_error_px": 2.203828744816596,
         "ransac_inliers": 3521,
         "homography": [
           [
-            0.6732756881176687,
-            0.023632803781961045,
-            37.113877311424574
+            0.673275688051971,
+            0.02363280404841988,
+            37.11387723333781
           ],
           [
-            -0.04816381931279216,
-            0.8999805832470158,
-            61.015324060372436
+            -0.048163819503113985,
+            0.8999805829896891,
+            61.01532421215388
           ],
           [
-            -0.00018782411076910448,
-            1.181649493294844e-05,
+            -0.00018782411094399353,
+            1.181649530157445e-05,
             1.0
           ]
         ]
@@ -8496,8 +8497,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.2910706,
-        "bytes": 334193
+        "seconds": 1.691921044,
+        "bytes": 334040
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8513,23 +8514,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.3476081515040983,
-        "homography_max_probe_error_px": 8.43547833108332,
+        "homography_mean_probe_error_px": 2.34760815029554,
+        "homography_max_probe_error_px": 8.435478402192254,
         "ransac_inliers": 1958,
         "homography": [
           [
-            0.5429828483392253,
-            0.011778392720285644,
-            65.85809569441595
+            0.5429828480837813,
+            0.011778392717620077,
+            65.85809573744606
           ],
           [
-            -0.06327627681625037,
-            0.8720868919277089,
-            105.94706067930525
+            -0.06327627694382054,
+            0.8720868917201908,
+            105.94706073958446
           ],
           [
-            -0.00025280071235111214,
-            2.3891209688233147e-06,
+            -0.0002528007127077015,
+            2.3891210015658557e-06,
             0.9999999999999999
           ]
         ]
@@ -8547,24 +8548,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.3608017630971077,
-        "homography_max_probe_error_px": 8.498077659489587,
+        "homography_mean_probe_error_px": 2.3608018314498462,
+        "homography_max_probe_error_px": 8.498077859816574,
         "ransac_inliers": 1947,
         "homography": [
           [
-            0.5428390240818309,
-            0.011692039320892168,
-            65.89579608405722
+            0.5428390237728479,
+            0.011692039497414392,
+            65.89579603333894
           ],
           [
-            -0.06331964816685856,
-            0.8718250758200502,
-            105.98926480830882
+            -0.06331964824899013,
+            0.8718250752515134,
+            105.98926491245676
           ],
           [
-            -0.00025294447923067794,
-            2.1927506603767634e-06,
-            1.0
+            -0.00025294447926732674,
+            2.1927498756690217e-06,
+            0.9999999999999999
           ]
         ]
       }
@@ -8590,8 +8591,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.3658574,
-        "bytes": 230554
+        "seconds": 1.751236512,
+        "bytes": 230384
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8607,24 +8608,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.0989588275444193,
-        "homography_max_probe_error_px": 11.197408616170582,
+        "homography_mean_probe_error_px": 3.09895894385205,
+        "homography_max_probe_error_px": 11.197408896041752,
         "ransac_inliers": 481,
         "homography": [
           [
-            0.4206459792067908,
-            0.032150937073735675,
-            59.858216603988815
+            0.4206459796748679,
+            0.03215093775966517,
+            59.858216366256684
           ],
           [
-            -0.08493029272754149,
-            0.8835257856713206,
-            93.90915010171818
+            -0.08493029264887884,
+            0.8835257867538516,
+            93.90914997911476
           ],
           [
-            -0.00032888813122403945,
-            1.470298277014015e-05,
-            0.9999999999999999
+            -0.0003288881308730749,
+            1.4702983942861935e-05,
+            1.0
           ]
         ]
       },
@@ -8641,23 +8642,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 3.026848381288156,
-        "homography_max_probe_error_px": 11.083973114925119,
+        "homography_mean_probe_error_px": 3.0268484023190996,
+        "homography_max_probe_error_px": 11.083972898349373,
         "ransac_inliers": 458,
         "homography": [
           [
-            0.41991518310171305,
-            0.03164842609685798,
-            60.12485407243682
+            0.4199151837350966,
+            0.03164842718484547,
+            60.12485345240149
           ],
           [
-            -0.08524969218547838,
-            0.8825420226501217,
-            94.13239281872563
+            -0.08524969249232807,
+            0.882542023475611,
+            94.13239300472506
           ],
           [
-            -0.0003298311387718483,
-            1.440030923779622e-05,
+            -0.000329831138376143,
+            1.4400309599716457e-05,
             1.0
           ]
         ]
@@ -8684,8 +8685,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.3853644,
-        "bytes": 168965
+        "seconds": 1.702437011,
+        "bytes": 168856
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8778,8 +8779,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.163293,
-        "bytes": 117210
+        "seconds": 0.216147794,
+        "bytes": 117104
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8795,24 +8796,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.3591890038913268,
-        "homography_max_probe_error_px": 2.279965410032804,
+        "homography_mean_probe_error_px": 1.359189003733321,
+        "homography_max_probe_error_px": 2.2799654097065507,
         "ransac_inliers": 618,
         "homography": [
           [
-            0.7054485899317818,
-            0.4341079926630274,
-            -129.68093513820048
+            0.7054485899294727,
+            0.4341079926628054,
+            -129.68093513768108
           ],
           [
-            -0.42302663486989267,
-            0.7047864288425272,
-            198.88663316424538
+            -0.423026634870665,
+            0.704786428842046,
+            198.8866331644519
           ],
           [
-            1.0536688281615701e-05,
-            1.3864333286866795e-05,
-            0.9999999999999999
+            1.0536688277720993e-05,
+            1.3864333287673521e-05,
+            1.0
           ]
         ]
       },
@@ -8829,23 +8830,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.3764563032102302,
-        "homography_max_probe_error_px": 2.2614034920320503,
+        "homography_mean_probe_error_px": 1.3764566687121274,
+        "homography_max_probe_error_px": 2.261403460518741,
         "ransac_inliers": 623,
         "homography": [
           [
-            0.7055475600520708,
-            0.4340123115654675,
-            -129.7033073681711
+            0.7055475608297263,
+            0.4340123099977528,
+            -129.70330725954992
           ],
           [
-            -0.42293646061146156,
-            0.7044469052059907,
-            198.9331026146062
+            -0.4229364583241576,
+            0.7044469019452013,
+            198.93310257950088
           ],
           [
-            1.0880071315987067e-05,
-            1.320485695099091e-05,
+            1.0880076355578677e-05,
+            1.3204849253340053e-05,
             1.0
           ]
         ]
@@ -8872,8 +8873,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.2156442,
-        "bytes": 131690
+        "seconds": 0.28784508,
+        "bytes": 131632
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8889,13 +8890,13 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.1653350489233905,
+        "homography_mean_probe_error_px": 2.1653350489233705,
         "homography_max_probe_error_px": 4.233582704276175,
         "ransac_inliers": 549,
         "homography": [
           [
-            -0.47100092757203343,
-            -0.2839160635803163,
+            -0.4710009275720334,
+            -0.28391606358031635,
             870.4398402422026
           ],
           [
@@ -8904,8 +8905,8 @@
             397.05254549705575
           ],
           [
-            1.0272116836807291e-05,
-            1.3838389777102635e-05,
+            1.0272116836807316e-05,
+            1.3838389777102516e-05,
             1.0
           ]
         ]
@@ -8923,24 +8924,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 2.173865631922477,
-        "homography_max_probe_error_px": 4.258828847255446,
+        "homography_mean_probe_error_px": 2.173865656556941,
+        "homography_max_probe_error_px": 4.258828567153454,
         "ransac_inliers": 554,
         "homography": [
           [
-            -0.47092575529210634,
-            -0.2840551842987581,
-            870.45330698406
+            -0.4709257551352213,
+            -0.28405518330949464,
+            870.45330737041
           ],
           [
-            0.2927322722141968,
-            -0.471023419879034,
-            397.04766527728384
+            0.2927322731059917,
+            -0.47102342105766537,
+            397.0476657934842
           ],
           [
-            1.0420975294616406e-05,
-            1.3643584964850943e-05,
-            0.9999999999999999
+            1.0420976755118554e-05,
+            1.3643587398721123e-05,
+            1.0
           ]
         ]
       }
@@ -8966,8 +8967,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.2517094,
-        "bytes": 140586
+        "seconds": 0.318752773,
+        "bytes": 140528
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -8998,8 +8999,8 @@
             467.18526805723997
           ],
           [
-            -4.180008194436185e-08,
-            1.8615686966865789e-07,
+            -4.180008194435347e-08,
+            1.8615686966866477e-07,
             1.0
           ]
         ]
@@ -9013,27 +9014,27 @@
           "p05": 0.4581066943810645,
           "median": 0.9617750326119315,
           "p95": 1.9069913479020002,
-          "max": 601.4464020775237
+          "max": 601.4464032695959
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.1443390123581427,
-        "homography_max_probe_error_px": 1.7109321185085653,
+        "homography_mean_probe_error_px": 1.1443390116100018,
+        "homography_max_probe_error_px": 1.710932117886447,
         "ransac_inliers": 636,
         "homography": [
           [
-            -0.2000385516795739,
-            0.34646674915792525,
-            247.38250077853814
+            -0.20003855168502907,
+            0.34646674915559694,
+            247.38250077858868
           ],
           [
-            -0.34608651166842597,
-            -0.1997215841546734,
-            467.18570080509426
+            -0.3460865116717133,
+            -0.1997215841509588,
+            467.18570080253505
           ],
           [
-            -1.9469390944519034e-08,
-            1.9143916099045772e-07,
+            -1.9469424018330114e-08,
+            1.9143916769000884e-07,
             1.0
           ]
         ]
@@ -9060,8 +9061,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.2373547,
-        "bytes": 96387
+        "seconds": 0.291673645,
+        "bytes": 96264
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9077,13 +9078,13 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7060890179704404,
+        "homography_mean_probe_error_px": 0.7060890179704435,
         "homography_max_probe_error_px": 1.4865189536788823,
         "ransac_inliers": 413,
         "homography": [
           [
             0.3036186461656504,
-            0.12863541103053847,
+            0.1286354110305385,
             200.0427238106143
           ],
           [
@@ -9092,8 +9093,8 @@
             134.5121481471382
           ],
           [
-            2.9796089041288076e-07,
-            -5.096142902882992e-07,
+            2.979608904128883e-07,
+            -5.096142902882704e-07,
             1.0
           ]
         ]
@@ -9111,23 +9112,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7060867852121209,
-        "homography_max_probe_error_px": 1.486512355743159,
+        "homography_mean_probe_error_px": 0.7060868438647876,
+        "homography_max_probe_error_px": 1.4865126853194637,
         "ransac_inliers": 413,
         "homography": [
           [
-            0.3036185393579489,
-            0.12863549565098337,
-            200.04271963794585
+            0.3036185403874275,
+            0.12863549479964773,
+            200.04271962249933
           ],
           [
-            -0.12888900721096594,
-            0.3034577271489181,
-            134.51215033606385
+            -0.12888900648313092,
+            0.30345772660934267,
+            134.51215027781785
           ],
           [
-            2.976770501662437e-07,
-            -5.094024986894238e-07,
+            2.9768042559080517e-07,
+            -5.094056390148171e-07,
             1.0
           ]
         ]
@@ -9154,8 +9155,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.2258122,
-        "bytes": 94611
+        "seconds": 0.301190421,
+        "bytes": 94408
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9171,23 +9172,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.298751796835671,
-        "homography_max_probe_error_px": 2.3987065991031065,
+        "homography_mean_probe_error_px": 1.2987517968356919,
+        "homography_max_probe_error_px": 2.3987065991031313,
         "ransac_inliers": 239,
         "homography": [
           [
-            -0.21595602417522747,
-            -0.12492586527176712,
+            -0.21595602417522752,
+            -0.12492586527176688,
             585.6575731768904
           ],
           [
             0.12559750973435563,
-            -0.2163908300396439,
+            -0.21639083003964377,
             355.06092189810823
           ],
           [
-            1.4385452675907778e-06,
-            4.512940783354028e-07,
+            1.438545267590782e-06,
+            4.51294078335825e-07,
             1.0
           ]
         ]
@@ -9205,23 +9206,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 1.298749992453923,
-        "homography_max_probe_error_px": 2.3987087885159473,
+        "homography_mean_probe_error_px": 1.2987499924539079,
+        "homography_max_probe_error_px": 2.3987087885159735,
         "ransac_inliers": 239,
         "homography": [
           [
-            -0.21595600794910258,
-            -0.1249258695565625,
+            -0.21595600794910264,
+            -0.12492586955656261,
             585.6575729281016
           ],
           [
-            0.12559752778363656,
-            -0.2163908070331299,
+            0.12559752778363648,
+            -0.21639080703312996,
             355.06091489702766
           ],
           [
-            1.438566839291331e-06,
-            4.513382163390127e-07,
+            1.4385668392911913e-06,
+            4.513382163388142e-07,
             0.9999999999999999
           ]
         ]
@@ -9248,8 +9249,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.9233984,
-        "bytes": 306273
+        "seconds": 1.221325866,
+        "bytes": 306072
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9265,23 +9266,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.21464868374646712,
-        "homography_max_probe_error_px": 0.38673628536143223,
+        "homography_mean_probe_error_px": 0.21464868374647178,
+        "homography_max_probe_error_px": 0.38673628536131277,
         "ransac_inliers": 2097,
         "homography": [
           [
-            0.8567981649602078,
-            0.2150151398003975,
-            10.14912111483139
+            0.8567981649602076,
+            0.21501513980039746,
+            10.149121114831384
           ],
           [
-            -0.21198701557058688,
-            0.8571830661691875,
-            130.76488011128393
+            -0.21198701557058683,
+            0.8571830661691874,
+            130.7648801112839
           ],
           [
-            9.125940943929794e-07,
-            -6.903189293404661e-07,
+            9.125940943929894e-07,
+            -6.903189293404479e-07,
             1.0
           ]
         ]
@@ -9299,23 +9300,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.19265799518465893,
-        "homography_max_probe_error_px": 0.3043215149445506,
+        "homography_mean_probe_error_px": 0.19265797292468576,
+        "homography_max_probe_error_px": 0.3043215069049854,
         "ransac_inliers": 2117,
         "homography": [
           [
-            0.8569947121120441,
-            0.21572220936663192,
-            10.047932009628079
+            0.8569947123795305,
+            0.21572220944257486,
+            10.047931950000503
           ],
           [
-            -0.21195047213509044,
-            0.8578789258863221,
-            130.65592531505442
+            -0.2119504720791007,
+            0.8578789261105001,
+            130.6559252612479
           ],
           [
-            1.0480176526106117e-06,
-            3.809731888495013e-07,
+            1.0480179099488023e-06,
+            3.809733332516835e-07,
             1.0
           ]
         ]
@@ -9342,8 +9343,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.6806479,
-        "bytes": 265233
+        "seconds": 0.942927405,
+        "bytes": 265048
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9366,7 +9367,7 @@
           [
             0.5686932729176543,
             0.4701223346892514,
-            25.557111300937372
+            25.55711130093737
           ],
           [
             -0.46777787080881905,
@@ -9374,8 +9375,8 @@
             348.28458126249353
           ],
           [
-            6.527511061467955e-06,
-            -1.2171001951117676e-06,
+            6.527511061467958e-06,
+            -1.2171001951117583e-06,
             1.0
           ]
         ]
@@ -9393,23 +9394,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.10757616553209541,
-        "homography_max_probe_error_px": 0.20667509385748858,
+        "homography_mean_probe_error_px": 0.10757613321600348,
+        "homography_max_probe_error_px": 0.2066749699776473,
         "ransac_inliers": 1637,
         "homography": [
           [
-            0.5686068146571744,
-            0.4703207184081021,
-            25.50778483451699
+            0.5686068152449847,
+            0.4703207185609317,
+            25.507784734746068
           ],
           [
-            -0.4678410434328923,
-            0.5651994862607274,
-            348.2940767470795
+            -0.4678410435906984,
+            0.565199486657087,
+            348.29407680630493
           ],
           [
-            6.3316676790748185e-06,
-            -9.86078839454373e-07,
+            6.331668322415458e-06,
+            -9.86078534762803e-07,
             1.0
           ]
         ]
@@ -9436,8 +9437,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.5634287,
-        "bytes": 147242
+        "seconds": 0.754468374,
+        "bytes": 147120
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9453,7 +9454,7 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7164064269072113,
+        "homography_mean_probe_error_px": 0.7164064269072309,
         "homography_max_probe_error_px": 0.9250997835052626,
         "ransac_inliers": 571,
         "homography": [
@@ -9464,12 +9465,12 @@
           ],
           [
             -0.5232431196598674,
-            0.09137913394382191,
+            0.09137913394382194,
             534.3547522308553
           ],
           [
-            1.7848812725014386e-05,
-            -6.306556043784364e-06,
+            1.784881272501437e-05,
+            -6.306556043784322e-06,
             0.9999999999999999
           ]
         ]
@@ -9487,24 +9488,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.7704246653067762,
-        "homography_max_probe_error_px": 1.3322941139040838,
+        "homography_mean_probe_error_px": 0.7704245544054896,
+        "homography_max_probe_error_px": 1.332294073093469,
         "ransac_inliers": 589,
         "homography": [
           [
-            0.10154524067093937,
-            0.5303047925690488,
-            204.9766736853
+            0.10154524186109952,
+            0.5303047917431859,
+            204.9766735803228
           ],
           [
-            -0.5250537437032851,
-            0.09422255900313922,
-            534.2673507378486
+            -0.5250537435350416,
+            0.09422255861339726,
+            534.2673509285161
           ],
           [
-            1.1329935331536867e-05,
-            1.706695112321928e-06,
-            1.0
+            1.1329937989869634e-05,
+            1.706692711360754e-06,
+            0.9999999999999999
           ]
         ]
       }
@@ -9530,8 +9531,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.5255538,
-        "bytes": 139306
+        "seconds": 0.721520982,
+        "bytes": 139120
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9547,23 +9548,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.8130402264856832,
-        "homography_max_probe_error_px": 1.1865229593349036,
+        "homography_mean_probe_error_px": 0.8130402264856451,
+        "homography_max_probe_error_px": 1.1865229593350195,
         "ransac_inliers": 420,
         "homography": [
           [
             0.42536287860878286,
-            -0.05711340222131396,
-            265.07458406303385
+            -0.057113402221313996,
+            265.0745840630339
           ],
           [
-            0.06255403795899422,
+            0.06255403795899418,
             0.42031719717093213,
-            174.3840469386431
+            174.38404693864314
           ],
           [
-            1.3693023336108742e-05,
-            -3.323639644894275e-06,
+            1.3693023336108613e-05,
+            -3.3236396448942585e-06,
             1.0
           ]
         ]
@@ -9581,23 +9582,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.6763453163269508,
-        "homography_max_probe_error_px": 1.1929058629576608,
+        "homography_mean_probe_error_px": 0.6763453166466842,
+        "homography_max_probe_error_px": 1.1929058425341181,
         "ransac_inliers": 403,
         "homography": [
           [
-            0.42545793150112515,
-            -0.06054978938916289,
-            265.7644302012888
+            0.4254579314204715,
+            -0.060549789257739954,
+            265.7644301921669
           ],
           [
-            0.06303888644832663,
-            0.41778016968997594,
-            174.55781069477774
+            0.063038886359123,
+            0.417780169845775,
+            174.5578106840342
           ],
           [
-            1.5623659435722695e-05,
-            -9.661197453202114e-06,
+            1.5623659231065074e-05,
+            -9.661197153979434e-06,
             1.0
           ]
         ]
@@ -9624,8 +9625,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.4332892,
-        "bytes": 87283
+        "seconds": 0.600079949,
+        "bytes": 87240
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9641,24 +9642,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 6.967030742089453,
-        "homography_max_probe_error_px": 21.18047160407007,
+        "homography_mean_probe_error_px": 6.96703074208943,
+        "homography_max_probe_error_px": 21.180471604070014,
         "ransac_inliers": 144,
         "homography": [
           [
-            0.24549406478763428,
-            0.24703949946392287,
-            236.62228451196393
+            0.24549406478763444,
+            0.24703949946392298,
+            236.6222845119639
           ],
           [
-            -0.2462052025185858,
-            0.239230674693959,
+            -0.24620520251858574,
+            0.23923067469395912,
             363.1578376343418
           ],
           [
-            5.495888846455362e-06,
-            -9.334627277562118e-06,
-            1.0
+            5.495888846455621e-06,
+            -9.334627277561873e-06,
+            0.9999999999999999
           ]
         ]
       },
@@ -9675,23 +9676,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": false,
-        "homography_mean_probe_error_px": 6.985160889679941,
-        "homography_max_probe_error_px": 21.148037263921506,
+        "homography_mean_probe_error_px": 6.9851608896799515,
+        "homography_max_probe_error_px": 21.148037263921577,
         "ransac_inliers": 142,
         "homography": [
           [
-            0.24522055936188536,
-            0.24631744349730914,
+            0.24522055936188533,
+            0.2463174434973092,
             236.77132169757866
           ],
           [
-            -0.24613669139961578,
-            0.23874989014119227,
+            -0.24613669139961583,
+            0.23874989014119224,
             363.1164030120142
           ],
           [
-            5.238493989684979e-06,
-            -1.0494428887581908e-05,
+            5.238493989684847e-06,
+            -1.0494428887581833e-05,
             1.0
           ]
         ]
@@ -9718,8 +9719,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0548192,
-        "bytes": 106378
+        "seconds": 0.082928989,
+        "bytes": 106224
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9735,23 +9736,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.10812966269999744,
+        "homography_mean_probe_error_px": 0.10812966269997899,
         "homography_max_probe_error_px": 0.19366356435278995,
         "ransac_inliers": 961,
         "homography": [
           [
             0.9986078135610242,
-            0.0001618234023170206,
-            4.80241143162529
+            0.00016182340231701985,
+            4.802411431625282
           ],
           [
-            0.003798772827448155,
+            0.0037987728274481492,
             1.0012777359993061,
-            -2.9970680481739254
+            -2.997068048173929
           ],
           [
-            -4.272906095000496e-06,
-            5.869381961869093e-06,
+            -4.272906095000481e-06,
+            5.8693819618689865e-06,
             1.0
           ]
         ]
@@ -9769,23 +9770,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.14139271270930884,
-        "homography_max_probe_error_px": 0.404726450350236,
+        "homography_mean_probe_error_px": 0.14139263001196395,
+        "homography_max_probe_error_px": 0.40472653607021025,
         "ransac_inliers": 912,
         "homography": [
           [
-            0.9989064322184168,
-            -0.001232231881357097,
-            4.904396953018416
+            0.9989064304094393,
+            -0.0012322323252961043,
+            4.904397118606436
           ],
           [
-            0.003911677709922108,
-            1.000683588193752,
-            -2.973358346776988
+            0.0039116773509603655,
+            1.000683586208037,
+            -2.9733581294121287
           ],
           [
-            -3.6696877753252657e-06,
-            3.889234575288548e-06,
+            -3.6696893771452514e-06,
+            3.889231562800939e-06,
             1.0
           ]
         ]
@@ -9812,8 +9813,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.050191,
-        "bytes": 97658
+        "seconds": 0.072550619,
+        "bytes": 97520
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9829,23 +9830,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.0980047248296828,
-        "homography_max_probe_error_px": 0.19366584002105192,
+        "homography_mean_probe_error_px": 0.09800472483339116,
+        "homography_max_probe_error_px": 0.19366584018484817,
         "ransac_inliers": 753,
         "homography": [
           [
-            0.9980734238994978,
-            0.005499902760750734,
-            5.046584940028702
+            0.9980734239011183,
+            0.005499902762081234,
+            5.046584939603958
           ],
           [
-            -0.0007414868404382226,
-            1.0021470646509965,
-            -4.419049243814998
+            -0.0007414868400137784,
+            1.0021470646521102,
+            -4.419049243984546
           ],
           [
-            -6.112149134466605e-06,
-            8.927797711511321e-06,
+            -6.112149133043806e-06,
+            8.927797713220857e-06,
             1.0
           ]
         ]
@@ -9863,23 +9864,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.11485754244643469,
-        "homography_max_probe_error_px": 0.19008776498475172,
+        "homography_mean_probe_error_px": 0.1148574992812152,
+        "homography_max_probe_error_px": 0.19008786098543062,
         "ransac_inliers": 729,
         "homography": [
           [
-            0.9981497617646665,
-            0.005322142112239182,
-            5.047807302239829
+            0.9981497598169388,
+            0.0053221410385314565,
+            5.047807614835208
           ],
           [
-            -0.0007246654369488925,
-            1.0020884739970537,
-            -4.402998350556711
+            -0.000724665702516892,
+            1.0020884714461595,
+            -4.402998113489891
           ],
           [
-            -6.086306986682723e-06,
-            8.842899786742008e-06,
+            -6.086308195855927e-06,
+            8.842895042163162e-06,
             1.0
           ]
         ]
@@ -9906,8 +9907,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0422265,
-        "bytes": 89802
+        "seconds": 0.062532342,
+        "bytes": 89648
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -9923,23 +9924,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.24694252218688878,
-        "homography_max_probe_error_px": 0.5154413861246451,
+        "homography_mean_probe_error_px": 0.24694252218696086,
+        "homography_max_probe_error_px": 0.5154413861245987,
         "ransac_inliers": 572,
         "homography": [
           [
-            0.9973640954929822,
-            0.003622452982897844,
-            8.711715546278448
+            0.997364095492982,
+            0.003622452982897856,
+            8.711715546278446
           ],
           [
-            0.003001847636193116,
-            1.002940242528292,
-            -9.215336851714648
+            0.003001847636193113,
+            1.0029402425282918,
+            -9.215336851714644
           ],
           [
-            -8.317665071964645e-06,
-            1.2117001499841588e-05,
+            -8.317665071964649e-06,
+            1.2117001499841515e-05,
             1.0
           ]
         ]
@@ -9952,28 +9953,28 @@
           "min": 0.034492397483851585,
           "p05": 0.13304353393118482,
           "median": 0.4376739978516177,
-          "p95": 10.975627493937958,
+          "p95": 10.975618892321968,
           "max": 916.529426918905
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.24646137918332328,
-        "homography_max_probe_error_px": 0.5224896610423536,
+        "homography_mean_probe_error_px": 0.24646130580737183,
+        "homography_max_probe_error_px": 0.5224889652177124,
         "ransac_inliers": 577,
         "homography": [
           [
-            0.997285903302738,
-            0.0036031324862580523,
-            8.72557047622422
+            0.9972859012977549,
+            0.00360313440139347,
+            8.725570276460294
           ],
           [
-            0.0029806558827061365,
-            1.0029740738925377,
-            -9.233054740230182
+            0.0029806554036279453,
+            1.0029740733672696,
+            -9.233054618170218
           ],
           [
-            -8.384573182347373e-06,
-            1.206615417299271e-05,
+            -8.38457534338267e-06,
+            1.2066154844554777e-05,
             1.0
           ]
         ]
@@ -10000,8 +10001,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0382414,
-        "bytes": 85018
+        "seconds": 0.057210184,
+        "bytes": 84912
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10017,24 +10018,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.3961152181220903,
-        "homography_max_probe_error_px": 0.8259637833150998,
+        "homography_mean_probe_error_px": 0.39611521902426483,
+        "homography_max_probe_error_px": 0.8259637847390402,
         "ransac_inliers": 469,
         "homography": [
           [
-            1.002772933608462,
-            0.01082298132770556,
-            0.5722230568290372
+            1.0027729335919244,
+            0.01082298132055431,
+            0.5722230604143878
           ],
           [
-            -0.001583256944970829,
-            1.006110180477874,
-            -7.429852410535826
+            -0.0015832569512421778,
+            1.006110180475307,
+            -7.429852408938397
           ],
           [
-            -3.228180991993443e-06,
-            1.532834269411958e-05,
-            0.9999999999999999
+            -3.2281810151033754e-06,
+            1.5328342706313055e-05,
+            1.0
           ]
         ]
       },
@@ -10051,23 +10052,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.29992486904399085,
-        "homography_max_probe_error_px": 0.4569034401546951,
+        "homography_mean_probe_error_px": 0.2999248678741842,
+        "homography_max_probe_error_px": 0.45690350285268533,
         "ransac_inliers": 441,
         "homography": [
           [
-            1.0020053878892237,
-            0.011562077923740045,
-            0.6502653557953292
+            1.002005387867958,
+            0.011562077706260084,
+            0.6502653803558436
           ],
           [
-            -0.0018822313021523533,
-            1.0065011176369787,
-            -7.439277152887863
+            -0.0018822311659434756,
+            1.0065011174579521,
+            -7.439277232545212
           ],
           [
-            -4.187401351821436e-06,
-            1.6513388993430108e-05,
+            -4.187401263319438e-06,
+            1.6513388501176287e-05,
             1.0
           ]
         ]
@@ -10094,8 +10095,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.0313968,
-        "bytes": 44915
+        "seconds": 0.046879572,
+        "bytes": 44744
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10111,23 +10112,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.5919151027015965,
-        "homography_max_probe_error_px": 1.3929341626205616,
+        "homography_mean_probe_error_px": 0.5919151027016125,
+        "homography_max_probe_error_px": 1.3929341626205953,
         "ransac_inliers": 325,
         "homography": [
           [
             1.0034749867535606,
-            0.0071757913206649,
-            2.8014357418763725
+            0.007175791320664909,
+            2.801435741876376
           ],
           [
-            0.0029928219285217826,
-            1.0082466549260496,
-            -16.07426915354941
+            0.0029928219285217726,
+            1.0082466549260498,
+            -16.074269153549402
           ],
           [
-            -4.0388151146464875e-06,
-            1.8266844684137798e-05,
+            -4.03881511464657e-06,
+            1.8266844684137852e-05,
             1.0
           ]
         ]
@@ -10145,24 +10146,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.5051650628268632,
-        "homography_max_probe_error_px": 1.1827449336492455,
+        "homography_mean_probe_error_px": 0.5051649534838845,
+        "homography_max_probe_error_px": 1.182744649515354,
         "ransac_inliers": 325,
         "homography": [
           [
-            1.0039184261016172,
-            0.007926904110226557,
-            2.6457715583361354
+            1.0039184261435166,
+            0.00792690491765291,
+            2.6457713686515074
           ],
           [
-            0.00304061169261068,
-            1.008928124947191,
-            -16.188494430289197
+            0.0030406117377046776,
+            1.008928124986128,
+            -16.18849442414068
           ],
           [
-            -3.7039424411897383e-06,
-            1.9082901267543338e-05,
-            0.9999999999999999
+            -3.7039426685066777e-06,
+            1.9082902212778883e-05,
+            1.0
           ]
         ]
       }
@@ -10188,8 +10189,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.4258654,
-        "bytes": 222298
+        "seconds": 0.563870011,
+        "bytes": 222128
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10205,23 +10206,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.025465494911705196,
-        "homography_max_probe_error_px": 0.035235301341661106,
+        "homography_mean_probe_error_px": 0.025465494929478534,
+        "homography_max_probe_error_px": 0.03523530140170608,
         "ransac_inliers": 2676,
         "homography": [
           [
-            1.0001316379311849,
-            3.790355225052139e-05,
-            -0.040718863933087726
+            1.0001316379311442,
+            3.790355213813405e-05,
+            -0.040718863898690984
           ],
           [
-            2.4481049578520226e-05,
-            1.000073721673645,
-            -0.013452260680730577
+            2.4481049543085154e-05,
+            1.0000737216735103,
+            -0.013452260631093655
           ],
           [
-            2.6439871433654044e-08,
-            1.7720201698234988e-07,
+            2.6439871317046287e-08,
+            1.7720201700791844e-07,
             1.0
           ]
         ]
@@ -10239,23 +10240,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.02593297304141933,
-        "homography_max_probe_error_px": 0.03649711332381193,
+        "homography_mean_probe_error_px": 0.02593312654865091,
+        "homography_max_probe_error_px": 0.036497712520531626,
         "ransac_inliers": 2674,
         "homography": [
           [
-            1.000136455992861,
-            3.9411654202560125e-05,
-            -0.04174315647500425
+            1.0001364555391572,
+            3.941249798930859e-05,
+            -0.04174327825914848
           ],
           [
-            2.434702962904369e-05,
-            1.0000788862770031,
-            -0.014053616570139387
+            2.434581409769495e-05,
+            1.0000788879595353,
+            -0.014053647268486314
           ],
           [
-            2.809186668199221e-08,
-            1.8391711653660052e-07,
+            2.8089395827216358e-08,
+            1.8392037241408216e-07,
             1.0
           ]
         ]
@@ -10282,8 +10283,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.5137131,
-        "bytes": 294113
+        "seconds": 0.669069644,
+        "bytes": 293976
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10299,24 +10300,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.028047019974240816,
-        "homography_max_probe_error_px": 0.05092482276998734,
+        "homography_mean_probe_error_px": 0.028047019974238262,
+        "homography_max_probe_error_px": 0.0509248227699846,
         "ransac_inliers": 2172,
         "homography": [
           [
             0.9999664767874518,
-            -9.064045346008105e-05,
-            0.05520996533365298
+            -9.064045346008079e-05,
+            0.055209965333651766
           ],
           [
-            8.82797609717974e-05,
+            8.82797609717961e-05,
             0.9999084092928515,
-            -0.02106575336156652
+            -0.021065753361566783
           ],
           [
-            6.502698294061761e-08,
-            -1.2587950288809293e-07,
-            1.0
+            6.502698294061911e-08,
+            -1.258795028880878e-07,
+            0.9999999999999999
           ]
         ]
       },
@@ -10333,24 +10334,24 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.0307188166153262,
-        "homography_max_probe_error_px": 0.05867175261736188,
+        "homography_mean_probe_error_px": 0.030718613022011752,
+        "homography_max_probe_error_px": 0.058671581629791504,
         "ransac_inliers": 2173,
         "homography": [
           [
-            0.999917338723236,
-            -0.00010579368822357574,
-            0.06943342154245075
+            0.9999173383893964,
+            -0.00010579235409533332,
+            0.06943316711685829
           ],
           [
-            7.693801178626264e-05,
-            0.999876260842847,
-            -0.01403681943995492
+            7.693653425427829e-05,
+            0.9998762633137754,
+            -0.014036938401089567
           ],
           [
-            2.9269885923887406e-08,
-            -1.4617988131216276e-07,
-            1.0
+            2.9266874941520938e-08,
+            -1.4617542838325087e-07,
+            0.9999999999999999
           ]
         ]
       }
@@ -10376,8 +10377,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.5015713,
-        "bytes": 270273
+        "seconds": 0.645497145,
+        "bytes": 270104
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10393,23 +10394,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.06267177419064159,
-        "homography_max_probe_error_px": 0.08309702305804914,
+        "homography_mean_probe_error_px": 0.06267177209043079,
+        "homography_max_probe_error_px": 0.08309701948047163,
         "ransac_inliers": 1314,
         "homography": [
           [
-            1.000038068573592,
-            -0.00012033226682821553,
-            8.703946624173508e-05
+            1.0000380685085197,
+            -0.00012033228494611081,
+            8.705721127337693e-05
           ],
           [
-            -9.877478805099558e-05,
-            0.9997191970965704,
-            0.10466161808630034
+            -9.877479823667676e-05,
+            0.999719197069719,
+            0.10466161929771894
           ],
           [
-            2.0531192427165595e-07,
-            -4.300240344274447e-07,
+            2.0531187414477728e-07,
+            -4.300240682027551e-07,
             1.0
           ]
         ]
@@ -10427,23 +10428,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.061294613317169566,
-        "homography_max_probe_error_px": 0.11161989159535815,
+        "homography_mean_probe_error_px": 0.06129508887879002,
+        "homography_max_probe_error_px": 0.11162183032150329,
         "ransac_inliers": 1313,
         "homography": [
           [
-            1.0001287876852718,
-            0.00019697540849821868,
-            -0.05071033987353678
+            1.0001287866592232,
+            0.00019697753898211717,
+            -0.05071062743875732
           ],
           [
-            -0.00013715591069992478,
-            1.0003082476534675,
-            -0.027106337647747322
+            -0.00013715855131012333,
+            1.0003082519156261,
+            -0.027106542317114662
           ],
           [
-            2.6837636427923528e-08,
-            3.2018835018722865e-07,
+            2.683209835942182e-08,
+            3.2019632788900463e-07,
             1.0
           ]
         ]
@@ -10470,8 +10471,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.3678912,
-        "bytes": 147946
+        "seconds": 0.458971772,
+        "bytes": 147760
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10487,23 +10488,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.31059189109164287,
-        "homography_max_probe_error_px": 0.5353904436991485,
+        "homography_mean_probe_error_px": 0.3105918910916271,
+        "homography_max_probe_error_px": 0.535390443699058,
         "ransac_inliers": 587,
         "homography": [
           [
             1.0000048301224873,
-            -0.0006908003590606546,
-            0.05635669492931722
+            -0.0006908003590607111,
+            0.0563566949293327
           ],
           [
-            0.0002449545565960019,
-            0.9979746585100014,
-            0.2694282766704983
+            0.0002449545565960188,
+            0.9979746585100013,
+            0.2694282766705083
           ],
           [
-            1.2248601966407412e-06,
-            -3.4215891743455313e-06,
+            1.2248601966408456e-06,
+            -3.4215891743457134e-06,
             1.0
           ]
         ]
@@ -10521,23 +10522,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.15380949729043353,
-        "homography_max_probe_error_px": 0.22184817474759563,
+        "homography_mean_probe_error_px": 0.15381078747204244,
+        "homography_max_probe_error_px": 0.22185266515338556,
         "ransac_inliers": 634,
         "homography": [
           [
-            1.000371580093649,
-            0.00044162023109361635,
-            -0.07934208835600928
+            1.0003715793654244,
+            0.00044162611297676106,
+            -0.07934331110412977
           ],
           [
-            7.13737350526319e-05,
-            1.0012980367251048,
-            -0.2976638531305808
+            7.13691820053273e-05,
+            1.0012980459721303,
+            -0.29766450077758644
           ],
           [
-            1.249788005082258e-08,
-            1.4569698183457936e-06,
+            1.2486810866835411e-08,
+            1.456987659437073e-06,
             1.0
           ]
         ]
@@ -10564,8 +10565,8 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.1971054,
-        "bytes": 72563
+        "seconds": 0.266584161,
+        "bytes": 72456
       },
       "same_descriptor_matcher_pairs_equal": true,
       "native": {
@@ -10581,23 +10582,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.5029906185674795,
-        "homography_max_probe_error_px": 0.9708564959899045,
+        "homography_mean_probe_error_px": 0.5029906240235518,
+        "homography_max_probe_error_px": 0.9708565091606024,
         "ransac_inliers": 208,
         "homography": [
           [
-            0.9969859981523104,
-            -0.0013071105275396263,
-            0.708896723840651
+            0.9969859981158774,
+            -0.0013071105223063772,
+            0.7088967257342144
           ],
           [
-            -0.0014554255869853405,
-            0.9978270247915931,
-            0.48319299718380265
+            -0.0014554256103027666,
+            0.9978270247699789,
+            0.4831930053151128
           ],
           [
-            -4.0663297758787345e-06,
-            -2.138055686812076e-06,
+            -4.06632984772299e-06,
+            -2.138055677713814e-06,
             1.0
           ]
         ]
@@ -10615,23 +10616,23 @@
         },
         "homography_found": true,
         "homography_accurate_3px": true,
-        "homography_mean_probe_error_px": 0.3931656998649971,
-        "homography_max_probe_error_px": 0.9210875932753657,
+        "homography_mean_probe_error_px": 0.3931664157132121,
+        "homography_max_probe_error_px": 0.9210864606767842,
         "ransac_inliers": 253,
         "homography": [
           [
-            0.9973337566513526,
-            -0.0026052558991854226,
-            1.2280949349332466
+            0.9973337516879622,
+            -0.0026052507263846004,
+            1.228094575896437
           ],
           [
-            -0.0008280556198120305,
-            0.9977825775806278,
-            0.48271295590245955
+            -0.0008280636934096394,
+            0.9977825959699065,
+            0.482710098179023
           ],
           [
-            -1.1489967896985513e-06,
-            -3.265716727465633e-06,
+            -1.1490150955496002e-06,
+            -3.265696080611628e-06,
             1.0
           ]
         ]
@@ -10651,5 +10652,5 @@
     "native_accurate_homographies_3px": 33,
     "opencv_accurate_homographies_3px": 32
   },
-  "finished_utc": "2026-10-15T09:02:24.264127+00:00"
+  "finished_utc": "2026-10-15T14:41:25.748793+00:00"
 }

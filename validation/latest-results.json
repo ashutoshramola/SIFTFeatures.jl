@@ -1,7 +1,7 @@
 {
   "suite": "synthetic OpenCV reference",
-  "run_id": "160c3b83d1c74b2cb5eb3d93fed339d8",
-  "started_utc": "2026-10-15T14:31:54.663456+00:00",
+  "run_id": "c55051d25f284863971f47d501ddc7d0",
+  "started_utc": "2026-10-15T14:35:06.702386+00:00",
   "state": "complete",
   "passed": true,
   "python": "3.11.17",
@@ -812,5 +812,5 @@
       "recovered_homography_max_probe_error_px": 0.0745330015562182
     }
   },
-  "finished_utc": "2026-10-15T14:32:02.373800+00:00"
+  "finished_utc": "2026-10-15T14:35:14.530776+00:00"
 }
