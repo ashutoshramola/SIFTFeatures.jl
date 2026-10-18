@@ -1,8 +1,8 @@
-# Real-photograph validation — 2026-10-15
+# Real-photograph validation — 2026-10-18
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 4.10.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.2; OpenCV 4.10.0; NumPy 2.4.6; Python 3.11.17. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `af2d76a9443c432482d477aba7965a68`.
+Runtime: julia version 1.13.2; OpenCV 4.10.0; NumPy 2.4.6; Python 3.11.17. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `72002c8c0f034dea86bbce643a504fc0`.
 
 ## Numerical agreement
 

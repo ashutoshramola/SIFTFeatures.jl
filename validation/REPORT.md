@@ -1,6 +1,6 @@
-# OpenCV reference validation — 2026-10-15
+# OpenCV reference validation — 2026-10-18
 
-The synthetic validation harness passed all 84 explicit checks on 2026-10-15 and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
+The synthetic validation harness passed all 84 explicit checks on 2026-10-18 and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
 
 Executed with Julia 1.13.2, OpenCV 4.10.0, and NumPy 2.4.6. All reference gates passed.
 Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
@@ -12,7 +12,7 @@ The six images are generated reproducibly by `validate.py`: shapes and lettering
 | base | 727 / 731 | 727 | 100.00% / 99.45% | 0.000083 | 0.000017 | 0.001483 | 0.99998546 |
 | translate | 697 / 701 | 697 | 100.00% / 99.43% | 0.000087 | 0.000018 | 0.000977 | 0.99998569 |
 | rotate90 | 718 / 722 | 718 | 100.00% / 99.45% | 0.000087 | 0.000018 | 0.001489 | 0.99998558 |
-| similarity | 532 / 532 | 532 | 100.00% / 100.00% | 0.000103 | 0.000014 | 0.000162 | 0.99998510 |
+| similarity | 532 / 532 | 532 | 100.00% / 100.00% | 0.000103 | 0.000014 | 0.000158 | 0.99998510 |
 | perspective | 624 / 623 | 623 | 99.84% / 100.00% | 0.000097 | 0.000017 | 0.000222 | 0.99998492 |
 | texture | 3353 / 3351 | 3351 | 99.94% / 100.00% | 0.000032 | 0.000006 | 0.000072 | 0.99998015 |
 
