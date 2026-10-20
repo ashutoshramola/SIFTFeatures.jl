@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-python@v7
         if: steps.check.outputs.should_run == 'true'
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - uses: julia-actions/cache@v3
         if: steps.check.outputs.should_run == 'true'
       - if: steps.check.outputs.should_run == 'true'

@@ -30,7 +30,7 @@ jobs:
           version: '1.13'
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - uses: julia-actions/cache@v3
       - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
       - run: python -m pip install -r validation/requirements.txt
