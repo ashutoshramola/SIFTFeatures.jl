@@ -184,8 +184,8 @@ end
     return m < n ? m + 1 : p - m + 1
 end
 
-function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
-                     k::Memory{Float32}, r::Int, cols::UnitRange{Int})
+@noinline function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
+                               k::Memory{Float32}, r::Int, cols::UnitRange{Int})
     h = size(src, 1)
     k0 = @inbounds k[1]
     y_lo = r + 1
@@ -230,8 +230,8 @@ function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
     return tmp
 end
 
-function _blur_rows!(dst::Matrix{Float32}, tmp::Matrix{Float32},
-                     k::Memory{Float32}, r::Int, cols::UnitRange{Int})
+@noinline function _blur_rows!(dst::Matrix{Float32}, tmp::Matrix{Float32},
+                               k::Memory{Float32}, r::Int, cols::UnitRange{Int})
     h, w = size(tmp)
     k0 = @inbounds k[1]
     @inbounds for x in cols
@@ -253,13 +253,17 @@ end
 function gaussian_blur!(dst::Matrix{Float32}, tmp::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) == size(tmp) ||
         throw(DimensionMismatch("dst, tmp, and src must have the same size"))
+    (tmp === dst || tmp === src) &&
+        throw(ArgumentError("tmp must not alias dst or src"))
+    isfinite(sigma) && sigma >= 0 ||
+        throw(ArgumentError("sigma must be finite and nonnegative"))
+    h, w = size(src)
+    (h >= 2 && w >= 2) ||
+        throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
     if sigma <= eps(Float32)
         copyto!(dst, src)
         return dst
     end
-    h, w = size(src)
-    (h >= 2 && w >= 2) ||
-        throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
     # A four-sigma finite symmetric FIR kernel, with reflect-101 (no repeated endpoint).
     s64 = Float64(sigma)
     len = (round(Int, 8 * s64 + 1) | 1)
@@ -295,6 +299,11 @@ end
 
 function gaussian_blur!(dst::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) || throw(DimensionMismatch("dst and src must have the same size"))
+    isfinite(sigma) && sigma >= 0 ||
+        throw(ArgumentError("sigma must be finite and nonnegative"))
+    h, w = size(src)
+    (h >= 2 && w >= 2) ||
+        throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
     if sigma <= eps(Float32)
         copyto!(dst, src)
         return dst
@@ -383,7 +392,19 @@ function dog_pyramid(g::AbstractVector)
     return [[_diff_matrix(o[l + 1], o[l]) for l in 1:length(o)-1] for o in g]
 end
 
-@inline function is_extremum(d, y::Int, x::Int, l::Int)
+@inline function _check_dog_neighborhood(d, y::Int, x::Int, l::Int)
+    (2 <= l <= length(d) - 1) ||
+        throw(ArgumentError("scale level l must satisfy 2 <= l <= length(d) - 1"))
+    p, a, n = d[l - 1], d[l], d[l + 1]
+    size(p) == size(a) == size(n) ||
+        throw(DimensionMismatch("adjacent DoG levels must have the same dimensions"))
+    h, w = size(a)
+    (2 <= y <= h - 1 && 2 <= x <= w - 1) ||
+        throw(ArgumentError("(y, x) must lie in the interior 2:h-1 × 2:w-1"))
+    return nothing
+end
+
+@inline function _is_extremum(d, y::Int, x::Int, l::Int)
     @inbounds begin
         dl = d[l]
         v = dl[y, x]
@@ -417,8 +438,13 @@ end
     return true
 end
 
+@inline function is_extremum(d, y::Int, x::Int, l::Int)
+    _check_dog_neighborhood(d, y, x, l)
+    return _is_extremum(d, y, x, l)
+end
+
 # Derivative order is x, y, scale; solve the 3-D quadratic in Float64 using StaticArrays.
-@inline function derivatives(d, y::Int, x::Int, l::Int)
+@inline function _derivatives(d, y::Int, x::Int, l::Int)
     @inbounds begin
         p, a, n = d[l - 1], d[l], d[l + 1]
         v = Float64(a[y, x])
@@ -441,11 +467,16 @@ end
     return g, H
 end
 
-function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
+@inline function derivatives(d, y::Int, x::Int, l::Int)
+    _check_dog_neighborhood(d, y, x, l)
+    return _derivatives(d, y, x, l)
+end
+
+function _localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
     h, w = size(d[1])
     for _ in 1:5
         (6 <= y <= h - 5 && 6 <= x <= w - 5 && 2 <= l <= c.octave_layers + 1) || return nothing
-        g, H = derivatives(d, y, x, l)
+        g, H = _derivatives(d, y, x, l)
         iszero(det(H)) && return nothing
         offset = -(H \ g)
         all(isfinite, offset) && maximum(abs, offset) < 1e6 || return nothing
@@ -464,6 +495,16 @@ function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
         l += round(Int, offset[3])
     end
     return nothing
+end
+
+function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
+    length(d) >= c.octave_layers + 2 ||
+        throw(ArgumentError("DoG octave must have at least octave_layers + 2 levels"))
+    s1 = size(d[1])
+    for k in 2:(c.octave_layers + 2)
+        size(d[k]) == s1 || throw(DimensionMismatch("all DoG levels in an octave must have the same size"))
+    end
+    return _localize(d, y, x, l, c)
 end
 
 # Full Float32-precision branchless minimax approximation of atan2(y, x).
@@ -494,9 +535,9 @@ end
     return muladd(p, x, 0.9999968f0)
 end
 
-function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
-                        sm::AbstractVector{Float64}, wtab::Vector{Float32},
-                        a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
+@noinline function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
+                                  sm::AbstractVector{Float64}, wtab::Vector{Float32},
+                                  a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
     fill!(hist, 0.0)
     empty!(angles)
     radius = round(Int, 4.5 * sigma)
@@ -549,6 +590,8 @@ function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, s
     Base.require_one_based_indexing(angles, hist, sm)
     (length(hist) == 36 && length(sm) == 36) ||
         throw(DimensionMismatch("orientation buffers must have length 36"))
+    isfinite(sigma) && sigma > 0 ||
+        throw(ArgumentError("sigma must be finite and positive"))
     wtab = Vector{Float32}(undef, max(0, round(Int, 4.5 * sigma)) + 1)
     return _orientations!(angles, hist, sm, wtab, a, y, x, sigma)
 end
@@ -572,8 +615,8 @@ _DescriptorWorkspace(cap::Int=256) = _DescriptorWorkspace(
     Memory{Float32}(undef, cap),
 )
 
-function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
-                      a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+@noinline function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
+                                a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
     phist = ws.phist
     fill!(phist, 0f0)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
@@ -601,21 +644,21 @@ function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
         i_lo = i_min_base
         i_hi = i_max_base
         if abs(sn64) > 1e-12
-            b1 = (j_cs64 - 2.5) / sn64
-            b2 = (j_cs64 + 2.5) / sn64
+            b1 = (j_cs64 - 2.50001) / sn64
+            b2 = (j_cs64 + 2.50001) / sn64
             lo_s, hi_s = minmax(b1, b2)
             i_lo = max(i_lo, floor(Int, lo_s) + 1)
             i_hi = min(i_hi, ceil(Int, hi_s) - 1)
-        elseif !(-2.5 < j_cs64 < 2.5)
+        elseif !(-2.50001 < j_cs64 < 2.50001)
             continue
         end
         if abs(cs64) > 1e-12
-            b1 = (-2.5 - j_sn64) / cs64
-            b2 = ( 2.5 - j_sn64) / cs64
+            b1 = (-2.50001 - j_sn64) / cs64
+            b2 = ( 2.50001 - j_sn64) / cs64
             lo_c, hi_c = minmax(b1, b2)
             i_lo = max(i_lo, floor(Int, lo_c) + 1)
             i_hi = min(i_hi, ceil(Int, hi_c) - 1)
-        elseif !(-2.5 < j_sn64 < 2.5)
+        elseif !(-2.50001 < j_sn64 < 2.50001)
             continue
         end
         n_i = i_hi - i_lo + 1
@@ -639,10 +682,11 @@ function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
             mag_buf[idx] = sqrt(muladd(gx, gx, gy * gy)) * _exp_neg_f32((u * u + v * v) * 0.125f0)
         end
 
-        # Pass 2: branchless 8-way trilinear scatter into 1-cell-padded 6×6×8 histogram
+        # Pass 2: 8-way trilinear scatter into 1-cell-padded 6×6×8 histogram
         for idx in 1:n_i
             rb = rb_buf[idx]
             cb = cb_buf[idx]
+            (-1.0f0 < rb < 4.0f0 && -1.0f0 < cb < 4.0f0) || continue
             ob = ob_buf[idx]
             mag = mag_buf[idx]
             r0 = floor(Int, rb)
@@ -706,6 +750,8 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
     Base.require_one_based_indexing(out, hist)
     (length(out) == 128 && length(hist) == 128) ||
         throw(DimensionMismatch("descriptor buffers must have length 128"))
+    isfinite(y) && isfinite(x) && isfinite(sigma) && sigma > 0 && isfinite(angle) ||
+        throw(ArgumentError("y, x, and angle must be finite and sigma must be finite and positive"))
     _descriptor!(out, _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
     @inbounds for k in 1:128
         hist[k] = Float64(out[k])
@@ -713,8 +759,11 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
     return out
 end
 
-descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real) =
-    _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+    isfinite(y) && isfinite(x) && isfinite(sigma) && sigma > 0 && isfinite(angle) ||
+        throw(ArgumentError("y, x, and angle must be finite and sigma must be finite and positive"))
+    return _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+end
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
 @inline function angle32(angle)
@@ -728,8 +777,8 @@ function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix
     dl = d[l]
     for x in cols, y in 6:h-5
         @inbounds abs(dl[y, x]) >= prelim_thresh || continue
-        is_extremum(d, y, x, l) || continue
-        p = localize(d, y, x, l, c)
+        _is_extremum(d, y, x, l) || continue
+        p = _localize(d, y, x, l, c)
         isnothing(p) && continue
         push!(out, LocalizedCandidate(
             o, octave, p.layer, p.iy, p.ix, p.y, p.x, p.sigma, p.response
@@ -742,11 +791,10 @@ function _dedup_candidates(raw_candidates::Vector{LocalizedCandidate})
     # Converged candidates at the same lattice extremum are the same feature.
     unique_candidates = LocalizedCandidate[]
     sizehint!(unique_candidates, length(raw_candidates))
-    seen = Set{UInt64}()
+    seen = Set{NTuple{4,Int32}}()
     sizehint!(seen, length(raw_candidates))
     for cand in raw_candidates
-        id = (UInt64(cand.o) << 48) | (UInt64(cand.layer) << 36) |
-             (UInt64(cand.ix) << 18) | UInt64(cand.iy)
+        id = (Int32(cand.o), Int32(cand.layer), Int32(cand.iy), Int32(cand.ix))
         id in seen && continue
         push!(seen, id)
         push!(unique_candidates, cand)
@@ -783,16 +831,6 @@ function _scan_octave!(raw_candidates::Vector{LocalizedCandidate}, d::Vector{Mat
         end
     end
     return raw_candidates
-end
-
-function _detect_candidates(dp::Vector{Vector{Matrix{Float32}}}, c::SIFTConfig)
-    prelim_thresh = Float32(0.5 * c.contrast_threshold / c.octave_layers)
-    nt = Threads.nthreads()
-    raw_candidates = LocalizedCandidate[]
-    for o in eachindex(dp)
-        _scan_octave!(raw_candidates, dp[o], o, c, prelim_thresh, nt)
-    end
-    return _dedup_candidates(raw_candidates)
 end
 
 function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=nothing)
