@@ -15,21 +15,21 @@ benchmark sequences. See [validation results](docs/validation.md) and
 
 Median of **five measured runs after one warmup per image**, using the first
 original-resolution photograph from each Oxford sequence. AMD EPYC 9V74 80-Core Processor;
-Julia 1.13.2 and OpenCV 4.10.0; one thread each; unlimited features.
-Measured 2026-10-18.
+Julia 1.13.2 and OpenCV 5.0.0; one thread each; unlimited features.
+Measured 2026-10-20.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3,224 / 3,225 | 232.8 | 185.4 | 1.26× |
-| trees_1 | 1000×700 | 12,477 / 12,477 | 497.6 | 398.7 | 1.25× |
-| graf_1 | 800×640 | 2,731 / 2,731 | 184.7 | 134.6 | 1.37× |
-| wall_1 | 1000×700 | 9,173 / 9,175 | 400.0 | 322.8 | 1.24× |
-| bark_1 | 765×512 | 3,757 / 3,758 | 185.3 | 145.4 | 1.27× |
-| boat_1 | 850×680 | 8,356 / 8,359 | 326.4 | 256.3 | 1.27× |
-| leuven_1 | 900×600 | 2,311 / 2,314 | 177.5 | 122.2 | 1.45× |
-| ubc_1 | 800×640 | 5,036 / 5,037 | 234.6 | 177.7 | 1.32× |
+| bikes_1 | 1000×700 | 3,224 / 3,225 | 273.5 | 205.6 | 1.33× |
+| trees_1 | 1000×700 | 12,477 / 12,477 | 595.7 | 455.3 | 1.31× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 221.0 | 144.0 | 1.53× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 477.8 | 361.6 | 1.32× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 212.8 | 162.3 | 1.31× |
+| boat_1 | 850×680 | 8,356 / 8,359 | 382.8 | 284.3 | 1.35× |
+| leuven_1 | 900×600 | 2,311 / 2,314 | 208.4 | 127.4 | 1.64× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 283.7 | 195.2 | 1.45× |
 
-**Julia currently takes 1.24–1.45× as long as OpenCV on these eight inputs.**
+**Julia currently takes 1.31–1.64× as long as OpenCV on these eight inputs.**
 These are timings for the current implementation on this machine.
 Decoding, compilation, file interchange, warmups, and forced GC are excluded;
 GC triggered inside a measured call is included. Parameters match, with OpenCV

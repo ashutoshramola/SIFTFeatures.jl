@@ -1,8 +1,8 @@
-# Real-photograph validation — 2026-10-18
+# Real-photograph validation — 2026-10-20
 
-**Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 4.10.0 and the supplied homographies. The package source was unchanged during this test.
+**Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 5.0.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.2; OpenCV 4.10.0; NumPy 2.4.6; Python 3.11.17. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `72002c8c0f034dea86bbce643a504fc0`.
+Runtime: julia version 1.13.2; OpenCV 5.0.0; NumPy 2.5.4; Python 3.13.16. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `d0624fcfb0d040a592c6b27a08f6a60c`.
 
 ## Numerical agreement
 
@@ -40,7 +40,7 @@ A compatibility pass does not mean every scene pair matched successfully. Standa
 | Pair | Julia: matches / correct | OpenCV: matches / correct | Mean fitted-homography error: Julia / OpenCV (px) |
 |---|---:|---:|---:|
 | graf_1 → graf_5 | 107 / 4 | 109 / 4 | 379.57 / 320.90 |
-| graf_1 → graf_6 | 86 / 0 | 87 / 0 | 507.87 / 691.53 |
+| graf_1 → graf_6 | 86 / 0 | 87 / 0 | 507.87 / 694.89 |
 | wall_1 → wall_6 | 64 / 11 | 63 / 11 | 3.07 / 3.07 |
 
 Local diagnostic match plots can be generated with `--figures /path/to/figures` (requires matplotlib). The publication includes the measured-result chart; downloaded photographs and image-overlay diagnostics remain local.
