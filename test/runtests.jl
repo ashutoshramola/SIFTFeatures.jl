@@ -4,7 +4,7 @@ using ImageCore: N0f8
 const SF = SIFTFeatures
 include("fixtures.jl")
 
-@testset "Inputs and parameters" begin
+@noinline function test_inputs()
     for a in (zeros(Float32,0,0),zeros(Float32,0,12),zeros(Float32,1,1),
               fill(0.5f0,32,40),zeros(UInt8,32,40),trues(32,40))
         k,d = sift(a)
@@ -63,7 +63,11 @@ include("fixtures.jl")
     @test_throws ArgumentError gaussian_pyramid(ones(Float32,1,20),SIFTConfig(first_octave=0);octaves=1)
 end
 
-@testset "Independent descriptor layout and interpolation" begin
+@testset "Inputs and parameters" begin
+    test_inputs()
+end
+
+@noinline function test_descriptor()
     center = 17
     horizontal = Float32[x/64 for y in 1:33,x in 1:33]
     vertical = permutedims(horizontal)
@@ -114,7 +118,11 @@ end
     end
 end
 
-@testset "Scale space and interpolation" begin
+@testset "Independent descriptor layout and interpolation" begin
+    test_descriptor()
+end
+
+@noinline function test_scale_space()
     a = reshape(Float32.(1:12)./12,3,4)
     b = SF.double_image(a)
     @test b[1:2:end,1:2:end] == a
@@ -196,7 +204,11 @@ end
     @test 0 <= SF.angle32(-1e-5) < 2pi
 end
 
-@testset "Detection, descriptors, and geometric consistency" begin
+@testset "Scale space and interpolation" begin
+    test_scale_space()
+end
+
+@noinline function test_detection()
     # Dimensions minus one are divisible by four: a 90-degree rotation preserves
     # the sampling phase through octave 2, isolating rotation from resampling.
     a = fixture(161,193)
@@ -245,7 +257,11 @@ end
     @test SF.descriptor(zeros(Float32,30,30),15.,15.,2.,0.) == zeros(Float32,128)
 end
 
-@testset "L2 ratio and mutual matching" begin
+@testset "Detection, descriptors, and geometric consistency" begin
+    test_detection()
+end
+
+@noinline function test_matching()
     a = zeros(Float32,128,2); a[1,2] = 1
     b = zeros(Float32,128,3); b[1,:] = [0.1,0.3,1.1]
     m = match_descriptors(a,b)
@@ -288,7 +304,11 @@ end
     @test_throws ArgumentError match_descriptors(a,fill(NaN,128,2))
 end
 
-@testset "Type stability, zero-allocation kernels, and chunk determinism" begin
+@testset "L2 ratio and mutual matching" begin
+    test_matching()
+end
+
+@noinline function test_stability_and_determinism()
     a = fixture(64, 80)
     dst = similar(a)
     tmp = similar(a)
@@ -370,4 +390,8 @@ end
     m_chunked = vcat(m_c1, m_c2)
     SF._filter_crosscheck!(m_chunked, ri1)
     @test m_chunked == m_single
+end
+
+@testset "Type stability, zero-allocation kernels, and chunk determinism" begin
+    test_stability_and_determinism()
 end
