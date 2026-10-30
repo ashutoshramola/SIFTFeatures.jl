@@ -184,6 +184,11 @@ end
     return m < n ? m + 1 : p - m + 1
 end
 
+@inline _load8(a::Matrix{Float32}, y::Int, x::Int) =
+    unsafe_load(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)))
+@inline _store8!(a::Matrix{Float32}, y::Int, x::Int, v::SVector{8,Float32}) =
+    unsafe_store!(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)), v)
+
 @noinline function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
                                k::Memory{Float32}, r::Int, cols::UnitRange{Int})
     h = size(src, 1)
@@ -199,21 +204,42 @@ end
                 end
                 tmp[y, x] = acc
             end
-            @simd for y in y_lo:y_hi
-                tmp[y, x] = k0 * src[y, x]
-            end
-            for d in 1:r
-                kd = k[d + 1]
-                @simd for y in y_lo:y_hi
-                    tmp[y, x] = muladd(kd, src[y - d, x] + src[y + d, x], tmp[y, x])
-                end
-            end
-            for y in (y_hi + 1):h
-                acc = k0 * src[y, x]
+            y = y_lo
+            while y + 31 <= y_hi
+                acc0 = k0 * _load8(src, y, x)
+                acc1 = k0 * _load8(src, y + 8, x)
+                acc2 = k0 * _load8(src, y + 16, x)
+                acc3 = k0 * _load8(src, y + 24, x)
                 for d in 1:r
-                    acc = muladd(k[d + 1], src[y - d, x] + src[_reflect101(y + d, h), x], acc)
+                    kd = k[d + 1]
+                    acc0 = muladd(kd, _load8(src, y - d, x)      + _load8(src, y + d, x),      acc0)
+                    acc1 = muladd(kd, _load8(src, y + 8 - d, x)  + _load8(src, y + 8 + d, x),  acc1)
+                    acc2 = muladd(kd, _load8(src, y + 16 - d, x) + _load8(src, y + 16 + d, x), acc2)
+                    acc3 = muladd(kd, _load8(src, y + 24 - d, x) + _load8(src, y + 24 + d, x), acc3)
                 end
-                tmp[y, x] = acc
+                _store8!(tmp, y, x, acc0)
+                _store8!(tmp, y + 8, x, acc1)
+                _store8!(tmp, y + 16, x, acc2)
+                _store8!(tmp, y + 24, x, acc3)
+                y += 32
+            end
+            if y <= y_hi
+                @simd for yi in y:y_hi
+                    tmp[yi, x] = k0 * src[yi, x]
+                end
+                for d in 1:r
+                    kd = k[d + 1]
+                    @simd for yi in y:y_hi
+                        tmp[yi, x] = muladd(kd, src[yi - d, x] + src[yi + d, x], tmp[yi, x])
+                    end
+                end
+            end
+            for y_tail in (y_hi + 1):h
+                acc = k0 * src[y_tail, x]
+                for d in 1:r
+                    acc = muladd(k[d + 1], src[y_tail - d, x] + src[_reflect101(y_tail + d, h), x], acc)
+                end
+                tmp[y_tail, x] = acc
             end
         else
             for y in 1:h
@@ -235,15 +261,72 @@ end
     h, w = size(tmp)
     k0 = @inbounds k[1]
     @inbounds for x in cols
-        @simd for y in 1:h
-            dst[y, x] = k0 * tmp[y, x]
-        end
-        for d in 1:r
-            kd = k[d + 1]
-            x1 = _reflect101(x - d, w)
-            x2 = _reflect101(x + d, w)
-            @simd for y in 1:h
-                dst[y, x] = muladd(kd, tmp[y, x1] + tmp[y, x2], dst[y, x])
+        y = 1
+        if r < x <= w - r
+            while y + 31 <= h
+                acc0 = k0 * _load8(tmp, y, x)
+                acc1 = k0 * _load8(tmp, y + 8, x)
+                acc2 = k0 * _load8(tmp, y + 16, x)
+                acc3 = k0 * _load8(tmp, y + 24, x)
+                for d in 1:r
+                    kd = k[d + 1]
+                    x1 = x - d
+                    x2 = x + d
+                    acc0 = muladd(kd, _load8(tmp, y, x1)      + _load8(tmp, y, x2),      acc0)
+                    acc1 = muladd(kd, _load8(tmp, y + 8, x1)  + _load8(tmp, y + 8, x2),  acc1)
+                    acc2 = muladd(kd, _load8(tmp, y + 16, x1) + _load8(tmp, y + 16, x2), acc2)
+                    acc3 = muladd(kd, _load8(tmp, y + 24, x1) + _load8(tmp, y + 24, x2), acc3)
+                end
+                _store8!(dst, y, x, acc0)
+                _store8!(dst, y + 8, x, acc1)
+                _store8!(dst, y + 16, x, acc2)
+                _store8!(dst, y + 24, x, acc3)
+                y += 32
+            end
+            if y <= h
+                @simd for yi in y:h
+                    dst[yi, x] = k0 * tmp[yi, x]
+                end
+                for d in 1:r
+                    kd = k[d + 1]
+                    @simd for yi in y:h
+                        dst[yi, x] = muladd(kd, tmp[yi, x - d] + tmp[yi, x + d], dst[yi, x])
+                    end
+                end
+            end
+        else
+            while y + 31 <= h
+                acc0 = k0 * _load8(tmp, y, x)
+                acc1 = k0 * _load8(tmp, y + 8, x)
+                acc2 = k0 * _load8(tmp, y + 16, x)
+                acc3 = k0 * _load8(tmp, y + 24, x)
+                for d in 1:r
+                    kd = k[d + 1]
+                    x1 = _reflect101(x - d, w)
+                    x2 = _reflect101(x + d, w)
+                    acc0 = muladd(kd, _load8(tmp, y, x1)      + _load8(tmp, y, x2),      acc0)
+                    acc1 = muladd(kd, _load8(tmp, y + 8, x1)  + _load8(tmp, y + 8, x2),  acc1)
+                    acc2 = muladd(kd, _load8(tmp, y + 16, x1) + _load8(tmp, y + 16, x2), acc2)
+                    acc3 = muladd(kd, _load8(tmp, y + 24, x1) + _load8(tmp, y + 24, x2), acc3)
+                end
+                _store8!(dst, y, x, acc0)
+                _store8!(dst, y + 8, x, acc1)
+                _store8!(dst, y + 16, x, acc2)
+                _store8!(dst, y + 24, x, acc3)
+                y += 32
+            end
+            if y <= h
+                @simd for yi in y:h
+                    dst[yi, x] = k0 * tmp[yi, x]
+                end
+                for d in 1:r
+                    kd = k[d + 1]
+                    x1 = _reflect101(x - d, w)
+                    x2 = _reflect101(x + d, w)
+                    @simd for yi in y:h
+                        dst[yi, x] = muladd(kd, tmp[yi, x1] + tmp[yi, x2], dst[yi, x])
+                    end
+                end
             end
         end
     end
@@ -314,9 +397,8 @@ end
 gaussian_blur(a::Matrix{Float32}, sigma::Real) =
     gaussian_blur!(similar(a), a, sigma)
 
-function downsample_2x(src::Matrix{Float32})
-    h, w = size(src) .÷ 2
-    dst = Matrix{Float32}(undef, h, w)
+function downsample_2x!(dst::Matrix{Float32}, src::Matrix{Float32})
+    h, w = size(dst)
     @inbounds for x in 1:w
         sx = 2x - 1
         @simd for y in 1:h
@@ -325,6 +407,9 @@ function downsample_2x(src::Matrix{Float32})
     end
     return dst
 end
+
+downsample_2x(src::Matrix{Float32}) =
+    downsample_2x!(Matrix{Float32}(undef, size(src) .÷ 2), src)
 
 function default_octaves(img, c)
     m = minimum(size(img))
@@ -404,38 +489,44 @@ end
     return nothing
 end
 
-@inline function _is_extremum(d, y::Int, x::Int, l::Int)
+@inline function _is_extremum(dp::Matrix{Float32}, dl::Matrix{Float32}, dn::Matrix{Float32},
+                              y::Int, x::Int, v::Float32)
     @inbounds begin
-        dl = d[l]
-        v = dl[y, x]
         iszero(v) && return false
         if v > 0f0
-            (v > dl[y - 1, x] && v > dl[y + 1, x]) || return false
-            (v > dl[y - 1, x - 1] && v > dl[y, x - 1] && v > dl[y + 1, x - 1] &&
-             v > dl[y - 1, x + 1] && v > dl[y, x + 1] && v > dl[y + 1, x + 1]) || return false
-            dp_prev = d[l - 1]
-            for j in x-1:x+1, i in y-1:y+1
-                dp_prev[i, j] >= v && return false
-            end
-            dp_next = d[l + 1]
-            for j in x-1:x+1, i in y-1:y+1
-                dp_next[i, j] >= v && return false
-            end
+            (v > dl[y - 1, x] && v > dl[y + 1, x] &&
+             v > dl[y, x - 1] && v > dl[y, x + 1] &&
+             v > dp[y, x]     && v > dn[y, x]) || return false
+            (v > dl[y - 1, x - 1] && v > dl[y + 1, x - 1] &&
+             v > dl[y - 1, x + 1] && v > dl[y + 1, x + 1]) || return false
+            (v > dp[y - 1, x - 1] && v > dp[y, x - 1] && v > dp[y + 1, x - 1] &&
+             v > dp[y - 1, x]                         && v > dp[y + 1, x]     &&
+             v > dp[y - 1, x + 1] && v > dp[y, x + 1] && v > dp[y + 1, x + 1]) || return false
+            (v > dn[y - 1, x - 1] && v > dn[y, x - 1] && v > dn[y + 1, x - 1] &&
+             v > dn[y - 1, x]                         && v > dn[y + 1, x]     &&
+             v > dn[y - 1, x + 1] && v > dn[y, x + 1] && v > dn[y + 1, x + 1]) || return false
         else
-            (v < dl[y - 1, x] && v < dl[y + 1, x]) || return false
-            (v < dl[y - 1, x - 1] && v < dl[y, x - 1] && v < dl[y + 1, x - 1] &&
-             v < dl[y - 1, x + 1] && v < dl[y, x + 1] && v < dl[y + 1, x + 1]) || return false
-            dp_prev = d[l - 1]
-            for j in x-1:x+1, i in y-1:y+1
-                dp_prev[i, j] <= v && return false
-            end
-            dp_next = d[l + 1]
-            for j in x-1:x+1, i in y-1:y+1
-                dp_next[i, j] <= v && return false
-            end
+            (v < dl[y - 1, x] && v < dl[y + 1, x] &&
+             v < dl[y, x - 1] && v < dl[y, x + 1] &&
+             v < dp[y, x]     && v < dn[y, x]) || return false
+            (v < dl[y - 1, x - 1] && v < dl[y + 1, x - 1] &&
+             v < dl[y - 1, x + 1] && v < dl[y + 1, x + 1]) || return false
+            (v < dp[y - 1, x - 1] && v < dp[y, x - 1] && v < dp[y + 1, x - 1] &&
+             v < dp[y - 1, x]                         && v < dp[y + 1, x]     &&
+             v < dp[y - 1, x + 1] && v < dp[y, x + 1] && v < dp[y + 1, x + 1]) || return false
+            (v < dn[y - 1, x - 1] && v < dn[y, x - 1] && v < dn[y + 1, x - 1] &&
+             v < dn[y - 1, x]                         && v < dn[y + 1, x]     &&
+             v < dn[y - 1, x + 1] && v < dn[y, x + 1] && v < dn[y + 1, x + 1]) || return false
         end
     end
     return true
+end
+
+@inline function _is_extremum(d, y::Int, x::Int, l::Int)
+    @inbounds begin
+        dl = d[l]
+        return _is_extremum(d[l - 1], dl, d[l + 1], y, x, dl[y, x])
+    end
 end
 
 @inline function is_extremum(d, y::Int, x::Int, l::Int)
@@ -774,10 +865,16 @@ end
 function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix{Float32}},
                                o::Int, octave::Int, l::Int, cols::UnitRange{Int},
                                h::Int, prelim_thresh::Float32, c::SIFTConfig)
-    dl = d[l]
-    for x in cols, y in 6:h-5
-        @inbounds abs(dl[y, x]) >= prelim_thresh || continue
-        _is_extremum(d, y, x, l) || continue
+    @inbounds begin
+        dp = d[l - 1]
+        dl = d[l]
+        dn = d[l + 1]
+    end
+    neg_thresh = -prelim_thresh
+    @inbounds for x in cols, y in 6:h-5
+        v = dl[y, x]
+        (v >= prelim_thresh || v <= neg_thresh) || continue
+        _is_extremum(dp, dl, dn, y, x, v) || continue
         p = _localize(d, y, x, l, c)
         isnothing(p) && continue
         push!(out, LocalizedCandidate(
@@ -856,6 +953,7 @@ function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=n
     base = similar(raw_base)
     gaussian_blur!(base, tmp, raw_base, blur)
     dogs = Vector{Matrix{Float32}}(undef, s + 2)
+    empty_mat = Matrix{Float32}(undef, 0, 0)
     for o in 1:n
         h, w = size(base)
         o > 1 && (tmp = Matrix{Float32}(undef, h, w))
@@ -866,7 +964,11 @@ function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=n
             gaussian_blur!(dst, tmp, levels[l], delta_sigmas[l])
             levels[l + 1] = dst
         end
-        next_base = o < n ? downsample_2x(levels[s + 1]) : base
+        next_base = if o < n
+            (o == 1 && c.first_octave == -1) ? downsample_2x!(a, levels[s + 1]) : downsample_2x(levels[s + 1])
+        else
+            base
+        end
         # Reuse levels[1], levels[s+2], levels[s+3], and tmp in-place for DoG;
         # only levels[2..s+1] are accessed during orientation and descriptor extraction.
         dogs[s + 2] = _diff_matrix!(levels[s + 3], levels[s + 3], levels[s + 2])
@@ -879,6 +981,10 @@ function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=n
             end
         end
         _scan_octave!(raw_candidates, dogs, o, c, prelim_thresh, nt)
+        # Release pure-DoG levels immediately so later octave allocations reuse pages without GC.
+        levels[1] = empty_mat
+        levels[s + 2] = empty_mat
+        levels[s + 3] = empty_mat
         push!(pyramid, levels)
         if o < n
             base = next_base
@@ -1004,10 +1110,10 @@ end
     return s
 end
 
-function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
-                       rev_dist::AbstractVector{Float64}, rev_idx::AbstractVector{Int},
-                       a::AbstractMatrix{Float32}, b::AbstractMatrix{Float32},
-                       qrange::UnitRange{Int}, r2::Float64, crosscheck::Bool)
+@noinline function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
+                                 rev_dist::AbstractVector{Float64}, rev_idx::AbstractVector{Int},
+                                 a::AbstractMatrix{Float32}, b::AbstractMatrix{Float32},
+                                 qrange::UnitRange{Int}, r2::Float64, crosscheck::Bool)
     nb = size(b, 2)
     i = first(qrange)
     i_end = last(qrange)
@@ -1080,10 +1186,10 @@ function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
     return chunk_matches
 end
 
-function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
-                       rev_dist::AbstractVector{Float64}, rev_idx::AbstractVector{Int},
-                       a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real},
-                       qrange::UnitRange{Int}, r2::Float64, crosscheck::Bool)
+@noinline function _match_chunk!(chunk_matches::Vector{DescriptorMatch},
+                                 rev_dist::AbstractVector{Float64}, rev_idx::AbstractVector{Int},
+                                 a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real},
+                                 qrange::UnitRange{Int}, r2::Float64, crosscheck::Bool)
     nb = size(b, 2)
     @inbounds for i in qrange
         best, second, index = Inf, Inf, 0
