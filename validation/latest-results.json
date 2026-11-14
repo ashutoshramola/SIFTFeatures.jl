@@ -1,18 +1,18 @@
 {
   "suite": "synthetic OpenCV reference",
-  "run_id": "77cbae5f13ab423aa0dcbdd07b6077d2",
-  "started_utc": "2026-10-20T14:54:32.015039+00:00",
+  "run_id": "c9bdf2ecdb824e1f845647caef595181",
+  "started_utc": "2026-11-14T17:50:18.734785+00:00",
   "state": "complete",
   "passed": true,
-  "python": "3.13.16",
+  "python": "3.13.18",
   "python_optimization": 0,
-  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "source_sha256": {
     "Project.toml": "d85540a2cb3846b98a94536e7994d6112b16970c1efe271f2ac6cad0eece0250",
-    "src/SIFTFeatures.jl": "e42e898000bb7e38c3665f9b3763cb7f4ab8d99dd5faca2adde75c570ede65bc",
+    "src/SIFTFeatures.jl": "bc2355c32ccfc30dbf77df3c27270cd89cb00890ae08b171cdc4b28e4c59dc9b",
     "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
     "validation/common.py": "95c34ef385c81bf10974af3c2589376cb93351dc92237b4107f06b6845793b59",
-    "validation/download_oxford.py": "499e912c9298013b1fe8cdfda7002d0c0c9437ded3e384ff7a7f601ac9eb2fb1",
+    "validation/download_oxford.py": "d412aee03f37e41af8e6ece5f70ff98fb580e396f2d1ec081b605cf5b7758d45",
     "validation/real_world.py": "7427347939fdf047730a4cf172dc201d29f42aec2b57fb95feb2f43e6f2b1338",
     "validation/test_validation.py": "eefc6cf13db257bb0ce9e05586983badef7370f098d122f5d701dedf621cb734",
     "validation/update_reports.py": "28cd5392ac2937ab30bbc02444d36f3d8be23961c27b14a01f0e95f6374d3fab",
@@ -298,7 +298,7 @@
     {
       "name": "texture: angle p95",
       "passed": true,
-      "detail": "7.231213233868471e-05"
+      "detail": "7.543434471890431e-05"
     },
     {
       "name": "texture: descriptor median cosine",
@@ -444,7 +444,7 @@
   "failures": [],
   "opencv": "5.0.0",
   "numpy": "2.5.4",
-  "julia": "julia version 1.13.2",
+  "julia": "julia version 1.13.4",
   "precise_upscale": true,
   "images": {
     "base": {
@@ -476,7 +476,7 @@
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 1.0964624921993739e-06,
+        "p05": 1.1560784274821642e-06,
         "median": 1.2543332727905081e-05,
         "p95": 0.002757065512002554,
         "max": 1.2714216474797326
@@ -502,7 +502,7 @@
       "half_pixel_probe_cosine": {
         "min": 0.9999798536300659,
         "p05": 0.9999810457229614,
-        "median": 0.9999896883964539,
+        "median": 0.9999897480010986,
         "p95": 0.9999964833259583,
         "max": 0.9999973177909851
       },
@@ -528,7 +528,7 @@
       "angle_error_deg": {
         "min": 0.0,
         "p05": 1.4668749538456677e-06,
-        "median": 1.2230377024746082e-05,
+        "median": 1.2286402660848905e-05,
         "p95": 0.0007680562700158176,
         "max": 1.2714216474797326
       },
@@ -578,8 +578,8 @@
       },
       "angle_error_deg": {
         "min": 4.333007042519988e-08,
-        "p05": 1.0919781441873351e-06,
-        "median": 1.3632409839823023e-05,
+        "p05": 1.0341614474156266e-06,
+        "median": 1.3602646209113886e-05,
         "p95": 0.002845216275548069,
         "max": 1.671104994921459
       },
@@ -629,8 +629,8 @@
       },
       "angle_error_deg": {
         "min": 1.0485645040517686e-07,
-        "p05": 1.0360764403060076e-06,
-        "median": 1.2352162715332034e-05,
+        "p05": 9.887575879103533e-07,
+        "median": 1.1934452504906509e-05,
         "p95": 0.0015642336516545603,
         "max": 0.782911400843766
       },
@@ -680,8 +680,8 @@
       },
       "angle_error_deg": {
         "min": 8.461224530209903e-08,
-        "p05": 7.921574270518626e-07,
-        "median": 1.263384324825286e-05,
+        "p05": 7.750812427003594e-07,
+        "median": 1.2530094241543331e-05,
         "p95": 0.003112292438466427,
         "max": 1.402465114797481
       },
@@ -731,9 +731,9 @@
       },
       "angle_error_deg": {
         "min": 1.6890017580443858e-09,
-        "p05": 8.679181963087796e-07,
-        "median": 8.497957977559123e-06,
-        "p95": 7.231213233868471e-05,
+        "p05": 8.536071505751287e-07,
+        "median": 8.553812614320053e-06,
+        "p95": 7.543434471890431e-05,
         "max": 1.0355706335901316
       },
       "detected_descriptor_cosine": {
@@ -747,7 +747,7 @@
         "min": 0.9999737739562988,
         "p05": 0.9999771118164062,
         "median": 0.9999802112579346,
-        "p95": 0.999983012676239,
+        "p95": 0.9999829530715942,
         "max": 0.9999875426292419
       },
       "cross_matches": 3351,
@@ -788,9 +788,9 @@
       "native_inlier_fraction": 0.930379746835443,
       "native_error_px": {
         "min": 0.0009013103441028623,
-        "p05": 0.007043563810551035,
+        "p05": 0.007043563810551034,
         "median": 0.2216130238593394,
-        "p95": 10.908385204424762,
+        "p95": 10.908385204424764,
         "max": 302.97365290393765
       },
       "opencv_matches": 314,
@@ -802,7 +802,7 @@
       "native_inlier_fraction": 0.9661458333333334,
       "native_error_px": {
         "min": 0.0038048643227581763,
-        "p05": 0.023216326804445967,
+        "p05": 0.02321632680444597,
         "median": 0.15572243089477503,
         "p95": 0.8558970980864798,
         "max": 216.1241439440283
@@ -812,5 +812,5 @@
       "recovered_homography_max_probe_error_px": 0.10425246278295479
     }
   },
-  "finished_utc": "2026-10-20T14:54:38.631631+00:00"
+  "finished_utc": "2026-11-14T17:50:24.347576+00:00"
 }

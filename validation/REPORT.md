@@ -1,8 +1,8 @@
-# OpenCV reference validation — 2026-10-20
+# OpenCV reference validation — 2026-11-14
 
-The synthetic validation harness passed all 84 explicit checks on 2026-10-20 and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
+The synthetic validation harness passed all 84 explicit checks on 2026-11-14 and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
 
-Executed with Julia 1.13.2, OpenCV 5.0.0, and NumPy 2.5.4. All reference gates passed.
+Executed with Julia 1.13.4, OpenCV 5.0.0, and NumPy 2.5.4. All reference gates passed.
 Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
 
 The six images are generated reproducibly by `validate.py`: shapes and lettering, four known geometric transforms, and an independent smoothed random texture. OpenCV precise upscaling is explicitly enabled. Keypoints are paired one-to-one using position, scale, and orientation only; descriptors do not choose the pairs.
@@ -14,7 +14,7 @@ The six images are generated reproducibly by `validate.py`: shapes and lettering
 | rotate90 | 712 / 718 | 712 | 100.00% / 99.16% | 0.000088 | 0.000018 | 0.002845 | 0.99998558 |
 | similarity | 527 / 527 | 527 | 100.00% / 100.00% | 0.000108 | 0.000016 | 0.001564 | 0.99998510 |
 | perspective | 607 / 606 | 605 | 99.67% / 99.83% | 0.000091 | 0.000017 | 0.003112 | 0.99998492 |
-| texture | 3353 / 3351 | 3351 | 99.94% / 100.00% | 0.000032 | 0.000006 | 0.000072 | 0.99998015 |
+| texture | 3353 / 3351 | 3351 | 99.94% / 100.00% | 0.000032 | 0.000006 | 0.000075 | 0.99998015 |
 
 Descriptors also agree at identical supplied frames, including half-pixel rounding probes across octaves −1, 0, and 1. OpenCV descriptors are normalized to unit L2 for comparison; Julia returns unquantized unit vectors.
 
@@ -48,6 +48,6 @@ Julia ratio/mutual matches agreed exactly with OpenCV BFMatcher when supplied th
 
 This is a synthetic reference suite, not a natural-image benchmark or proof of bitwise identity. Shape repetition produces some incorrect ratio-test matches in both implementations; RANSAC remains necessary for geometric use. Exact keypoint counts can differ around histogram peaks and plateau/tie cases. The descriptor comparison separates detector variation from descriptor arithmetic and quantization.
 
-All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia 1.13.2 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
+All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia 1.13.4 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
 
 Run `python validation/validate.py` to regenerate the JSON. This Markdown report records the run; the JSON includes minima, p05, medians, p95, maxima, and per-transform details. See the README for setup and numerical conventions.

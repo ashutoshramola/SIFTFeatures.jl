@@ -1,8 +1,8 @@
-# Real-photograph validation — 2026-10-20
+# Real-photograph validation — 2026-11-14
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 5.0.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.2; OpenCV 5.0.0; NumPy 2.5.4; Python 3.13.16. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `d0624fcfb0d040a592c6b27a08f6a60c`.
+Runtime: julia version 1.13.4; OpenCV 5.0.0; NumPy 2.5.4; Python 3.13.18. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `0f74613fb6704038b57f6b52ee90e09c`.
 
 ## Numerical agreement
 
@@ -63,7 +63,7 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 ## Validation integrity and Julia regression tests
 
-The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed under `Pkg.test()` with bounds checking enabled for the original 0.1.0 run. The current suite expands to 170 Julia checks on Julia 1.13.2 (both single-threaded and multi-threaded).
+The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed under `Pkg.test()` with bounds checking enabled for the original 0.1.0 run. The current suite expands to 170 Julia checks on Julia 1.13.4 (both single-threaded and multi-threaded).
 
 - [Descriptor-corruption control](../validation/guard-negative-control.txt)
 - [Machine-readable original-resolution results](../validation/real-world-results.json)

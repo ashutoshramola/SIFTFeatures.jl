@@ -1,18 +1,18 @@
 {
   "suite": "Oxford real-photo reference",
-  "run_id": "d0624fcfb0d040a592c6b27a08f6a60c",
-  "started_utc": "2026-10-20T14:55:15.808262+00:00",
+  "run_id": "0f74613fb6704038b57f6b52ee90e09c",
+  "started_utc": "2026-11-14T17:50:59.400602+00:00",
   "state": "complete",
   "passed": true,
-  "python": "3.13.16",
+  "python": "3.13.18",
   "python_optimization": 1,
-  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "source_sha256": {
     "Project.toml": "d85540a2cb3846b98a94536e7994d6112b16970c1efe271f2ac6cad0eece0250",
-    "src/SIFTFeatures.jl": "e42e898000bb7e38c3665f9b3763cb7f4ab8d99dd5faca2adde75c570ede65bc",
+    "src/SIFTFeatures.jl": "bc2355c32ccfc30dbf77df3c27270cd89cb00890ae08b171cdc4b28e4c59dc9b",
     "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
     "validation/common.py": "95c34ef385c81bf10974af3c2589376cb93351dc92237b4107f06b6845793b59",
-    "validation/download_oxford.py": "499e912c9298013b1fe8cdfda7002d0c0c9437ded3e384ff7a7f601ac9eb2fb1",
+    "validation/download_oxford.py": "d412aee03f37e41af8e6ece5f70ff98fb580e396f2d1ec081b605cf5b7758d45",
     "validation/real_world.py": "7427347939fdf047730a4cf172dc201d29f42aec2b57fb95feb2f43e6f2b1338",
     "validation/test_validation.py": "eefc6cf13db257bb0ce9e05586983badef7370f098d122f5d701dedf621cb734",
     "validation/update_reports.py": "28cd5392ac2937ab30bbc02444d36f3d8be23961c27b14a01f0e95f6374d3fab",
@@ -183,7 +183,7 @@
     {
       "name": "bikes_3: detected descriptor cosine",
       "passed": true,
-      "detail": "0.9999824166297913"
+      "detail": "0.999982476234436"
     },
     {
       "name": "bikes_3: fixed-frame descriptor cosine",
@@ -358,7 +358,7 @@
     {
       "name": "bikes_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.001091580477155701"
+      "detail": "0.0010961581138771578"
     },
     {
       "name": "bikes_6: detected descriptor cosine",
@@ -418,7 +418,7 @@
     {
       "name": "trees_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0003089692915007362"
+      "detail": "0.00031119453162042156"
     },
     {
       "name": "trees_1: detected descriptor cosine",
@@ -478,7 +478,7 @@
     {
       "name": "trees_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0002769390007752066"
+      "detail": "0.00027786123785963673"
     },
     {
       "name": "trees_2: detected descriptor cosine",
@@ -538,7 +538,7 @@
     {
       "name": "trees_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0003161473454525481"
+      "detail": "0.00031501189958989056"
     },
     {
       "name": "trees_3: detected descriptor cosine",
@@ -598,7 +598,7 @@
     {
       "name": "trees_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.000669996572459125"
+      "detail": "0.0006738605559776548"
     },
     {
       "name": "trees_4: detected descriptor cosine",
@@ -813,7 +813,7 @@
     {
       "name": "graf_2: unit descriptors",
       "passed": true,
-      "detail": "2.980232238769531e-07"
+      "detail": "3.5762786865234375e-07"
     },
     {
       "name": "graf_2: paired frames",
@@ -898,7 +898,7 @@
     {
       "name": "graf_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00046840109780503953"
+      "detail": "0.0004689136686771391"
     },
     {
       "name": "graf_3: detected descriptor cosine",
@@ -1138,7 +1138,7 @@
     {
       "name": "wall_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00019179116679065"
+      "detail": "0.0001902677409333673"
     },
     {
       "name": "wall_1: detected descriptor cosine",
@@ -1173,7 +1173,7 @@
     {
       "name": "wall_2: unit descriptors",
       "passed": true,
-      "detail": "4.172325134277344e-07"
+      "detail": "4.76837158203125e-07"
     },
     {
       "name": "wall_2: paired frames",
@@ -1198,7 +1198,7 @@
     {
       "name": "wall_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00021790700844030703"
+      "detail": "0.00021877436351304836"
     },
     {
       "name": "wall_2: detected descriptor cosine",
@@ -1293,7 +1293,7 @@
     {
       "name": "wall_4: unit descriptors",
       "passed": true,
-      "detail": "4.76837158203125e-07"
+      "detail": "4.172325134277344e-07"
     },
     {
       "name": "wall_4: paired frames",
@@ -1378,7 +1378,7 @@
     {
       "name": "wall_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0002818603760138355"
+      "detail": "0.00028029006481376063"
     },
     {
       "name": "wall_5: detected descriptor cosine",
@@ -1438,7 +1438,7 @@
     {
       "name": "wall_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.0002767475230414237"
+      "detail": "0.0002787983916831851"
     },
     {
       "name": "wall_6: detected descriptor cosine",
@@ -1858,7 +1858,7 @@
     {
       "name": "boat_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00016389879223320433"
+      "detail": "0.000163774429970182"
     },
     {
       "name": "boat_1: detected descriptor cosine",
@@ -1918,7 +1918,7 @@
     {
       "name": "boat_2: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00021611854030133604"
+      "detail": "0.0002137792041244812"
     },
     {
       "name": "boat_2: detected descriptor cosine",
@@ -2218,7 +2218,7 @@
     {
       "name": "leuven_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00022880468649019936"
+      "detail": "0.00022863851403442307"
     },
     {
       "name": "leuven_1: detected descriptor cosine",
@@ -2398,7 +2398,7 @@
     {
       "name": "leuven_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00016060639680808228"
+      "detail": "0.00015641723907211248"
     },
     {
       "name": "leuven_4: detected descriptor cosine",
@@ -2518,7 +2518,7 @@
     {
       "name": "leuven_6: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00012789485613281347"
+      "detail": "0.0001276116641863136"
     },
     {
       "name": "leuven_6: detected descriptor cosine",
@@ -2578,7 +2578,7 @@
     {
       "name": "ubc_1: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00018874537695769998"
+      "detail": "0.00018112742012276782"
     },
     {
       "name": "ubc_1: detected descriptor cosine",
@@ -2613,7 +2613,7 @@
     {
       "name": "ubc_2: unit descriptors",
       "passed": true,
-      "detail": "4.172325134277344e-07"
+      "detail": "3.5762786865234375e-07"
     },
     {
       "name": "ubc_2: paired frames",
@@ -2698,7 +2698,7 @@
     {
       "name": "ubc_3: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00013376850310164586"
+      "detail": "0.00013300945207081786"
     },
     {
       "name": "ubc_3: detected descriptor cosine",
@@ -2758,7 +2758,7 @@
     {
       "name": "ubc_4: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00011988769546525559"
+      "detail": "0.00011814382599402333"
     },
     {
       "name": "ubc_4: detected descriptor cosine",
@@ -2818,7 +2818,7 @@
     {
       "name": "ubc_5: angle_error_deg p95",
       "passed": true,
-      "detail": "0.00015444017137489146"
+      "detail": "0.00015053628794291547"
     },
     {
       "name": "ubc_5: detected descriptor cosine",
@@ -2888,7 +2888,7 @@
     {
       "name": "ubc_6: fixed-frame descriptor cosine",
       "passed": true,
-      "detail": "0.99997878074646"
+      "detail": "0.9999788403511047"
     },
     {
       "name": "ubc_6: cross-library retrieval count",
@@ -3867,7 +3867,7 @@
   "dataset_manifest_sha256": "64588c8fb619acdc37b3e20fa68323305ae7ece94fe7278075c170835e10193d",
   "opencv": "5.0.0",
   "numpy": "2.5.4",
-  "julia": "julia version 1.13.2",
+  "julia": "julia version 1.13.4",
   "configuration": {
     "max_side": 0,
     "octave_layers": 3,
@@ -4057,10 +4057,10 @@
       "native_count": 3224,
       "opencv_count": 3225,
       "native_sift": {
-        "seconds": 0.337024049,
-        "bytes": 125204168
+        "seconds": 0.255126708,
+        "bytes": 122396936
       },
-      "opencv_seconds": 0.23507445100000268,
+      "opencv_seconds": 0.2386182379999866,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3223,
       "native_coverage": 0.9996898263027295,
@@ -4080,9 +4080,9 @@
         "max": 0.00014303025152684334
       },
       "angle_error_deg": {
-        "min": 2.0225274441613763e-09,
+        "min": 1.2904986120069687e-08,
         "p05": 1.1636450026915786e-06,
-        "median": 1.3924326135597484e-05,
+        "median": 1.3925001074745327e-05,
         "p95": 0.00028886884968292755,
         "max": 1.0075189034644911
       },
@@ -4116,10 +4116,10 @@
       "native_count": 1828,
       "opencv_count": 1828,
       "native_sift": {
-        "seconds": 0.268359131,
-        "bytes": 124073784
+        "seconds": 0.172507099,
+        "bytes": 121245456
       },
-      "opencv_seconds": 0.1792891730000008,
+      "opencv_seconds": 0.16847389099999077,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1828,
       "native_coverage": 1.0,
@@ -4141,7 +4141,7 @@
       "angle_error_deg": {
         "min": 1.6700710965803151e-09,
         "p05": 1.3168963812855676e-06,
-        "median": 1.6047691017657446e-05,
+        "median": 1.5923993457485808e-05,
         "p95": 0.0009452089829011774,
         "max": 1.078521950728976
       },
@@ -4175,10 +4175,10 @@
       "native_count": 1249,
       "opencv_count": 1249,
       "native_sift": {
-        "seconds": 0.259551198,
-        "bytes": 123329864
+        "seconds": 0.155424307,
+        "bytes": 120511488
       },
-      "opencv_seconds": 0.1531197590000204,
+      "opencv_seconds": 0.1464726330000019,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1248,
       "native_coverage": 0.9991993594875901,
@@ -4199,15 +4199,15 @@
       },
       "angle_error_deg": {
         "min": 1.1546482160085537e-08,
-        "p05": 1.2201263906524837e-06,
-        "median": 1.3705848529362546e-05,
+        "p05": 1.118027848828257e-06,
+        "median": 1.3671776697392962e-05,
         "p95": 0.0012992734311005312,
         "max": 0.5704088523155275
       },
       "detected_descriptor_cosine": {
         "min": 0.9997906684875488,
         "p05": 0.9999785423278809,
-        "median": 0.9999824166297913,
+        "median": 0.999982476234436,
         "p95": 0.9999871850013733,
         "max": 0.9999909996986389
       },
@@ -4234,10 +4234,10 @@
       "native_count": 726,
       "opencv_count": 726,
       "native_sift": {
-        "seconds": 0.209907448,
-        "bytes": 123061648
+        "seconds": 0.10967449,
+        "bytes": 120243272
       },
-      "opencv_seconds": 0.1312543880000021,
+      "opencv_seconds": 0.1259004149999896,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 726,
       "native_coverage": 1.0,
@@ -4258,7 +4258,7 @@
       },
       "angle_error_deg": {
         "min": 2.9355222043598224e-08,
-        "p05": 1.0273210322788686e-06,
+        "p05": 1.0358708975958291e-06,
         "median": 1.4188154431368974e-05,
         "p95": 0.0004643123614764248,
         "max": 0.4903084663265832
@@ -4293,10 +4293,10 @@
       "native_count": 517,
       "opencv_count": 517,
       "native_sift": {
-        "seconds": 0.224186577,
-        "bytes": 122709744
+        "seconds": 0.149970119,
+        "bytes": 119891368
       },
-      "opencv_seconds": 0.12362383399999999,
+      "opencv_seconds": 0.12126745199998368,
       "descriptor_max_norm_error": 2.384185791015625e-07,
       "paired_count": 517,
       "native_coverage": 1.0,
@@ -4317,8 +4317,8 @@
       },
       "angle_error_deg": {
         "min": 8.735278932671017e-08,
-        "p05": 1.2961324073920012e-06,
-        "median": 1.2781545306994157e-05,
+        "p05": 1.1968400193465766e-06,
+        "median": 1.2814248075562213e-05,
         "p95": 0.0014969716365163827,
         "max": 0.8026960593739332
       },
@@ -4352,10 +4352,10 @@
       "native_count": 355,
       "opencv_count": 355,
       "native_sift": {
-        "seconds": 0.19661977,
-        "bytes": 122637376
+        "seconds": 0.095759436,
+        "bytes": 119819000
       },
-      "opencv_seconds": 0.11298964200000228,
+      "opencv_seconds": 0.11255920299998934,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 355,
       "native_coverage": 1.0,
@@ -4378,8 +4378,8 @@
         "min": 1.494624575908301e-07,
         "p05": 1.6624546502734955e-06,
         "median": 1.3583160884357806e-05,
-        "p95": 0.001091580477155701,
-        "max": 0.5921556327236822
+        "p95": 0.0010961581138771578,
+        "max": 0.5921708915127791
       },
       "detected_descriptor_cosine": {
         "min": 0.9998480081558228,
@@ -4411,10 +4411,10 @@
       "native_count": 12477,
       "opencv_count": 12477,
       "native_sift": {
-        "seconds": 0.607623405,
-        "bytes": 133001208
+        "seconds": 0.420646721,
+        "bytes": 130182832
       },
-      "opencv_seconds": 0.4904602260000104,
+      "opencv_seconds": 0.41676040300001205,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 12475,
       "native_coverage": 0.9998397050573055,
@@ -4435,9 +4435,9 @@
       },
       "angle_error_deg": {
         "min": 1.1493506841311082e-09,
-        "p05": 1.1244111075739855e-06,
-        "median": 1.2621345474909768e-05,
-        "p95": 0.0003089692915007362,
+        "p05": 1.1222178632211856e-06,
+        "median": 1.2580351789064696e-05,
+        "p95": 0.00031119453162042156,
         "max": 3.628037339674998
       },
       "detected_descriptor_cosine": {
@@ -4470,10 +4470,10 @@
       "native_count": 10728,
       "opencv_count": 10732,
       "native_sift": {
-        "seconds": 0.59538815,
-        "bytes": 131934456
+        "seconds": 0.359957199,
+        "bytes": 129116080
       },
-      "opencv_seconds": 0.4393277999999725,
+      "opencv_seconds": 0.3814408510000078,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10728,
       "native_coverage": 1.0,
@@ -4494,9 +4494,9 @@
       },
       "angle_error_deg": {
         "min": 2.2856229274120383e-09,
-        "p05": 1.0744633308119332e-06,
-        "median": 1.2131686232257547e-05,
-        "p95": 0.0002769390007752066,
+        "p05": 1.067410139111429e-06,
+        "median": 1.2184839483983102e-05,
+        "p95": 0.00027786123785963673,
         "max": 4.04422871829431
       },
       "detected_descriptor_cosine": {
@@ -4529,10 +4529,10 @@
       "native_count": 15232,
       "opencv_count": 15236,
       "native_sift": {
-        "seconds": 0.67581241,
-        "bytes": 136071200
+        "seconds": 0.484043799,
+        "bytes": 133252824
       },
-      "opencv_seconds": 0.5557623530000058,
+      "opencv_seconds": 0.4673044710000056,
       "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 15230,
       "native_coverage": 0.9998686974789915,
@@ -4554,15 +4554,15 @@
       "angle_error_deg": {
         "min": 8.079881112789918e-10,
         "p05": 1.0843965898375931e-06,
-        "median": 1.298917924459808e-05,
-        "p95": 0.0003161473454525481,
+        "median": 1.2941356055463252e-05,
+        "p95": 0.00031501189958989056,
         "max": 2.1182638017735593
       },
       "detected_descriptor_cosine": {
         "min": 0.9972462058067322,
         "p05": 0.9999775290489197,
         "median": 0.9999809265136719,
-        "p95": 0.999984622001648,
+        "p95": 0.9999846816062927,
         "max": 0.9999936819076538
       },
       "fixed_frame_descriptor_cosine": {
@@ -4588,10 +4588,10 @@
       "native_count": 10269,
       "opencv_count": 10267,
       "native_sift": {
-        "seconds": 0.580886092,
-        "bytes": 131664248
+        "seconds": 0.382603753,
+        "bytes": 128845872
       },
-      "opencv_seconds": 0.45807422999999403,
+      "opencv_seconds": 0.3885156679999966,
       "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 10261,
       "native_coverage": 0.999220956276171,
@@ -4612,9 +4612,9 @@
       },
       "angle_error_deg": {
         "min": 1.3333394113444095e-09,
-        "p05": 1.2001229217332457e-06,
+        "p05": 1.2012436474252436e-06,
         "median": 1.4734778998643547e-05,
-        "p95": 0.000669996572459125,
+        "p95": 0.0006738605559776548,
         "max": 4.216647069974941
       },
       "detected_descriptor_cosine": {
@@ -4647,10 +4647,10 @@
       "native_count": 5109,
       "opencv_count": 5111,
       "native_sift": {
-        "seconds": 0.351504006,
-        "bytes": 126863400
+        "seconds": 0.234159627,
+        "bytes": 124045024
       },
-      "opencv_seconds": 0.27717316199999686,
+      "opencv_seconds": 0.2451425269999845,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 5107,
       "native_coverage": 0.999608533959679,
@@ -4671,8 +4671,8 @@
       },
       "angle_error_deg": {
         "min": 3.928621142543736e-09,
-        "p05": 1.3215279864349146e-06,
-        "median": 1.548370031648883e-05,
+        "p05": 1.3357552105582685e-06,
+        "median": 1.5433817209309008e-05,
         "p95": 0.0007532116984629398,
         "max": 3.0001740328931366
       },
@@ -4686,7 +4686,7 @@
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999736547470093,
         "p05": 0.9999780654907227,
-        "median": 0.9999814629554749,
+        "median": 0.9999814033508301,
         "p95": 0.9999865889549255,
         "max": 0.9999935626983643
       },
@@ -4706,10 +4706,10 @@
       "native_count": 3008,
       "opencv_count": 3009,
       "native_sift": {
-        "seconds": 0.320740827,
-        "bytes": 124778776
+        "seconds": 0.177918285,
+        "bytes": 121960400
       },
-      "opencv_seconds": 0.22640419300000758,
+      "opencv_seconds": 0.19035952600000883,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3008,
       "native_coverage": 1.0,
@@ -4730,13 +4730,13 @@
       },
       "angle_error_deg": {
         "min": 1.3373596324617794e-10,
-        "p05": 1.2144544069835018e-06,
-        "median": 1.52947358277541e-05,
+        "p05": 1.2122206703529413e-06,
+        "median": 1.5287989553219247e-05,
         "p95": 0.00037204290074917756,
         "max": 3.5276442282825378
       },
       "detected_descriptor_cosine": {
-        "min": 0.9934515357017517,
+        "min": 0.9934514760971069,
         "p05": 0.9999778866767883,
         "median": 0.9999816417694092,
         "p95": 0.9999878406524658,
@@ -4765,10 +4765,10 @@
       "native_count": 2731,
       "opencv_count": 2731,
       "native_sift": {
-        "seconds": 0.221508102,
-        "bytes": 91788664
+        "seconds": 0.129875693,
+        "bytes": 89724336
       },
-      "opencv_seconds": 0.1584183150000058,
+      "opencv_seconds": 0.1403630000000078,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2730,
       "native_coverage": 0.9996338337605273,
@@ -4790,7 +4790,7 @@
       "angle_error_deg": {
         "min": 2.155652740908713e-10,
         "p05": 1.1397728101077802e-06,
-        "median": 1.2890728227765874e-05,
+        "median": 1.2870059723946068e-05,
         "p95": 0.0005308422394184007,
         "max": 0.6944479720506218
       },
@@ -4804,7 +4804,7 @@
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999752044677734,
         "p05": 0.9999792575836182,
-        "median": 0.9999836683273315,
+        "median": 0.9999836087226868,
         "p95": 0.9999884963035583,
         "max": 0.9999933242797852
       },
@@ -4824,11 +4824,11 @@
       "native_count": 3105,
       "opencv_count": 3106,
       "native_sift": {
-        "seconds": 0.26208309,
-        "bytes": 92279136
+        "seconds": 0.172617076,
+        "bytes": 90214808
       },
-      "opencv_seconds": 0.17820242100000883,
-      "descriptor_max_norm_error": 2.980232238769531e-07,
+      "opencv_seconds": 0.15057751899999516,
+      "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3104,
       "native_coverage": 0.9996779388083736,
       "opencv_coverage": 0.9993560849967804,
@@ -4848,8 +4848,8 @@
       },
       "angle_error_deg": {
         "min": 3.4307752793636145e-09,
-        "p05": 1.097181214862963e-06,
-        "median": 1.3632932926568154e-05,
+        "p05": 1.0760839888109823e-06,
+        "median": 1.364493341382569e-05,
         "p95": 0.0029308053670826914,
         "max": 1.5362153972664205
       },
@@ -4883,10 +4883,10 @@
       "native_count": 3476,
       "opencv_count": 3475,
       "native_sift": {
-        "seconds": 0.272655814,
-        "bytes": 92575968
+        "seconds": 0.144760687,
+        "bytes": 90511640
       },
-      "opencv_seconds": 0.18822940300000823,
+      "opencv_seconds": 0.16238217599999416,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3475,
       "native_coverage": 0.9997123130034522,
@@ -4907,9 +4907,9 @@
       },
       "angle_error_deg": {
         "min": 5.328192424574942e-09,
-        "p05": 9.976351903039105e-07,
-        "median": 1.2988904622784665e-05,
-        "p95": 0.00046840109780503953,
+        "p05": 9.930483826311408e-07,
+        "median": 1.2983776143749648e-05,
+        "p95": 0.0004689136686771391,
         "max": 1.1236356075433247
       },
       "detected_descriptor_cosine": {
@@ -4942,10 +4942,10 @@
       "native_count": 3649,
       "opencv_count": 3647,
       "native_sift": {
-        "seconds": 0.275285435,
-        "bytes": 93154280
+        "seconds": 0.182025237,
+        "bytes": 91089952
       },
-      "opencv_seconds": 0.19110429799999906,
+      "opencv_seconds": 0.1637047060000043,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3647,
       "native_coverage": 0.9994519046314059,
@@ -4966,14 +4966,14 @@
       },
       "angle_error_deg": {
         "min": 1.8213637216681717e-09,
-        "p05": 1.1852064612326437e-06,
-        "median": 1.3453291457826789e-05,
+        "p05": 1.1975836355755466e-06,
+        "median": 1.3517004049317054e-05,
         "p95": 0.0005704964312739948,
         "max": 2.668443425267552
       },
       "detected_descriptor_cosine": {
-        "min": 0.9943220615386963,
-        "p05": 0.99997878074646,
+        "min": 0.9943221211433411,
+        "p05": 0.9999787211418152,
         "median": 0.9999829530715942,
         "p95": 0.9999875426292419,
         "max": 0.9999935626983643
@@ -5001,10 +5001,10 @@
       "native_count": 3893,
       "opencv_count": 3895,
       "native_sift": {
-        "seconds": 0.282610188,
-        "bytes": 93305192
+        "seconds": 0.157247121,
+        "bytes": 91240864
       },
-      "opencv_seconds": 0.1981675359999997,
+      "opencv_seconds": 0.1774594000000036,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3892,
       "native_coverage": 0.999743128692525,
@@ -5025,8 +5025,8 @@
       },
       "angle_error_deg": {
         "min": 2.895627870879289e-09,
-        "p05": 1.2348128168996379e-06,
-        "median": 1.3270643423467257e-05,
+        "p05": 1.2209898489096294e-06,
+        "median": 1.3213489555563385e-05,
         "p95": 0.00048083166385729946,
         "max": 1.3482077588245491
       },
@@ -5060,10 +5060,10 @@
       "native_count": 4567,
       "opencv_count": 4570,
       "native_sift": {
-        "seconds": 0.306839121,
-        "bytes": 93717800
+        "seconds": 0.184510126,
+        "bytes": 91653472
       },
-      "opencv_seconds": 0.21982638600002247,
+      "opencv_seconds": 0.18712179199999923,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4566,
       "native_coverage": 0.9997810378804467,
@@ -5084,8 +5084,8 @@
       },
       "angle_error_deg": {
         "min": 4.783452463171323e-09,
-        "p05": 1.1411611629373389e-06,
-        "median": 1.3203245790434173e-05,
+        "p05": 1.1323664330765619e-06,
+        "median": 1.325265308663365e-05,
         "p95": 0.001787497063795201,
         "max": 1.3519290364467766
       },
@@ -5119,10 +5119,10 @@
       "native_count": 9173,
       "opencv_count": 9175,
       "native_sift": {
-        "seconds": 0.508642258,
-        "bytes": 131002488
+        "seconds": 0.366166162,
+        "bytes": 128184112
       },
-      "opencv_seconds": 0.3952904190000197,
+      "opencv_seconds": 0.3449662989999922,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 9173,
       "native_coverage": 1.0,
@@ -5143,10 +5143,10 @@
       },
       "angle_error_deg": {
         "min": 5.104154152812652e-11,
-        "p05": 1.0310811679899384e-06,
-        "median": 1.163178153242102e-05,
-        "p95": 0.00019179116679065,
-        "max": 3.79459474103165
+        "p05": 1.016699172986897e-06,
+        "median": 1.1621673144421268e-05,
+        "p95": 0.0001902677409333673,
+        "max": 3.7946252586097677
       },
       "detected_descriptor_cosine": {
         "min": 0.9890539646148682,
@@ -5178,11 +5178,11 @@
       "native_count": 10394,
       "opencv_count": 10397,
       "native_sift": {
-        "seconds": 0.49862517,
-        "bytes": 114009912
+        "seconds": 0.334305432,
+        "bytes": 111598704
       },
-      "opencv_seconds": 0.381443011999977,
-      "descriptor_max_norm_error": 4.172325134277344e-07,
+      "opencv_seconds": 0.32144886099999326,
+      "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 10391,
       "native_coverage": 0.9997113719453531,
       "opencv_coverage": 0.9994229104549389,
@@ -5202,9 +5202,9 @@
       },
       "angle_error_deg": {
         "min": 2.9212758638306108e-09,
-        "p05": 1.1434374350339875e-06,
-        "median": 1.3292623626204351e-05,
-        "p95": 0.00021790700844030703,
+        "p05": 1.1379445025991314e-06,
+        "median": 1.3274532173176312e-05,
+        "p95": 0.00021877436351304836,
         "max": 1.7831689924832324
       },
       "detected_descriptor_cosine": {
@@ -5237,10 +5237,10 @@
       "native_count": 10231,
       "opencv_count": 10233,
       "native_sift": {
-        "seconds": 0.495242244,
-        "bytes": 113914488
+        "seconds": 0.349027361,
+        "bytes": 111503280
       },
-      "opencv_seconds": 0.3758151170000019,
+      "opencv_seconds": 0.31941634700001487,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 10231,
       "native_coverage": 1.0,
@@ -5261,8 +5261,8 @@
       },
       "angle_error_deg": {
         "min": 2.9011747582437615e-09,
-        "p05": 1.1478311550487108e-06,
-        "median": 1.352445972749028e-05,
+        "p05": 1.1526029921261855e-06,
+        "median": 1.3509274970663411e-05,
         "p95": 0.00024945172643851306,
         "max": 2.616755039948513
       },
@@ -5296,11 +5296,11 @@
       "native_count": 10030,
       "opencv_count": 10032,
       "native_sift": {
-        "seconds": 0.46516378,
-        "bytes": 113784696
+        "seconds": 0.341793462,
+        "bytes": 111373488
       },
-      "opencv_seconds": 0.3691096980000168,
-      "descriptor_max_norm_error": 4.76837158203125e-07,
+      "opencv_seconds": 0.3138404190000017,
+      "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 10030,
       "native_coverage": 1.0,
       "opencv_coverage": 0.9998006379585327,
@@ -5320,10 +5320,10 @@
       },
       "angle_error_deg": {
         "min": 2.4291295546396723e-09,
-        "p05": 1.134477448640849e-06,
-        "median": 1.2952505235454748e-05,
+        "p05": 1.1424975913033897e-06,
+        "median": 1.3002036789564523e-05,
         "p95": 0.0002838065037712766,
-        "max": 1.8930985365707398
+        "max": 1.8931137953597859
       },
       "detected_descriptor_cosine": {
         "min": 0.997397780418396,
@@ -5355,10 +5355,10 @@
       "native_count": 10405,
       "opencv_count": 10400,
       "native_sift": {
-        "seconds": 0.502540477,
-        "bytes": 114015544
+        "seconds": 0.338740858,
+        "bytes": 111604336
       },
-      "opencv_seconds": 0.3803863430000263,
+      "opencv_seconds": 0.32642986100000826,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10399,
       "native_coverage": 0.9994233541566555,
@@ -5379,9 +5379,9 @@
       },
       "angle_error_deg": {
         "min": 2.335952024691517e-09,
-        "p05": 1.0935375803254315e-06,
-        "median": 1.3411872748098524e-05,
-        "p95": 0.0002818603760138355,
+        "p05": 1.1318437916090851e-06,
+        "median": 1.3479121912839078e-05,
+        "p95": 0.00028029006481376063,
         "max": 1.9394544765807105
       },
       "detected_descriptor_cosine": {
@@ -5414,10 +5414,10 @@
       "native_count": 10120,
       "opencv_count": 10114,
       "native_sift": {
-        "seconds": 0.489877084,
-        "bytes": 113836408
+        "seconds": 0.332592624,
+        "bytes": 111425200
       },
-      "opencv_seconds": 0.3730666570000096,
+      "opencv_seconds": 0.32064260399999966,
       "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 10111,
       "native_coverage": 0.9991106719367588,
@@ -5438,13 +5438,13 @@
       },
       "angle_error_deg": {
         "min": 3.503444592725693e-10,
-        "p05": 1.117820331629732e-06,
-        "median": 1.3504482459980507e-05,
-        "p95": 0.0002767475230414237,
+        "p05": 1.1059164187345435e-06,
+        "median": 1.3531284052837014e-05,
+        "p95": 0.0002787983916831851,
         "max": 3.770250411490792
       },
       "detected_descriptor_cosine": {
-        "min": 0.9953842759132385,
+        "min": 0.9953842163085938,
         "p05": 0.9999772906303406,
         "median": 0.999980628490448,
         "p95": 0.9999837875366211,
@@ -5473,10 +5473,10 @@
       "native_count": 3757,
       "opencv_count": 3758,
       "native_sift": {
-        "seconds": 0.24489414,
-        "bytes": 72185992
+        "seconds": 0.170909325,
+        "bytes": 70607040
       },
-      "opencv_seconds": 0.17197257700001956,
+      "opencv_seconds": 0.13798940899999934,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3757,
       "native_coverage": 1.0,
@@ -5498,15 +5498,15 @@
       "angle_error_deg": {
         "min": 2.9256777515097563e-09,
         "p05": 1.3215338946332908e-06,
-        "median": 1.56573674058721e-05,
+        "median": 1.535124593866822e-05,
         "p95": 0.0009227473676569964,
-        "max": 3.709465272914766
+        "max": 3.709434755336674
       },
       "detected_descriptor_cosine": {
         "min": 0.9931191205978394,
         "p05": 0.999977707862854,
         "median": 0.9999812841415405,
-        "p95": 0.999984622001648,
+        "p95": 0.9999845623970032,
         "max": 0.9999890327453613
       },
       "fixed_frame_descriptor_cosine": {
@@ -5532,10 +5532,10 @@
       "native_count": 3123,
       "opencv_count": 3121,
       "native_sift": {
-        "seconds": 0.227071064,
-        "bytes": 71254208
+        "seconds": 0.133877086,
+        "bytes": 69675256
       },
-      "opencv_seconds": 0.152760169000004,
+      "opencv_seconds": 0.12208632200000125,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3121,
       "native_coverage": 0.9993595901376882,
@@ -5557,7 +5557,7 @@
       "angle_error_deg": {
         "min": 2.6433717179830544e-09,
         "p05": 1.4153548228046248e-06,
-        "median": 1.7806471715469364e-05,
+        "median": 1.7960887797921042e-05,
         "p95": 0.0014934498338129258,
         "max": 0.868505560432985
       },
@@ -5566,7 +5566,7 @@
         "p05": 0.9999775886535645,
         "median": 0.999981164932251,
         "p95": 0.9999845027923584,
-        "max": 0.9999895691871643
+        "max": 0.9999896287918091
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.999972939491272,
@@ -5591,10 +5591,10 @@
       "native_count": 4157,
       "opencv_count": 4158,
       "native_sift": {
-        "seconds": 0.227365588,
-        "bytes": 72424552
+        "seconds": 0.153537007,
+        "bytes": 70845600
       },
-      "opencv_seconds": 0.18038004100000649,
+      "opencv_seconds": 0.14581893900000864,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4155,
       "native_coverage": 0.9995188838104402,
@@ -5615,8 +5615,8 @@
       },
       "angle_error_deg": {
         "min": 5.804232404858949e-09,
-        "p05": 1.3162711554796166e-06,
-        "median": 1.6414110827234348e-05,
+        "p05": 1.3501239439205102e-06,
+        "median": 1.6525632727918814e-05,
         "p95": 0.000786617235106107,
         "max": 3.086376686366786
       },
@@ -5650,10 +5650,10 @@
       "native_count": 4589,
       "opencv_count": 4589,
       "native_sift": {
-        "seconds": 0.269309855,
-        "bytes": 72695912
+        "seconds": 0.190216676,
+        "bytes": 71116960
       },
-      "opencv_seconds": 0.1952617919999966,
+      "opencv_seconds": 0.1628431809999995,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4587,
       "native_coverage": 0.9995641752015689,
@@ -5674,13 +5674,13 @@
       },
       "angle_error_deg": {
         "min": 1.9844116768587173e-09,
-        "p05": 1.1794818088503588e-06,
-        "median": 1.442270775685259e-05,
+        "p05": 1.1861386436431246e-06,
+        "median": 1.4487618450569142e-05,
         "p95": 0.0005393893242804681,
         "max": 0.9914582151201529
       },
       "detected_descriptor_cosine": {
-        "min": 0.9992756843566895,
+        "min": 0.9992756247520447,
         "p05": 0.9999775290489197,
         "median": 0.9999809265136719,
         "p95": 0.9999843239784241,
@@ -5709,10 +5709,10 @@
       "native_count": 4202,
       "opencv_count": 4204,
       "native_sift": {
-        "seconds": 0.234612373,
-        "bytes": 72458856
+        "seconds": 0.157815958,
+        "bytes": 70879904
       },
-      "opencv_seconds": 0.18551168400000506,
+      "opencv_seconds": 0.1563143750000222,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4201,
       "native_coverage": 0.9997620180866255,
@@ -5733,8 +5733,8 @@
       },
       "angle_error_deg": {
         "min": 7.48168238830026e-10,
-        "p05": 1.2294647854471818e-06,
-        "median": 1.4220136524412868e-05,
+        "p05": 1.212807686247171e-06,
+        "median": 1.4169637763624461e-05,
         "p95": 0.0004800784456482523,
         "max": 1.778606220125554
       },
@@ -5768,10 +5768,10 @@
       "native_count": 4344,
       "opencv_count": 4346,
       "native_sift": {
-        "seconds": 0.272598729,
-        "bytes": 72543912
+        "seconds": 0.159931091,
+        "bytes": 70964960
       },
-      "opencv_seconds": 0.19146601700001042,
+      "opencv_seconds": 0.1647459040000001,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4343,
       "native_coverage": 0.9997697974217311,
@@ -5792,8 +5792,8 @@
       },
       "angle_error_deg": {
         "min": 1.508091807762741e-09,
-        "p05": 1.2172423896172987e-06,
-        "median": 1.3113148335083984e-05,
+        "p05": 1.1751714270016208e-06,
+        "median": 1.3133163387583371e-05,
         "p95": 0.0003633569602473341,
         "max": 1.9175716104873406
       },
@@ -5827,10 +5827,10 @@
       "native_count": 8356,
       "opencv_count": 8359,
       "native_sift": {
-        "seconds": 0.43872655,
-        "bytes": 109204728
+        "seconds": 0.261636494,
+        "bytes": 106875120
       },
-      "opencv_seconds": 0.3128084410000156,
+      "opencv_seconds": 0.27604440100000716,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 8353,
       "native_coverage": 0.9996409765438009,
@@ -5851,9 +5851,9 @@
       },
       "angle_error_deg": {
         "min": 3.693056540615822e-09,
-        "p05": 1.0251710918141679e-06,
-        "median": 1.1410385818154715e-05,
-        "p95": 0.00016389879223320433,
+        "p05": 1.0313082341497575e-06,
+        "median": 1.139544525159407e-05,
+        "p95": 0.000163774429970182,
         "max": 2.5889278340729835
       },
       "detected_descriptor_cosine": {
@@ -5886,10 +5886,10 @@
       "native_count": 7949,
       "opencv_count": 7949,
       "native_sift": {
-        "seconds": 0.394013273,
-        "bytes": 108953080
+        "seconds": 0.280058872,
+        "bytes": 106623472
       },
-      "opencv_seconds": 0.3001502650000134,
+      "opencv_seconds": 0.25697421899999995,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 7948,
       "native_coverage": 0.9998741980123286,
@@ -5910,14 +5910,14 @@
       },
       "angle_error_deg": {
         "min": 1.679485538437447e-09,
-        "p05": 9.881606664966238e-07,
-        "median": 1.1159754318034209e-05,
-        "p95": 0.00021611854030133604,
+        "p05": 9.783710565870411e-07,
+        "median": 1.1130749007894446e-05,
+        "p95": 0.0002137792041244812,
         "max": 4.685474176961106
       },
       "detected_descriptor_cosine": {
         "min": 0.9930354952812195,
-        "p05": 0.9999778270721436,
+        "p05": 0.9999777674674988,
         "median": 0.999981164932251,
         "p95": 0.9999849200248718,
         "max": 0.9999915957450867
@@ -5945,10 +5945,10 @@
       "native_count": 6145,
       "opencv_count": 6145,
       "native_sift": {
-        "seconds": 0.368094755,
-        "bytes": 106199464
+        "seconds": 0.215156855,
+        "bytes": 103869856
       },
-      "opencv_seconds": 0.2648801160000005,
+      "opencv_seconds": 0.2191459459999976,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 6143,
       "native_coverage": 0.9996745321399512,
@@ -5969,8 +5969,8 @@
       },
       "angle_error_deg": {
         "min": 7.194414689470475e-10,
-        "p05": 9.606873761136035e-07,
-        "median": 1.1786261073299703e-05,
+        "p05": 9.882138072042416e-07,
+        "median": 1.1808238273593179e-05,
         "p95": 0.0008962498796408123,
         "max": 3.8738739443236665
       },
@@ -6004,10 +6004,10 @@
       "native_count": 4915,
       "opencv_count": 4912,
       "native_sift": {
-        "seconds": 0.30873001,
-        "bytes": 105438568
+        "seconds": 0.197382401,
+        "bytes": 103108960
       },
-      "opencv_seconds": 0.21356988100001217,
+      "opencv_seconds": 0.18782957100000885,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 4912,
       "native_coverage": 0.9993896236012207,
@@ -6028,8 +6028,8 @@
       },
       "angle_error_deg": {
         "min": 1.5046568087067605e-09,
-        "p05": 1.0121726546364474e-06,
-        "median": 1.202745682184671e-05,
+        "p05": 9.713211777522931e-07,
+        "median": 1.1970561762038382e-05,
         "p95": 0.0002514499874145377,
         "max": 2.7845718800309704
       },
@@ -6063,10 +6063,10 @@
       "native_count": 4672,
       "opencv_count": 4674,
       "native_sift": {
-        "seconds": 0.282131897,
-        "bytes": 105297768
+        "seconds": 0.172461682,
+        "bytes": 102968160
       },
-      "opencv_seconds": 0.20504521999998815,
+      "opencv_seconds": 0.1826320179999925,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4672,
       "native_coverage": 1.0,
@@ -6087,8 +6087,8 @@
       },
       "angle_error_deg": {
         "min": 1.2790918706973678e-10,
-        "p05": 1.0527076370686928e-06,
-        "median": 1.201308566362958e-05,
+        "p05": 1.0575673388775756e-06,
+        "median": 1.2042004971570757e-05,
         "p95": 0.0001630163317292137,
         "max": 0.8093814575152042
       },
@@ -6122,10 +6122,10 @@
       "native_count": 3897,
       "opencv_count": 3896,
       "native_sift": {
-        "seconds": 0.283720856,
-        "bytes": 104820200
+        "seconds": 0.157946824,
+        "bytes": 102490592
       },
-      "opencv_seconds": 0.18451096999999095,
+      "opencv_seconds": 0.16496257299999684,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3896,
       "native_coverage": 0.9997433923530922,
@@ -6146,8 +6146,8 @@
       },
       "angle_error_deg": {
         "min": 2.25078949254065e-09,
-        "p05": 9.559435520895414e-07,
-        "median": 1.1803508776059625e-05,
+        "p05": 9.49780877533191e-07,
+        "median": 1.171189867434737e-05,
         "p95": 0.0004719594151960271,
         "max": 3.633253971472989
       },
@@ -6181,10 +6181,10 @@
       "native_count": 2311,
       "opencv_count": 2314,
       "native_sift": {
-        "seconds": 0.241776214,
-        "bytes": 96413272
+        "seconds": 0.145071575,
+        "bytes": 94238224
       },
-      "opencv_seconds": 0.14029731499999798,
+      "opencv_seconds": 0.12899580699999547,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2311,
       "native_coverage": 1.0,
@@ -6205,9 +6205,9 @@
       },
       "angle_error_deg": {
         "min": 3.1580109098813034e-09,
-        "p05": 1.1954822252863971e-06,
-        "median": 1.1863393798990685e-05,
-        "p95": 0.00022880468649019936,
+        "p05": 1.1588310398034589e-06,
+        "median": 1.165396567232429e-05,
+        "p95": 0.00022863851403442307,
         "max": 1.5009729772335778
       },
       "detected_descriptor_cosine": {
@@ -6240,10 +6240,10 @@
       "native_count": 1927,
       "opencv_count": 1928,
       "native_sift": {
-        "seconds": 0.198370322,
-        "bytes": 96180120
+        "seconds": 0.108213328,
+        "bytes": 94005072
       },
-      "opencv_seconds": 0.13394836200001237,
+      "opencv_seconds": 0.11967217399998731,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1927,
       "native_coverage": 1.0,
@@ -6264,8 +6264,8 @@
       },
       "angle_error_deg": {
         "min": 7.605342354315562e-11,
-        "p05": 9.931576690344397e-07,
-        "median": 1.1171323369410315e-05,
+        "p05": 9.895207607339485e-07,
+        "median": 1.1274981768478078e-05,
         "p95": 0.00016172122341717376,
         "max": 0.9538082330972912
       },
@@ -6299,10 +6299,10 @@
       "native_count": 1697,
       "opencv_count": 1697,
       "native_sift": {
-        "seconds": 0.21341684,
-        "bytes": 96038104
+        "seconds": 0.105234785,
+        "bytes": 93863056
       },
-      "opencv_seconds": 0.1253604350000046,
+      "opencv_seconds": 0.11570988000002558,
       "descriptor_max_norm_error": 2.980232238769531e-07,
       "paired_count": 1697,
       "native_coverage": 1.0,
@@ -6324,7 +6324,7 @@
       "angle_error_deg": {
         "min": 1.255469254967202e-08,
         "p05": 8.119682065185006e-07,
-        "median": 1.0676307233008073e-05,
+        "median": 1.0600378436319555e-05,
         "p95": 0.00019318196966509055,
         "max": 1.1460980686358822
       },
@@ -6358,10 +6358,10 @@
       "native_count": 1458,
       "opencv_count": 1458,
       "native_sift": {
-        "seconds": 0.20155573,
-        "bytes": 95634576
+        "seconds": 0.126052378,
+        "bytes": 93459528
       },
-      "opencv_seconds": 0.11486657300000047,
+      "opencv_seconds": 0.10791580999998018,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1458,
       "native_coverage": 1.0,
@@ -6382,9 +6382,9 @@
       },
       "angle_error_deg": {
         "min": 1.256957754558127e-08,
-        "p05": 7.97273543906943e-07,
-        "median": 1.0568758761120504e-05,
-        "p95": 0.00016060639680808228,
+        "p05": 8.353023510279452e-07,
+        "median": 1.0613638308730983e-05,
+        "p95": 0.00015641723907211248,
         "max": 0.8507186184491762
       },
       "detected_descriptor_cosine": {
@@ -6417,10 +6417,10 @@
       "native_count": 1329,
       "opencv_count": 1328,
       "native_sift": {
-        "seconds": 0.168449457,
-        "bytes": 95430600
+        "seconds": 0.082898996,
+        "bytes": 93255552
       },
-      "opencv_seconds": 0.11085543299998335,
+      "opencv_seconds": 0.103765353,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1328,
       "native_coverage": 0.999247554552295,
@@ -6442,7 +6442,7 @@
       "angle_error_deg": {
         "min": 1.66872508583912e-08,
         "p05": 7.607937865046698e-07,
-        "median": 1.1096254302096633e-05,
+        "median": 1.1043597814845667e-05,
         "p95": 0.00018214042262737525,
         "max": 1.7086301647479725
       },
@@ -6476,10 +6476,10 @@
       "native_count": 1085,
       "opencv_count": 1085,
       "native_sift": {
-        "seconds": 0.188840512,
-        "bytes": 95281320
+        "seconds": 0.087243785,
+        "bytes": 93106272
       },
-      "opencv_seconds": 0.10260962899999981,
+      "opencv_seconds": 0.09832756800000197,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1084,
       "native_coverage": 0.9990783410138249,
@@ -6500,9 +6500,9 @@
       },
       "angle_error_deg": {
         "min": 5.216282699774839e-08,
-        "p05": 9.366671236204958e-07,
+        "p05": 9.68313618528842e-07,
         "median": 1.0630887499990496e-05,
-        "p95": 0.00012789485613281347,
+        "p95": 0.0001276116641863136,
         "max": 2.3264022675163827
       },
       "detected_descriptor_cosine": {
@@ -6535,10 +6535,10 @@
       "native_count": 5036,
       "opencv_count": 5037,
       "native_sift": {
-        "seconds": 0.292379094,
-        "bytes": 93977448
+        "seconds": 0.174682695,
+        "bytes": 91913120
       },
-      "opencv_seconds": 0.2142703279999978,
+      "opencv_seconds": 0.18714707699999167,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 5036,
       "native_coverage": 1.0,
@@ -6559,9 +6559,9 @@
       },
       "angle_error_deg": {
         "min": 2.726702250637399e-09,
-        "p05": 8.915168370177567e-07,
-        "median": 9.783005653175249e-06,
-        "p95": 0.00018874537695769998,
+        "p05": 8.82758200091505e-07,
+        "median": 9.727923624035324e-06,
+        "p95": 0.00018112742012276782,
         "max": 4.74132126152049
       },
       "detected_descriptor_cosine": {
@@ -6594,11 +6594,11 @@
       "native_count": 6071,
       "opencv_count": 6071,
       "native_sift": {
-        "seconds": 0.332793532,
-        "bytes": 94609320
+        "seconds": 0.237945675,
+        "bytes": 92544992
       },
-      "opencv_seconds": 0.2364130409999916,
-      "descriptor_max_norm_error": 4.172325134277344e-07,
+      "opencv_seconds": 0.20534548800000607,
+      "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 6070,
       "native_coverage": 0.9998352824905288,
       "opencv_coverage": 0.9998352824905288,
@@ -6619,7 +6619,7 @@
       "angle_error_deg": {
         "min": 3.6793928777042546e-09,
         "p05": 8.242716810483241e-07,
-        "median": 9.692136111815027e-06,
+        "median": 9.686054026153195e-06,
         "p95": 0.00012549362447260805,
         "max": 1.9208249555897499
       },
@@ -6653,10 +6653,10 @@
       "native_count": 7221,
       "opencv_count": 7220,
       "native_sift": {
-        "seconds": 0.334110915,
-        "bytes": 95984336
+        "seconds": 0.215356906,
+        "bytes": 93920008
       },
-      "opencv_seconds": 0.25990524600001663,
+      "opencv_seconds": 0.22173848200000634,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 7219,
       "native_coverage": 0.9997230300512394,
@@ -6677,9 +6677,9 @@
       },
       "angle_error_deg": {
         "min": 1.012663166140532e-09,
-        "p05": 8.57911626769934e-07,
-        "median": 9.501883116767739e-06,
-        "p95": 0.00013376850310164586,
+        "p05": 8.519957060068808e-07,
+        "median": 9.564111890443571e-06,
+        "p95": 0.00013300945207081786,
         "max": 2.8645663730059
       },
       "detected_descriptor_cosine": {
@@ -6712,10 +6712,10 @@
       "native_count": 6960,
       "opencv_count": 6958,
       "native_sift": {
-        "seconds": 0.355160252,
-        "bytes": 95828496
+        "seconds": 0.224509972,
+        "bytes": 93764168
       },
-      "opencv_seconds": 0.2631076929999949,
+      "opencv_seconds": 0.23441341000000193,
       "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 6957,
       "native_coverage": 0.9995689655172414,
@@ -6736,9 +6736,9 @@
       },
       "angle_error_deg": {
         "min": 1.3734678336494986e-08,
-        "p05": 8.571684838075007e-07,
-        "median": 9.693911471993783e-06,
-        "p95": 0.00011988769546525559,
+        "p05": 8.720990557931134e-07,
+        "median": 9.777998951217878e-06,
+        "p95": 0.00011814382599402333,
         "max": 1.2392803244454083
       },
       "detected_descriptor_cosine": {
@@ -6771,10 +6771,10 @@
       "native_count": 4969,
       "opencv_count": 4971,
       "native_sift": {
-        "seconds": 0.290038189,
-        "bytes": 93940328
+        "seconds": 0.207156142,
+        "bytes": 91876000
       },
-      "opencv_seconds": 0.222398639000005,
+      "opencv_seconds": 0.19104583799997954,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4967,
       "native_coverage": 0.999597504528074,
@@ -6796,8 +6796,8 @@
       "angle_error_deg": {
         "min": 1.3297008567888154e-09,
         "p05": 9.429764700920928e-07,
-        "median": 1.0462007819680424e-05,
-        "p95": 0.00015444017137489146,
+        "median": 1.0408752077760813e-05,
+        "p95": 0.00015053628794291547,
         "max": 1.1207841605708397
       },
       "detected_descriptor_cosine": {
@@ -6830,10 +6830,10 @@
       "native_count": 2875,
       "opencv_count": 2887,
       "native_sift": {
-        "seconds": 0.239539156,
-        "bytes": 91863576
+        "seconds": 0.124113871,
+        "bytes": 89799248
       },
-      "opencv_seconds": 0.1578291110000123,
+      "opencv_seconds": 0.1404215519999923,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2874,
       "native_coverage": 0.9996521739130435,
@@ -6854,10 +6854,10 @@
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 9.769838360349492e-07,
-        "median": 1.16046038198901e-05,
+        "p05": 9.907755404446609e-07,
+        "median": 1.1663077439875716e-05,
         "p95": 0.00044707996338787335,
-        "max": 3.6102755032888076
+        "max": 3.610229726921619
       },
       "detected_descriptor_cosine": {
         "min": 0.9871070384979248,
@@ -6868,7 +6868,7 @@
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999741911888123,
-        "p05": 0.99997878074646,
+        "p05": 0.9999788403511047,
         "median": 0.9999825954437256,
         "p95": 0.9999867677688599,
         "max": 0.9999914765357971
@@ -6899,7 +6899,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.076476531,
+        "seconds": 0.060944249,
         "bytes": 775256
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -6944,7 +6944,7 @@
         "error_px": {
           "min": 0.01411768795224778,
           "p05": 0.08901321419305522,
-          "median": 0.4086947377078533,
+          "median": 0.40869473770785336,
           "p95": 12.926552111494004,
           "max": 781.4654497210511
         },
@@ -6993,7 +6993,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.033677263,
+        "seconds": 0.026763206,
         "bytes": 84656
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7087,7 +7087,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.019691642,
+        "seconds": 0.015645942,
         "bytes": 38344
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7181,7 +7181,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.014132211,
+        "seconds": 0.011187069,
         "bytes": 32712
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7193,7 +7193,7 @@
           "min": 0.10215128797299325,
           "p05": 0.28320558422798686,
           "median": 1.0731281735369416,
-          "p95": 394.1281512449997,
+          "p95": 394.12815124499974,
           "max": 823.1760039043651
         },
         "homography_found": true,
@@ -7224,7 +7224,7 @@
         "correct_within_3px": 207,
         "precision_3px": 0.8054474708171206,
         "error_px": {
-          "min": 0.10225292976910072,
+          "min": 0.1022529297691007,
           "p05": 0.2834098928217852,
           "median": 1.0741581325147362,
           "p95": 393.6728323432219,
@@ -7275,7 +7275,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.009813798,
+        "seconds": 0.007773592,
         "bytes": 28616
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7369,7 +7369,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.112303463,
+        "seconds": 0.884556856,
         "bytes": 337944
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7463,7 +7463,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.576709671,
+        "seconds": 1.257061714,
         "bytes": 405976
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7474,7 +7474,7 @@
         "error_px": {
           "min": 0.058645724223610494,
           "p05": 0.4185641330014202,
-          "median": 1.2550272384486696,
+          "median": 1.2550272384486694,
           "p95": 7.710549458582187,
           "max": 934.1825347823421
         },
@@ -7557,7 +7557,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.063376216,
+        "seconds": 0.870791485,
         "bytes": 231984
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7651,7 +7651,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.528913786,
+        "seconds": 0.422415499,
         "bytes": 109384
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7745,7 +7745,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.312024892,
+        "seconds": 0.249196944,
         "bytes": 72136
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7756,7 +7756,7 @@
         "error_px": {
           "min": 0.1099823224263662,
           "p05": 0.5966353841546077,
-          "median": 3.704498142169568,
+          "median": 3.7044981421695686,
           "p95": 626.1985850773764,
           "max": 1018.9002173370652
         },
@@ -7790,7 +7790,7 @@
         "error_px": {
           "min": 0.11003620387143968,
           "p05": 0.6000278028718591,
-          "median": 3.690916338812577,
+          "median": 3.6909163388125767,
           "p95": 625.5071133181316,
           "max": 1018.9002481293021
         },
@@ -7839,7 +7839,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.071341388,
+        "seconds": 0.056524866,
         "bytes": 126768
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7933,7 +7933,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.079826684,
+        "seconds": 0.063383441,
         "bytes": 120496
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7980,7 +7980,7 @@
           "p05": 0.24941829025186182,
           "median": 1.3180927870819323,
           "p95": 354.38635045887804,
-          "max": 663.3159061714424
+          "max": 663.3159061714425
         },
         "homography_found": true,
         "homography_accurate_3px": true,
@@ -8027,7 +8027,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.083815615,
+        "seconds": 0.066357317,
         "bytes": 81032
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8039,7 +8039,7 @@
           "min": 0.08012198814550808,
           "p05": 0.3470922050164821,
           "median": 7.430196590392386,
-          "p95": 505.24692348089786,
+          "p95": 505.2469234808978,
           "max": 732.3528729096155
         },
         "homography_found": true,
@@ -8121,7 +8121,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.089287765,
+        "seconds": 0.070819644,
         "bytes": 83208
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8215,7 +8215,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.104857531,
+        "seconds": 0.084618816,
         "bytes": 80544
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8262,7 +8262,7 @@
           "p05": 70.25808187158,
           "median": 302.9257013201467,
           "p95": 536.8522699275013,
-          "max": 677.5663357668662
+          "max": 677.5663357668664
         },
         "homography_found": true,
         "homography_accurate_3px": false,
@@ -8309,7 +8309,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.795433172,
+        "seconds": 0.631688835,
         "bytes": 561920
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8319,7 +8319,7 @@
         "precision_3px": 0.9949313621964098,
         "error_px": {
           "min": 0.03921683523384278,
-          "p05": 0.36198071257857356,
+          "p05": 0.3619807125785735,
           "median": 1.1710135747455241,
           "p95": 2.360236058155959,
           "max": 667.9416708520281
@@ -8352,8 +8352,8 @@
         "correct_within_3px": 4715,
         "precision_3px": 0.9951456310679612,
         "error_px": {
-          "min": 0.03918552797362694,
-          "p05": 0.3616364042656645,
+          "min": 0.039185527973626934,
+          "p05": 0.36163640426566446,
           "median": 1.1715129813927367,
           "p95": 2.3599871294765475,
           "max": 667.9416931170231
@@ -8403,7 +8403,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.783768712,
+        "seconds": 0.623458537,
         "bytes": 533248
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8497,7 +8497,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.768490773,
+        "seconds": 0.609046673,
         "bytes": 334040
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8507,7 +8507,7 @@
         "precision_3px": 0.861812778603269,
         "error_px": {
           "min": 0.04477381283636042,
-          "p05": 0.32790631809256476,
+          "p05": 0.3279063180925647,
           "median": 1.202940322386195,
           "p95": 4.8139856981743225,
           "max": 835.8429404517091
@@ -8591,7 +8591,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.799425409,
+        "seconds": 0.636722704,
         "bytes": 230384
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8685,7 +8685,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.778244454,
+        "seconds": 0.628053995,
         "bytes": 168856
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8732,7 +8732,7 @@
           "p05": 0.7677156282645545,
           "median": 154.53619192011058,
           "p95": 554.7090378814966,
-          "max": 753.5462992437682
+          "max": 753.5462992437683
         },
         "homography_found": true,
         "homography_accurate_3px": false,
@@ -8779,7 +8779,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.099745173,
+        "seconds": 0.078201486,
         "bytes": 117104
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8824,7 +8824,7 @@
         "error_px": {
           "min": 0.020715689670720596,
           "p05": 0.24157119878608593,
-          "median": 1.2049026798900766,
+          "median": 1.2049026798900768,
           "p95": 6.91794696030319,
           "max": 646.1672305105942
         },
@@ -8873,7 +8873,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.132004437,
+        "seconds": 0.103789924,
         "bytes": 131632
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8967,7 +8967,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.146028645,
+        "seconds": 0.11469559,
         "bytes": 140528
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9061,7 +9061,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.133852197,
+        "seconds": 0.105008919,
         "bytes": 96264
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9071,7 +9071,7 @@
         "precision_3px": 0.9300225733634312,
         "error_px": {
           "min": 0.010390766631516548,
-          "p05": 0.09454835946152466,
+          "p05": 0.09454835946152465,
           "median": 0.6179599566469962,
           "p95": 119.42658412712993,
           "max": 419.2563737948303
@@ -9155,7 +9155,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.138358277,
+        "seconds": 0.108671532,
         "bytes": 94280
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9249,7 +9249,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.556226435,
+        "seconds": 0.44222149,
         "bytes": 306072
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9343,7 +9343,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.431012673,
+        "seconds": 0.340607581,
         "bytes": 265048
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9437,7 +9437,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.344393418,
+        "seconds": 0.272283323,
         "bytes": 147120
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9482,7 +9482,7 @@
         "error_px": {
           "min": 0.016828866308021818,
           "p05": 0.17314251377354636,
-          "median": 0.8220952737042535,
+          "median": 0.8220952737042536,
           "p95": 269.8872133834011,
           "max": 532.9357670311731
         },
@@ -9531,7 +9531,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.328017205,
+        "seconds": 0.25881153,
         "bytes": 138992
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9625,7 +9625,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.273550754,
+        "seconds": 0.215862525,
         "bytes": 87176
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9719,7 +9719,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.037790226,
+        "seconds": 0.029611123,
         "bytes": 106224
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9813,7 +9813,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.03312005,
+        "seconds": 0.026102001,
         "bytes": 97520
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9907,7 +9907,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.028157313,
+        "seconds": 0.022349623,
         "bytes": 89648
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9920,7 +9920,7 @@
           "p05": 0.1342763101711128,
           "median": 0.4383474893830476,
           "p95": 17.468570111503123,
-          "max": 916.5294222370331
+          "max": 916.5294222370333
         },
         "homography_found": true,
         "homography_accurate_3px": true,
@@ -9950,9 +9950,9 @@
         "correct_within_3px": 577,
         "precision_3px": 0.9158730158730158,
         "error_px": {
-          "min": 0.034492397483851585,
+          "min": 0.03449239748385159,
           "p05": 0.13304353393118482,
-          "median": 0.4376739978516177,
+          "median": 0.43767399785161765,
           "p95": 10.975618892321968,
           "max": 916.529426918905
         },
@@ -10001,7 +10001,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.025674132,
+        "seconds": 0.020434409,
         "bytes": 84912
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10095,7 +10095,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.021043005,
+        "seconds": 0.016647469,
         "bytes": 44744
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10142,7 +10142,7 @@
           "p05": 0.15222233708096244,
           "median": 0.5634316874538408,
           "p95": 110.70992909718687,
-          "max": 849.823356830631
+          "max": 849.8233568306312
         },
         "homography_found": true,
         "homography_accurate_3px": true,
@@ -10189,7 +10189,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.257610357,
+        "seconds": 0.203144831,
         "bytes": 222128
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10199,7 +10199,7 @@
         "precision_3px": 0.9838175799926444,
         "error_px": {
           "min": 0.001853483207382898,
-          "p05": 0.03307586202749468,
+          "p05": 0.033075862027494685,
           "median": 0.17680716557879575,
           "p95": 0.7432861121194727,
           "max": 655.5543353970821
@@ -10283,7 +10283,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.305697307,
+        "seconds": 0.242152709,
         "bytes": 293976
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10377,7 +10377,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.294976433,
+        "seconds": 0.232983917,
         "bytes": 270040
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10386,9 +10386,9 @@
         "correct_within_3px": 1333,
         "precision_3px": 0.9514632405424697,
         "error_px": {
-          "min": 0.005816364844121996,
+          "min": 0.005816364844121997,
           "p05": 0.0853222128170899,
-          "median": 0.44066017530518437,
+          "median": 0.4406601753051843,
           "p95": 2.62871125846869,
           "max": 631.77578655346
         },
@@ -10471,7 +10471,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.210131913,
+        "seconds": 0.16650023,
         "bytes": 147760
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10565,7 +10565,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.121476445,
+        "seconds": 0.096470466,
         "bytes": 72456
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10576,8 +10576,8 @@
         "error_px": {
           "min": 0.008985966837279957,
           "p05": 0.20545549907772032,
-          "median": 1.0684258383716247,
-          "p95": 335.6307439549129,
+          "median": 1.068425838371625,
+          "p95": 335.63074395491293,
           "max": 784.0716484685857
         },
         "homography_found": true,
@@ -10652,5 +10652,5 @@
     "native_accurate_homographies_3px": 33,
     "opencv_accurate_homographies_3px": 32
   },
-  "finished_utc": "2026-10-20T14:59:36.648451+00:00"
+  "finished_utc": "2026-11-14T17:54:45.608129+00:00"
 }
