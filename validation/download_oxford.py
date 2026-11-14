@@ -4,9 +4,28 @@ import argparse
 import json
 from pathlib import Path
 import tarfile
+import time
+import urllib.error
 import urllib.request
 
 from common import sha256
+
+
+def fetch_with_retries(url: str, destination: Path, retries: int = 5):
+    headers = {"User-Agent": "SIFTFeatures.jl-validation/0.2 (+https://github.com/ashutoshramola/SIFTFeatures.jl)"}
+    for attempt in range(1, retries + 1):
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=60) as source, destination.open("wb") as sink:
+                while chunk := source.read(1024 * 1024):
+                    sink.write(chunk)
+            return
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as err:
+            if attempt == retries:
+                raise
+            wait = min(30, 3 * (2 ** (attempt - 1)))
+            print(f"Download attempt {attempt}/{retries} failed ({err}); retrying in {wait}s...", flush=True)
+            time.sleep(wait)
 
 
 def download(args):
@@ -24,9 +43,7 @@ def download(args):
         archive = cache / (name + ".tar.gz")
         if not archive.exists():
             temporary = archive.with_suffix(".partial")
-            with urllib.request.urlopen(sequence["url"], timeout=90) as source, temporary.open("wb") as sink:
-                while chunk := source.read(1024 * 1024):
-                    sink.write(chunk)
+            fetch_with_retries(sequence["url"], temporary)
             temporary.replace(archive)
         if sha256(archive) != sequence["sha256"]:
             raise ValueError(name + ": archive checksum mismatch")
