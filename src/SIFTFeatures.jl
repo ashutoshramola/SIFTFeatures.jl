@@ -690,26 +690,35 @@ end
 orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
     orientations!(Float64[], Memory{Float64}(undef, 36), Memory{Float64}(undef, 36), a, y, x, sigma)
 
-struct _DescriptorWorkspace
-    phist::Memory{Float32}
+mutable struct _DescriptorWorkspace
+    const phist::Memory{Float32}
     rb::Memory{Float32}
     cb::Memory{Float32}
     ob::Memory{Float32}
     mag::Memory{Float32}
 end
 
-_DescriptorWorkspace(cap::Int=256) = _DescriptorWorkspace(
-    Memory{Float32}(undef, 288),
-    Memory{Float32}(undef, cap),
-    Memory{Float32}(undef, cap),
-    Memory{Float32}(undef, cap),
-    Memory{Float32}(undef, cap),
-)
+function _DescriptorWorkspace(cap::Int=256)
+    c = max(0, cap)
+    return _DescriptorWorkspace(
+        Memory{Float32}(undef, 288),
+        Memory{Float32}(undef, c),
+        Memory{Float32}(undef, c),
+        Memory{Float32}(undef, c),
+        Memory{Float32}(undef, c),
+    )
+end
+
+@noinline function _grow_descriptor_workspace!(ws::_DescriptorWorkspace, cap::Int)
+    ws.rb  = Memory{Float32}(undef, cap)
+    ws.cb  = Memory{Float32}(undef, cap)
+    ws.ob  = Memory{Float32}(undef, cap)
+    ws.mag = Memory{Float32}(undef, cap)
+    return ws
+end
 
 @noinline function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
                                 a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
-    phist = ws.phist
-    fill!(phist, 0f0)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
     # choose the opposite pixel if applied directly to a one-based coordinate.
     cy, cx = round(Int, y - 1) + 1, round(Int, x - 1) + 1
@@ -726,6 +735,17 @@ _DescriptorWorkspace(cap::Int=256) = _DescriptorWorkspace(
     j_max = min(radius, w - 1 - cx)
     i_min_base = max(-radius, 2 - cy)
     i_max_base = min(radius, h - 1 - cy)
+    max_ni = i_max_base - i_min_base + 1
+    if j_min > j_max || max_ni <= 0
+        fill!(out, 0f0)
+        return out
+    end
+    min_cap = min(length(ws.rb), length(ws.cb), length(ws.ob), length(ws.mag))
+    if max_ni > min_cap
+        _grow_descriptor_workspace!(ws, max(max_ni, 2 * min_cap))
+    end
+    phist = ws.phist
+    fill!(phist, 0f0)
     rb_buf, cb_buf, ob_buf, mag_buf = ws.rb, ws.cb, ws.ob, ws.mag
 
     @inbounds for j in j_min:j_max
@@ -1022,13 +1042,21 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
     return out
 end
 
+function _max_octave_height(gp::Vector{Vector{Matrix{Float32}}})
+    max_h = 0
+    for levels in gp, lvl in levels
+        h = size(lvl, 1)
+        h > max_h && (max_h = h)
+    end
+    return max_h
+end
+
 function _build_descriptors_range!(desc::Matrix{Float32},
                                    kp::Vector{SIFTKeypoint{Float32}},
                                    gp::Vector{Vector{Matrix{Float32}}},
                                    first_octave::Int,
                                    r::UnitRange{Int})
-    max_h = isempty(gp) || isempty(gp[1]) ? 256 : max(256, size(gp[1][1], 1))
-    ws = _DescriptorWorkspace(max_h)
+    ws = _DescriptorWorkspace(max(256, _max_octave_height(gp)))
     @views for i in r
         k = kp[i]
         factor = 2.0^k.octave

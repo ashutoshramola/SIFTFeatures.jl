@@ -116,6 +116,16 @@ end
         d_ang = SF.descriptor!(out_buf, hist_buf, horizontal, center, center, sigma, ang)
         @test all(isfinite, d_ang) && abs(norm(d_ang) - 1f0) < 2f-6
     end
+    # Undersized _DescriptorWorkspace grows safely instead of writing out of bounds.
+    expected_big = SF.descriptor(horizontal, center, center, 2.7, 0.4)
+    for init_cap in (0, 8, 16)
+        small_ws = SF._DescriptorWorkspace(init_cap)
+        out_small = Vector{Float32}(undef, 128)
+        SF._descriptor!(out_small, small_ws, horizontal, center, center, 2.7, 0.4)
+        @test out_small == expected_big
+        @test length(small_ws.rb) >= 29
+        @test (@allocated SF._descriptor!(out_small, small_ws, horizontal, center, center, 2.7, 0.4)) == 0
+    end
 end
 
 @testset "Independent descriptor layout and interpolation" begin
@@ -255,6 +265,20 @@ end
     @test_throws ArgumentError SF.orientations(ramp, 33, 33, 0.0)
     @test_throws ArgumentError SF.orientations(ramp, 33, 33, -1.0)
     @test SF.descriptor(zeros(Float32,30,30),15.,15.,2.,0.) == zeros(Float32,128)
+    # Regression for #8: large-scale keypoints whose descriptor column slice exceeds
+    # 256 rows must not overflow _DescriptorWorkspace even when levels[1] is released early.
+    large_blob0 = Float32[exp(-((x - 160.3)^2 + (y - 160.7)^2) / (2 * 24.0^2)) for y in 1:320, x in 1:320]
+    kl0, dl0 = sift(large_blob0; config=SIFTConfig(sigma=12.0, first_octave=0, assumed_input_sigma=0.0), octaves=1)
+    @test !isempty(kl0)
+    @test size(dl0) == (128, length(kl0))
+    @test all(isfinite, dl0) && all(abs.(vec(sum(abs2, dl0; dims=1)) .- 1) .< 2e-6)
+    @test all(p -> hypot(p.x - 160.3, p.y - 160.7) < 0.25, kl0)
+    large_blob_m1 = Float32[exp(-((x - 100.3)^2 + (y - 100.7)^2) / (2 * 14.0^2)) for y in 1:200, x in 1:200]
+    klm, dlm = sift(large_blob_m1; config=SIFTConfig(sigma=12.0, first_octave=-1, assumed_input_sigma=0.0), octaves=1)
+    @test !isempty(klm)
+    @test size(dlm) == (128, length(klm))
+    @test all(isfinite, dlm) && all(abs.(vec(sum(abs2, dlm; dims=1)) .- 1) .< 2e-6)
+    @test all(p -> hypot(p.x - 100.3, p.y - 100.7) < 0.25, klm)
 end
 
 @testset "Detection, descriptors, and geometric consistency" begin
@@ -368,6 +392,16 @@ end
     SF._build_descriptors_range!(desc_split, kp, gp, c.first_octave, 1:mid)
     SF._build_descriptors_range!(desc_split, kp, gp, c.first_octave, (mid + 1):nkp)
     @test desc_split == desc
+
+    # Verify _build_descriptors_range! handles cleared levels[1] (as in _build_pyramid_and_detect)
+    # on a >256-pixel tall octave level with a large-scale keypoint.
+    tall_lvl = Float32[x / 320 for y in 1:320, x in 1:320]
+    empty_lvl = Matrix{Float32}(undef, 0, 0)
+    cleared_gp = [[empty_lvl, tall_lvl, empty_lvl, empty_lvl]]
+    tall_kp = [SIFTKeypoint(160.0f0, 160.0f0, 20.0f0, 0.3f0, 0.1f0, 0, 1)]
+    tall_desc = Matrix{Float32}(undef, 128, 1)
+    SF._build_descriptors_range!(tall_desc, tall_kp, cleared_gp, 0, 1:1)
+    @test tall_desc[:, 1] == SF.descriptor(tall_lvl, 160.0, 160.0, 20.0, 0.3f0)
 
     # Verify 4-aligned matcher chunking matches single-chunk execution bit-for-bit
     m_single = DescriptorMatch[]
