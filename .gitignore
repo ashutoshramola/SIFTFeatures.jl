@@ -5,6 +5,8 @@ __pycache__/
 validation-data/
 validation-work/
 benchmark-work/
+hpatches-data/
+extended-eval-work/
 # Local review history and diagnostic plots retained outside the publication.
 audit/
 validation/REAL_WORLD_REPORT.md
