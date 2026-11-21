@@ -195,7 +195,7 @@ end
     k0 = @inbounds k[1]
     y_lo = r + 1
     y_hi = h - r
-    @inbounds for x in cols
+    GC.@preserve tmp src @inbounds for x in cols
         if y_lo <= y_hi
             for y in 1:r
                 acc = k0 * src[y, x]
@@ -260,7 +260,7 @@ end
                                k::Memory{Float32}, r::Int, cols::UnitRange{Int})
     h, w = size(tmp)
     k0 = @inbounds k[1]
-    @inbounds for x in cols
+    GC.@preserve dst tmp @inbounds for x in cols
         y = 1
         if r < x <= w - r
             while y + 31 <= h

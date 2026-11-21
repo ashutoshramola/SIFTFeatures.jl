@@ -175,6 +175,13 @@ end
     # Multi-period reflect-101 when kernel radius exceeds tiny image dimensions (r = 12 > h = 2, w = 3).
     tiny_2x3 = Float32[0.2 0.5 0.8; 0.3 0.6 0.9]
     @test all(isfinite, SF.gaussian_blur(tiny_2x3, 3.0))
+    # Regression for #10: r = 0 (sigma = 0.05) on h % 32 == 0 and GC.@preserve in blur kernels.
+    exact32 = Float32[(x + y) / 100 for y in 1:32, x in 1:32]
+    @test SF.gaussian_blur(exact32, 0.05) == exact32
+    cols_ir = string(only(Base.code_lowered(SF._blur_cols!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
+    rows_ir = string(only(Base.code_lowered(SF._blur_rows!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
+    @test occursin("gc_preserve", cols_ir)
+    @test occursin("gc_preserve", rows_ir)
     # Candidate deduplication when two neighboring lattice points converge to the same extremum,
     # including large coordinates beyond 2^18 that would collide under narrow bit-packing.
     dup_cands = [
@@ -385,6 +392,12 @@ end
     @test (@allocated SF._orientations!(ang, h36, s36, wtab, gp[1][2], 16, 16, 1.6)) == 0
     @test (@allocated SF._descriptor!(out128, ws, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)) == 0
     @test (@allocated SF.sqdist128(desc, 1, desc, 2)) == 0
+    k_blur = Memory{Float32}(undef, 5)
+    fill!(k_blur, 0.1f0)
+    SF._blur_cols!(tmp, a, k_blur, 4, 1:size(a, 2))
+    SF._blur_rows!(dst, tmp, k_blur, 4, 1:size(a, 2))
+    @test (@allocated SF._blur_cols!(tmp, a, k_blur, 4, 1:size(a, 2))) == 0
+    @test (@allocated SF._blur_rows!(dst, tmp, k_blur, 4, 1:size(a, 2))) == 0
 
     # Bitwise identity between single-chunk and multi-chunk execution
     b_full = SF.double_image(a)
