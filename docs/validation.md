@@ -1,31 +1,31 @@
-# Real-photograph validation — 2026-11-14
+# Real-photograph validation — 2026-11-21
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 5.0.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.4; OpenCV 5.0.0; NumPy 2.5.4; Python 3.13.18. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `0f74613fb6704038b57f6b52ee90e09c`.
+Runtime: julia version 1.13.4; OpenCV 5.0.0; NumPy 2.5.5; Python 3.13.18. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `4b564b4e49724f4791e164acc7a0aa36`.
 
 ## Numerical agreement
 
 - 249,541 Julia feature instances and 249,572 OpenCV instances; 249,471 geometry-only one-to-one pairs (99.9595% coverage across all frames).
 - Lowest coverage on any individual photograph: 99.5497%.
-- Lowest per-image median descriptor cosine similarity: 0.99998051 (1 means identical directions).
+- Lowest per-image median descriptor cosine similarity: 0.99998057 (1 means identical directions).
 - Worst per-image p95 position difference: 0.000581 px; relative scale difference: 2.70769e-05; orientation difference: 0.002931°.
 - Fixed-frame descriptors, descriptor norms, cross-library retrieval, and matching the same descriptors with Julia versus BFMatcher were also checked.
 
 ## Matching against independent geometry
 
-Across 40 reference/target pairs, Julia returned 38,552 descriptor matches, of which 34,983 landed within 3 pixels of the published transformation (90.742% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
+Across 40 reference/target pairs, Julia returned 38,552 descriptor matches, of which 34,986 landed within 3 pixels of the published transformation (90.750% pooled precision). OpenCV returned 38,572 matches, with 34,995 correct (90.726%).
 
 A separately fitted homography had mean error below 3 pixels at five fixed source-image probes on 33/40 Julia pairs and 32/40 OpenCV pairs. Fit accuracy is scored against the supplied homography, not the RANSAC mask.
 
 | Scene | Change | Lowest frame coverage | Correct matches: Julia / OpenCV¹ | Accurate homographies: Julia / OpenCV² |
 |---|---|---:|---:|---:|
 | bikes | blur | 99.9199% | 1,845 / 1,843 | 5 / 4 |
-| trees | blur | 99.9217% | 3,720 / 3,722 | 3 / 3 |
+| trees | blur | 99.9217% | 3,722 / 3,722 | 3 / 3 |
 | graf | viewpoint | 99.9125% | 1,434 / 1,435 | 3 / 3 |
 | wall | viewpoint | 99.9111% | 10,467 / 10,473 | 3 / 3 |
 | bark | zoom rotation | 99.9278% | 2,444 / 2,444 | 5 / 5 |
-| boat | zoom rotation | 99.9282% | 4,913 / 4,912 | 4 / 4 |
+| boat | zoom rotation | 99.9282% | 4,914 / 4,912 | 4 / 4 |
 | leuven | illumination | 99.8704% | 3,084 / 3,090 | 5 / 5 |
 | ubc | jpeg compression | 99.5497% | 7,076 / 7,076 | 5 / 5 |
 
@@ -63,7 +63,7 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 ## Validation integrity and Julia regression tests
 
-The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Under `Pkg.test()` with bounds checking enabled, the Julia test suite passes on Julia 1.13.4 (both single-threaded and multi-threaded).
+The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Under `Pkg.test()` with bounds checking enabled, all 576 Julia checks pass on Julia 1.13.4 (both single-threaded and multi-threaded).
 
 - [Descriptor-corruption control](../validation/guard-negative-control.txt)
 - [Machine-readable original-resolution results](../validation/real-world-results.json)

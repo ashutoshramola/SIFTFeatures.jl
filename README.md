@@ -14,22 +14,22 @@ benchmark sequences. See [validation results](docs/validation.md) and
 ### Detection and descriptor timing
 
 Median of **five measured runs after one warmup per image**, using the first
-original-resolution photograph from each Oxford sequence. AMD EPYC 9V74 80-Core Processor;
+original-resolution photograph from each Oxford sequence. Intel(R) Xeon(R) 6975P-C;
 Julia 1.13.4 and OpenCV 5.0.0; one thread each; unlimited features.
-Measured 2026-11-14.
+Measured 2026-11-21.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3,224 / 3,225 | 155.0 | 164.9 | 0.94× |
-| trees_1 | 1000×700 | 12,477 / 12,477 | 384.3 | 372.3 | 1.03× |
-| graf_1 | 800×640 | 2,731 / 2,731 | 135.6 | 117.3 | 1.16× |
-| wall_1 | 1000×700 | 9,173 / 9,175 | 317.5 | 294.4 | 1.08× |
-| bark_1 | 765×512 | 3,757 / 3,758 | 146.2 | 131.0 | 1.12× |
-| boat_1 | 850×680 | 8,356 / 8,359 | 254.2 | 229.8 | 1.11× |
-| leuven_1 | 900×600 | 2,311 / 2,314 | 115.5 | 104.7 | 1.10× |
-| ubc_1 | 800×640 | 5,036 / 5,037 | 173.4 | 158.6 | 1.09× |
+| bikes_1 | 1000×700 | 3,224 / 3,225 | 163.5 | 141.5 | 1.16× |
+| trees_1 | 1000×700 | 12,477 / 12,477 | 403.4 | 339.0 | 1.19× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 133.0 | 111.0 | 1.20× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 335.5 | 271.3 | 1.24× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 143.2 | 120.4 | 1.19× |
+| boat_1 | 850×680 | 8,356 / 8,359 | 261.6 | 225.3 | 1.16× |
+| leuven_1 | 900×600 | 2,311 / 2,314 | 122.9 | 101.6 | 1.21× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 182.5 | 151.9 | 1.20× |
 
-**Julia currently takes 0.94–1.16× as long as OpenCV on these eight inputs.**
+**Julia currently takes 1.16–1.24× as long as OpenCV on these eight inputs.**
 These are timings for the current implementation on this machine.
 Decoding, compilation, file interchange, warmups, and forced GC are excluded;
 GC triggered inside a measured call is included. Parameters match, with OpenCV
@@ -53,8 +53,8 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 |---|---:|---:|
 | Detected feature instances | 249,541 | 249,572 |
 | Descriptor matches across 40 pairs | 38,552 | 38,572 |
-| Correct matches within 3 px | 34,983 | 34,995 |
-| Pooled match precision | 90.742% | 90.726% |
+| Correct matches within 3 px | 34,986 | 34,995 |
+| Pooled match precision | 90.750% | 90.726% |
 | Accurate fitted homographies² | 33 / 40 | 32 / 40 |
 
 | Numerical agreement with OpenCV | Measured value |
@@ -63,14 +63,13 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 | Position difference: worst image's p95 | 0.000581 px |
 | Relative scale difference: worst image's p95 | 2.70769e-05 |
 | Orientation difference: worst image's p95 | 0.002931° |
-| Descriptor cosine: lowest per-image median | 0.99998051 (1 means identical directions) |
+| Descriptor cosine: lowest per-image median | 0.99998057 (1 means identical directions) |
 
 ² Mean fitted-homography error below 3 px at five fixed image probes, evaluated
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Full validation, thresholds, and difficult cases](docs/validation.md).
-On the current source, the Julia test suite passes on Julia 1.13.4 (both single-threaded
-and multi-threaded).
+On the current source, all 576 Julia checks pass on Julia 1.13.4 (both single-threaded and multi-threaded).
 
 ## Installation
 
