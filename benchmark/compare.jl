@@ -1,4 +1,4 @@
-using SIFTFeatures, LinearAlgebra, ImageCore, ColorTypes, StaticArrays
+using SIFTFeatures, LinearAlgebra, ColorTypes, Colors, FixedPointNumbers, StaticArrays
 
 # File loading, compilation/warmup, forced GC, and result checks are outside
 # the timed interval. GC triggered by sift itself remains part of that interval.
@@ -11,8 +11,9 @@ function main()
         for (key, value) in (("julia", VERSION), ("cpu_target", Sys.CPU_NAME),
                              ("julia_threads", Threads.nthreads()),
                              ("blas_threads", BLAS.get_num_threads()),
-                             ("ImageCore", Base.pkgversion(ImageCore)),
                              ("ColorTypes", Base.pkgversion(ColorTypes)),
+                             ("Colors", Base.pkgversion(Colors)),
+                             ("FixedPointNumbers", Base.pkgversion(FixedPointNumbers)),
                              ("StaticArrays", Base.pkgversion(StaticArrays)))
             println(io, key, '\t', value)
         end

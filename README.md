@@ -1,7 +1,7 @@
 # SIFTFeatures.jl
 
 Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
-descriptors, and L2 matching. Uses `ImageCore`, `ColorTypes`, and `StaticArrays`
+descriptors, and L2 matching. Uses `ColorTypes`, `Colors`, `FixedPointNumbers`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
 Version 0.2.0 is a native Julia implementation focused on correctness and performance. OpenCV
@@ -154,7 +154,7 @@ julia --project=. benchmark/run.jl
 
 The Julia tests include analytical localization and descriptor-layout anchors,
 orientation/interpolation checks, geometric consistency, and matcher edge cases.
-CI runs Julia 1.13 on Linux (single-threaded and multi-threaded).
+CI runs Julia 1.13 on Linux (single-threaded and multi-threaded), macOS, and Windows.
 
 Python is used only in the optional OpenCV comparison environment:
 

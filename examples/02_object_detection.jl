@@ -3,14 +3,14 @@
 # Run from the repository root:
 #   julia --threads=auto --project=. examples/02_object_detection.jl
 
-include("homography_ransac.jl")
+@isdefined(ransac_homography) || include("homography_ransac.jl")
 
 """
     detect_object(template, scene; config=SIFTConfig(), ratio=0.8, thresh_px=2.5)
 
 Locate `template` inside `scene` even under rotation, scale change, or partial occlusion.
-Returns the 3×3 homography `H_template_to_scene`, the 4 projected corner coordinates
-in `scene` (`corners_xy`), and match/inlier statistics.
+Returns the 3×3 homography `H`, the 4 projected corner coordinates in `scene`
+(`corners`), and match/inlier statistics.
 """
 function detect_object(template::AbstractMatrix, scene::AbstractMatrix;
                        config::SIFTConfig=SIFTConfig(),

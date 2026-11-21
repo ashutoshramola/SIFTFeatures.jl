@@ -1,10 +1,9 @@
 # Pure-Julia Normalized DLT + RANSAC Homography Estimation and Image Warping
-# Uses only SIFTFeatures, LinearAlgebra, StaticArrays, Statistics, and Random.
+# Uses only SIFTFeatures, LinearAlgebra, StaticArrays, and Random.
 
 using SIFTFeatures
 using LinearAlgebra: svd, norm, det, I
 using StaticArrays: SVector, SMatrix
-using Statistics: mean
 using Random: AbstractRNG, MersenneTwister
 
 """
@@ -25,8 +24,8 @@ end
 
 function _normalize_points(pts::AbstractMatrix{Float64})
     n = size(pts, 1)
-    mx = mean(@view pts[:, 1])
-    my = mean(@view pts[:, 2])
+    mx = sum(@view pts[:, 1]) / n
+    my = sum(@view pts[:, 2]) / n
     mean_dist = 0.0
     @inbounds for i in axes(pts, 1)
         mean_dist += hypot(pts[i, 1] - mx, pts[i, 2] - my)
@@ -218,9 +217,10 @@ function homography_probe_error(H_est::SMatrix{3,3,Float64,9},
 end
 
 """
-    synthetic_scene(h::Int=320, w::Int=400) -> Matrix{Float32}
+    synthetic_scene(h::Int=320, w::Int=400; seed::Int=1) -> Matrix{Float32}
 
 Generate a deterministic, multi-scale textured scene for standalone examples.
+Vary `seed` to create distinct scenes.
 """
 function synthetic_scene(h::Int=320, w::Int=400; seed::Int=1)
     img = Matrix{Float32}(undef, h, w)

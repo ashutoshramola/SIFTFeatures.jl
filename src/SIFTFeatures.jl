@@ -1,7 +1,8 @@
 module SIFTFeatures
 
-using ColorTypes: Colorant, Gray, AbstractGray, color
-using ImageCore: ImageCore, Normed, gray
+using ColorTypes: Colorant, Gray, AbstractGray, color, gray
+using Colors: Colors # registers Colorant -> Gray luminance conversions
+using FixedPointNumbers: Normed
 using LinearAlgebra: norm, dot, det
 using StaticArrays: SVector, SMatrix
 

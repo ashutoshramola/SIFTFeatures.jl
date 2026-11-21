@@ -114,7 +114,7 @@ vo = track_sequence(frames; config=cfg)
 
 | Workload | Recommended `SIFTConfig` | Why |
 |---|---|---|
-| **Offline photogrammetry / maximum recall** | `SIFTConfig()` (`first_octave=-1`, `nfeatures=0`) | `2×` upsampling detects fine sub-pixel structures (~14 FPS on `1000×700` with 8 threads). |
+| **Offline photogrammetry / maximum recall** | `SIFTConfig()` (`first_octave=-1`, `nfeatures=0`) | `2×` upsampling detects fine sub-pixel structures and maximizes recall. |
 | **Image retrieval / database indexing** | `SIFTConfig(nfeatures=500)` or `SIFTConfig(nfeatures=1000)` | Retains the strongest features by contrast response; keeps matching $O(K^2)$ fast. |
-| **Real-time video / robotics (50–60 FPS)** | `SIFTConfig(first_octave=0, nfeatures=500)` | Skips `2×` image doubling (`4×` fewer pixels in the first octave), running in ~16–19 ms per `1000×700` frame on 8 threads. |
+| **High-throughput video / robotics** | `SIFTConfig(first_octave=0, nfeatures=500)` | Skips `2×` image doubling (`4×` fewer pixels in the first octave) for substantially lower latency, especially with `--threads=auto`. |
 | **Low-contrast / dark / foggy scenes** | `SIFTConfig(contrast_threshold=0.02)` | Lowers the DoG contrast rejection threshold (default `0.04`) to recover subtle features. |
