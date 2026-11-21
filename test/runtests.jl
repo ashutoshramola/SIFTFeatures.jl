@@ -116,6 +116,13 @@ end
         d_ang = SF.descriptor!(out_buf, hist_buf, horizontal, center, center, sigma, ang)
         @test all(isfinite, d_ang) && abs(norm(d_ang) - 1f0) < 2f-6
     end
+    # Regression for #11: large/negative finite angles must remain 2π-periodic and finite.
+    for ang in (-floatmax(Float64), -1e40, -1e7, -1000.0, -pi/2, 2pi, 1000.0, 1e7, 1e40, floatmax(Float64))
+        d_large = SF.descriptor(horizontal, center, center, 1.6, ang)
+        d_red = SF.descriptor(horizontal, center, center, 1.6, rem2pi(ang, RoundDown))
+        @test all(isfinite, d_large) && abs(norm(d_large) - 1f0) < 2f-6
+        @test d_large == d_red
+    end
     # Regression for #9: bound _exp_neg_f32 and _atan2_f32 minimax approximation errors.
     exp_xs = range(0f0, 1.5625f0; length=10_001)
     @test maximum(x -> abs(SF._exp_neg_f32(x) - exp(-Float64(x))), exp_xs) < 5e-7
