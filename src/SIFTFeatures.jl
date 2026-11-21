@@ -10,7 +10,7 @@ export SIFTConfig, SIFTKeypoint, DescriptorMatch, sift, match_descriptors,
 
 public validate, grayscale_float, double_image, gaussian_blur, gaussian_blur!,
        default_octaves, is_extremum, derivatives, localize, orientations, orientations!,
-       descriptor, descriptor!, angle32
+       descriptor, descriptor!, angle32, OrientationWorkspace, DescriptorWorkspace
 
 """SIFT parameters. `first_octave=-1` doubles the input on a pixel-aligned grid.
 Contrast uses OpenCV semantics (the threshold is divided by `octave_layers`).
@@ -80,6 +80,7 @@ end
 @inline intensity(v::Normed) = Float32(v)
 @inline intensity(v::Unsigned) = Float32(reinterpret(Normed{typeof(v), sizeof(v) * 8}, v))
 @inline intensity(v::AbstractGray) = Float32(gray(v))
+# Uses ColorTypes.Gray(color(v)) luminance conversion (matching JuliaImages Gray.(img)).
 @inline intensity(v::Colorant) = Float32(gray(Gray(color(v))))
 
 @inline _chunk_range(n::Int, chunk::Int, nchunks::Int) =
@@ -338,8 +339,8 @@ function gaussian_blur!(dst::Matrix{Float32}, tmp::Matrix{Float32}, src::Matrix{
         throw(DimensionMismatch("dst, tmp, and src must have the same size"))
     (tmp === dst || tmp === src) &&
         throw(ArgumentError("tmp must not alias dst or src"))
-    isfinite(sigma) && sigma >= 0 ||
-        throw(ArgumentError("sigma must be finite and nonnegative"))
+    isfinite(sigma) && sigma >= 0 && 8.0 * Float64(sigma) + 1.0 < Float64(typemax(Int32)) ||
+        throw(ArgumentError("sigma must be finite, nonnegative, and within kernel size limits"))
     h, w = size(src)
     (h >= 2 && w >= 2) ||
         throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
@@ -382,8 +383,8 @@ end
 
 function gaussian_blur!(dst::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) || throw(DimensionMismatch("dst and src must have the same size"))
-    isfinite(sigma) && sigma >= 0 ||
-        throw(ArgumentError("sigma must be finite and nonnegative"))
+    isfinite(sigma) && sigma >= 0 && 8.0 * Float64(sigma) + 1.0 < Float64(typemax(Int32)) ||
+        throw(ArgumentError("sigma must be finite, nonnegative, and within kernel size limits"))
     h, w = size(src)
     (h >= 2 && w >= 2) ||
         throw(ArgumentError("gaussian_blur! requires at least two pixels along each axis"))
@@ -425,7 +426,7 @@ function gaussian_pyramid(img::AbstractMatrix, config::SIFTConfig=SIFTConfig(); 
     c = validate(config)
     a = grayscale_float(img)
     n = isnothing(octaves) ? default_octaves(a, c) : octaves
-    n isa Integer && n >= 0 || throw(ArgumentError("octaves must be a nonnegative integer"))
+    n isa Integer && !(n isa Bool) && n >= 0 || throw(ArgumentError("octaves must be a nonnegative integer"))
     pyramid = Vector{Matrix{Float32}}[]
     (isempty(a) || n == 0) && return pyramid
     raw_base = c.first_octave == -1 ? double_image(a) : a
@@ -473,14 +474,20 @@ end
 
 """Adjacent Gaussian differences, with `octave_layers + 2` levels per octave."""
 function dog_pyramid(g::AbstractVector)
+    Base.require_one_based_indexing(g)
     isempty(g) && return Vector{Matrix{Float32}}[]
+    for o in g
+        Base.require_one_based_indexing(o)
+    end
     return [[_diff_matrix(o[l + 1], o[l]) for l in 1:length(o)-1] for o in g]
 end
 
 @inline function _check_dog_neighborhood(d, y::Int, x::Int, l::Int)
+    Base.require_one_based_indexing(d)
     (2 <= l <= length(d) - 1) ||
         throw(ArgumentError("scale level l must satisfy 2 <= l <= length(d) - 1"))
     p, a, n = d[l - 1], d[l], d[l + 1]
+    Base.require_one_based_indexing(p, a, n)
     size(p) == size(a) == size(n) ||
         throw(DimensionMismatch("adjacent DoG levels must have the same dimensions"))
     h, w = size(a)
@@ -589,10 +596,14 @@ function _localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
 end
 
 function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
+    validate(c)
+    Base.require_one_based_indexing(d)
     length(d) >= c.octave_layers + 2 ||
         throw(ArgumentError("DoG octave must have at least octave_layers + 2 levels"))
+    Base.require_one_based_indexing(d[1])
     s1 = size(d[1])
     for k in 2:(c.octave_layers + 2)
+        Base.require_one_based_indexing(d[k])
         size(d[k]) == s1 || throw(DimensionMismatch("all DoG levels in an octave must have the same size"))
     end
     return _localize(d, y, x, l, c)
@@ -628,23 +639,38 @@ end
     return muladd(p, x, 0.99999976f0)
 end
 
+"""Reusable workspace for zero-allocation calls to [`orientations!`](@ref)."""
+struct OrientationWorkspace
+    hist::Memory{Float64}
+    sm::Memory{Float64}
+    wtab::Vector{Float32}
+end
+
+OrientationWorkspace(cap::Int=64) = OrientationWorkspace(
+    Memory{Float64}(undef, 36),
+    Memory{Float64}(undef, 36),
+    Vector{Float32}(undef, max(1, cap)),
+)
+
 @noinline function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
                                   sm::AbstractVector{Float64}, wtab::Vector{Float32},
                                   a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
     fill!(hist, 0.0)
     empty!(angles)
-    radius = round(Int, 4.5 * sigma)
-    length(wtab) < radius + 1 && resize!(wtab, radius + 1)
-    inv_2sigma2 = Float32(-1.0 / (2.0 * (1.5 * sigma)^2))
-    @inbounds for k in 0:radius
-        wtab[k + 1] = exp(Float32(k * k) * inv_2sigma2)
-    end
     h, w = size(a)
-    scale = Float32(36.0 / (2pi))
+    radius = round(Int, 4.5 * sigma)
     j_min = max(-radius, 2 - x)
     j_max = min(radius, w - 1 - x)
     i_min = max(-radius, 2 - y)
     i_max = min(radius, h - 1 - y)
+    (j_min > j_max || i_min > i_max) && return angles
+    max_k = max(abs(j_min), abs(j_max), abs(i_min), abs(i_max))
+    length(wtab) < max_k + 1 && resize!(wtab, max_k + 1)
+    inv_2sigma2 = Float32(-1.0 / (2.0 * (1.5 * sigma)^2))
+    @inbounds for k in 0:max_k
+        wtab[k + 1] = exp(Float32(k * k) * inv_2sigma2)
+    end
+    scale = Float32(36.0 / (2pi))
     @inbounds for j in j_min:j_max
         xx = x + j
         wj = wtab[abs(j) + 1]
@@ -678,21 +704,35 @@ end
     return angles
 end
 
+function orientations!(angles::Vector{Float64}, ws::OrientationWorkspace,
+                       a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
+    Base.require_one_based_indexing(angles)
+    isfinite(sigma) && sigma > 0 && 4.5 * Float64(sigma) < Float64(typemax(Int32)) ||
+        throw(ArgumentError("sigma must be finite, positive, and within orientation window limits"))
+    return _orientations!(angles, ws.hist, ws.sm, ws.wtab, a, y, x, sigma)
+end
+
 function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, sm::AbstractVector{Float64},
                        a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
     Base.require_one_based_indexing(angles, hist, sm)
     (length(hist) == 36 && length(sm) == 36) ||
         throw(DimensionMismatch("orientation buffers must have length 36"))
-    isfinite(sigma) && sigma > 0 ||
-        throw(ArgumentError("sigma must be finite and positive"))
-    wtab = Vector{Float32}(undef, max(0, round(Int, 4.5 * sigma)) + 1)
+    isfinite(sigma) && sigma > 0 && 4.5 * Float64(sigma) < Float64(typemax(Int32)) ||
+        throw(ArgumentError("sigma must be finite, positive, and within orientation window limits"))
+    h, w = size(a)
+    radius = round(Int, 4.5 * sigma)
+    j_min = max(-radius, 2 - x); j_max = min(radius, w - 1 - x)
+    i_min = max(-radius, 2 - y); i_max = min(radius, h - 1 - y)
+    max_k = (j_min > j_max || i_min > i_max) ? 0 : max(abs(j_min), abs(j_max), abs(i_min), abs(i_max))
+    wtab = Vector{Float32}(undef, max_k + 1)
     return _orientations!(angles, hist, sm, wtab, a, y, x, sigma)
 end
 
 orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
-    orientations!(Float64[], Memory{Float64}(undef, 36), Memory{Float64}(undef, 36), a, y, x, sigma)
+    orientations!(Float64[], OrientationWorkspace(), a, y, x, sigma)
 
-mutable struct _DescriptorWorkspace
+"""Reusable workspace for zero-allocation calls to [`descriptor!`](@ref)."""
+mutable struct DescriptorWorkspace
     const phist::Memory{Float32}
     rb::Memory{Float32}
     cb::Memory{Float32}
@@ -700,9 +740,11 @@ mutable struct _DescriptorWorkspace
     mag::Memory{Float32}
 end
 
-function _DescriptorWorkspace(cap::Int=256)
+const _DescriptorWorkspace = DescriptorWorkspace
+
+function DescriptorWorkspace(cap::Int=256)
     c = max(0, cap)
-    return _DescriptorWorkspace(
+    return DescriptorWorkspace(
         Memory{Float32}(undef, 288),
         Memory{Float32}(undef, c),
         Memory{Float32}(undef, c),
@@ -711,7 +753,7 @@ function _DescriptorWorkspace(cap::Int=256)
     )
 end
 
-@noinline function _grow_descriptor_workspace!(ws::_DescriptorWorkspace, cap::Int)
+@noinline function _grow_descriptor_workspace!(ws::DescriptorWorkspace, cap::Int)
     ws.rb  = Memory{Float32}(undef, cap)
     ws.cb  = Memory{Float32}(undef, cap)
     ws.ob  = Memory{Float32}(undef, cap)
@@ -719,7 +761,7 @@ end
     return ws
 end
 
-@noinline function _descriptor!(out::AbstractVector{Float32}, ws::_DescriptorWorkspace,
+@noinline function _descriptor!(out::AbstractVector{Float32}, ws::DescriptorWorkspace,
                                 a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
     # choose the opposite pixel if applied directly to a one-based coordinate.
@@ -733,7 +775,9 @@ end
     cs64, sn64 = cos(phi) / width, sin(phi) / width
     cs, sn = Float32(cs64), Float32(sn64)
     h, w = size(a)
-    radius = min(round(Int, width * sqrt(2.0) * 2.5), ceil(Int, hypot(h, w)))
+    max_r = ceil(Int, hypot(h, w))
+    r_est = width * sqrt(2.0) * 2.5
+    radius = r_est < Float64(max_r) ? round(Int, r_est) : max_r
     scale = Float32(8.0 / (2pi))
     phi_f32 = Float32(phi)
     j_min = max(-radius, 2 - cx)
@@ -763,8 +807,9 @@ end
             b1 = (j_cs64 - 2.50001) / sn64
             b2 = (j_cs64 + 2.50001) / sn64
             lo_s, hi_s = minmax(b1, b2)
-            i_lo = max(i_lo, floor(Int, lo_s) + 1)
-            i_hi = min(i_hi, ceil(Int, hi_s) - 1)
+            (hi_s <= i_lo || lo_s >= i_hi) && continue
+            lo_s > i_lo - 1 && (i_lo = max(i_lo, floor(Int, lo_s) + 1))
+            hi_s < i_hi + 1 && (i_hi = min(i_hi, ceil(Int, hi_s) - 1))
         elseif !(-2.50001 < j_cs64 < 2.50001)
             continue
         end
@@ -772,8 +817,9 @@ end
             b1 = (-2.50001 - j_sn64) / cs64
             b2 = ( 2.50001 - j_sn64) / cs64
             lo_c, hi_c = minmax(b1, b2)
-            i_lo = max(i_lo, floor(Int, lo_c) + 1)
-            i_hi = min(i_hi, ceil(Int, hi_c) - 1)
+            (hi_c <= i_lo || lo_c >= i_hi) && continue
+            lo_c > i_lo - 1 && (i_lo = max(i_lo, floor(Int, lo_c) + 1))
+            hi_c < i_hi + 1 && (i_hi = min(i_hi, ceil(Int, hi_c) - 1))
         elseif !(-2.50001 < j_sn64 < 2.50001)
             continue
         end
@@ -861,14 +907,29 @@ end
     return out
 end
 
+@inline function _validate_descriptor_args(y::Real, x::Real, sigma::Real, angle::Real)
+    lim = Float64(typemax(Int32))
+    isfinite(y) && isfinite(x) && abs(Float64(y)) < lim && abs(Float64(x)) < lim &&
+        isfinite(sigma) && sigma > 0 && isfinite(angle) ||
+        throw(ArgumentError("y, x must be finite within coordinate limits, angle finite, and sigma finite and positive"))
+    return nothing
+end
+
+function descriptor!(out::AbstractVector{Float32}, ws::DescriptorWorkspace,
+                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+    Base.require_one_based_indexing(out)
+    length(out) == 128 || throw(DimensionMismatch("descriptor output buffer must have length 128"))
+    _validate_descriptor_args(y, x, sigma, angle)
+    return _descriptor!(out, ws, a, y, x, sigma, angle)
+end
+
 function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64},
                      a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
     Base.require_one_based_indexing(out, hist)
     (length(out) == 128 && length(hist) == 128) ||
         throw(DimensionMismatch("descriptor buffers must have length 128"))
-    isfinite(y) && isfinite(x) && isfinite(sigma) && sigma > 0 && isfinite(angle) ||
-        throw(ArgumentError("y, x, and angle must be finite and sigma must be finite and positive"))
-    _descriptor!(out, _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+    _validate_descriptor_args(y, x, sigma, angle)
+    _descriptor!(out, DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
     @inbounds for k in 1:128
         hist[k] = Float64(out[k])
     end
@@ -876,9 +937,8 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
 end
 
 function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
-    isfinite(y) && isfinite(x) && isfinite(sigma) && sigma > 0 && isfinite(angle) ||
-        throw(ArgumentError("y, x, and angle must be finite and sigma must be finite and positive"))
-    return _descriptor!(Vector{Float32}(undef, 128), _DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+    _validate_descriptor_args(y, x, sigma, angle)
+    return _descriptor!(Vector{Float32}(undef, 128), DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
 end
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
@@ -958,7 +1018,7 @@ end
 function _build_pyramid_and_detect(img::AbstractMatrix, c::SIFTConfig; octaves=nothing)
     a = grayscale_float(img)
     n = isnothing(octaves) ? default_octaves(a, c) : octaves
-    n isa Integer && n >= 0 || throw(ArgumentError("octaves must be a nonnegative integer"))
+    n isa Integer && !(n isa Bool) && n >= 0 || throw(ArgumentError("octaves must be a nonnegative integer"))
     pyramid = Vector{Matrix{Float32}}[]
     raw_candidates = LocalizedCandidate[]
     (isempty(a) || n == 0) && return pyramid, raw_candidates
@@ -1023,14 +1083,12 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
                                  gp::Vector{Vector{Matrix{Float32}}},
                                  r::UnitRange{Int})
     angles_buf = Float64[]
-    ori_hist = Memory{Float64}(undef, 36)
-    ori_sm = Memory{Float64}(undef, 36)
-    ori_wtab = Vector{Float32}(undef, 64)
+    ws = OrientationWorkspace(64)
     for idx in r
         cand = cands[idx]
         factor = 2.0^cand.octave
         _orientations!(
-            angles_buf, ori_hist, ori_sm, ori_wtab,
+            angles_buf, ws.hist, ws.sm, ws.wtab,
             gp[cand.o][cand.layer], cand.iy, cand.ix, cand.sigma
         )
         y_img = Float32(1 + (cand.y - 1) * factor)

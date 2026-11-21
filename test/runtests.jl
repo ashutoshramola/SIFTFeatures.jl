@@ -4,6 +4,13 @@ using ImageCore: N0f8
 const SF = SIFTFeatures
 include("fixtures.jl")
 
+struct _ZeroBasedArray{T,N,A<:AbstractArray{T,N}} <: AbstractArray{T,N}
+    data::A
+end
+Base.size(a::_ZeroBasedArray) = size(a.data)
+Base.axes(a::_ZeroBasedArray) = map(n -> 0:(n - 1), size(a.data))
+Base.getindex(a::_ZeroBasedArray, I::Int...) = a.data[(i + 1 for i in I)...]
+
 @noinline function test_inputs()
     for a in (zeros(Float32,0,0),zeros(Float32,0,12),zeros(Float32,1,1),
               fill(0.5f0,32,40),zeros(UInt8,32,40),trues(32,40))
@@ -15,7 +22,8 @@ include("fixtures.jl")
     a = fixture(80,96)
     for sym in (:validate, :grayscale_float, :double_image, :gaussian_blur, :gaussian_blur!,
                 :default_octaves, :is_extremum, :derivatives, :localize,
-                :orientations, :orientations!, :descriptor, :descriptor!, :angle32)
+                :orientations, :orientations!, :descriptor, :descriptor!, :angle32,
+                :OrientationWorkspace, :DescriptorWorkspace)
         @test Base.ispublic(SIFTFeatures, sym)
     end
     @test SF.grayscale_float(Gray.(a)) == a
@@ -50,6 +58,10 @@ include("fixtures.jl")
     end
     @test_throws ArgumentError sift(a;octaves=-1)
     @test_throws ArgumentError sift(a;octaves=100)
+    @test_throws ArgumentError sift(a;octaves=true)
+    @test_throws ArgumentError sift(a;octaves=false)
+    @test_throws ArgumentError gaussian_pyramid(a;octaves=true)
+    @test_throws ArgumentError gaussian_pyramid(a;octaves=false)
     @test size(last(sift(a;octaves=0))) == (128,0)
     # The final octave may be two pixels wide, but cannot have a singleton axis.
     for first_octave in (-1,0), dims in ((2,2),(2,9),(3,3),(9,2))
@@ -107,6 +119,16 @@ end
     @test_throws ArgumentError SF.descriptor(impulse, center, center, 0.0, 0.0)
     @test_throws ArgumentError SF.descriptor(impulse, center, center, -1.0, 0.0)
     @test_throws ArgumentError SF.descriptor(impulse, center, center, 1.6, NaN)
+    # Regression for #12: huge finite coordinates throw ArgumentError (not InexactError),
+    # huge finite sigma stays bounded by image diagonal, and DescriptorWorkspace works in-place.
+    @test_throws ArgumentError SF.descriptor(impulse, 1e30, center, 1.6, 0.0)
+    @test_throws ArgumentError SF.descriptor(impulse, center, -1e30, 1.6, 0.0)
+    d_huge_sigma = SF.descriptor(horizontal, center, center, 1e30, 0.0)
+    @test all(isfinite, d_huge_sigma) && abs(norm(d_huge_sigma) - 1f0) < 2f-6
+    desc_ws = SF.DescriptorWorkspace(64)
+    @test SF.descriptor!(out_buf, desc_ws, impulse, center, center, 1/3, 0) === out_buf
+    @test out_buf == actual
+    @test_throws DimensionMismatch SF.descriptor!(zeros(Float32, 127), desc_ws, impulse, center, center, 1/3, 0)
     # Sweep angles and scales to exercise Float32/Float64 window boundary clipping,
     # including the exact half-ULP boundary where Float64 v < 2.5 rounds to Float32 2.5f0 (rb == 4.0f0).
     sigma_edge = 5.0 / (3.0 * (2.5 - 5e-8))
@@ -175,6 +197,8 @@ end
     @test_throws ArgumentError SF.gaussian_blur!(blur_dst, blur_src, blur_src, 1.5)
     @test_throws ArgumentError SF.gaussian_blur(blur_src, -0.5)
     @test_throws ArgumentError SF.gaussian_blur(blur_src, NaN)
+    @test_throws ArgumentError SF.gaussian_blur(blur_src, 1e20)
+    @test_throws ArgumentError SF.gaussian_blur!(blur_dst, blur_tmp, blur_src, 1e20)
     @test_throws DimensionMismatch SF.gaussian_blur!(zeros(Float32, 10, 10), blur_src, 1.5)
     @test_throws DimensionMismatch SF.gaussian_blur!(blur_dst, zeros(Float32, 10, 10), blur_src, 1.5)
     @test_throws ArgumentError SF.gaussian_blur!(zeros(Float32, 1, 5), zeros(Float32, 1, 5), zeros(Float32, 1, 5), 1.5)
@@ -224,7 +248,19 @@ end
     @test_throws ArgumentError SF.derivatives(dogs, 1, 10, 3)
     @test_throws ArgumentError SF.derivatives(dogs[1:1], 10, 10, 1)
     @test_throws ArgumentError SF.localize(dogs[1:2], 10, 10, 2, SIFTConfig())
+    @test_throws ArgumentError SF.localize(dogs, 10, 10, 3, SIFTConfig(octave_layers=0))
     @test_throws DimensionMismatch SF.localize([dogs[1], zeros(Float32, 20, 21), dogs[3], dogs[4], dogs[5]], 10, 10, 3, SIFTConfig())
+    # Regression for #12: public scale-space helpers reject non-1-based indexing with ArgumentError.
+    zmat = _ZeroBasedArray(ones(Float32, 10, 10))
+    zdogs = _ZeroBasedArray(dogs)
+    @test_throws ArgumentError SF.dog_pyramid(_ZeroBasedArray([dogs]))
+    @test_throws ArgumentError SF.dog_pyramid([zdogs])
+    @test_throws ArgumentError SF.is_extremum(zdogs, 10, 10, 3)
+    @test_throws ArgumentError SF.is_extremum([zmat, zmat, zmat], 5, 5, 2)
+    @test_throws ArgumentError SF.derivatives(zdogs, 10, 10, 3)
+    @test_throws ArgumentError SF.derivatives([zmat, zmat, zmat], 5, 5, 2)
+    @test_throws ArgumentError SF.localize(zdogs, 10, 10, 3, SIFTConfig())
+    @test_throws ArgumentError SF.localize([zmat, zmat, zmat, zmat, zmat], 5, 5, 3, SIFTConfig())
     # Analytical Gaussian blob: the DoG extremum's lower scale is s/sqrt(k).
     blob = Float32[exp(-((x-50.3)^2+(y-49.7)^2)/32) for y in 1:101,x in 1:101]
     bk,_ = sift(blob;config=SIFTConfig(assumed_input_sigma=0))
@@ -285,6 +321,11 @@ end
     @test_throws DimensionMismatch SF.orientations!(ang_buf, ori_hist, zeros(Float64, 35), ramp, 33, 33, 2.0)
     @test_throws ArgumentError SF.orientations(ramp, 33, 33, 0.0)
     @test_throws ArgumentError SF.orientations(ramp, 33, 33, -1.0)
+    @test_throws ArgumentError SF.orientations(ramp, 33, 33, 1e20)
+    ori_ws = SF.OrientationWorkspace()
+    @test SF.orientations!(ang_buf, ori_ws, ramp, 33, 33, 2.0) === ang_buf
+    @test ang_buf == SF.orientations(ramp, 33, 33, 2.0)
+    @test_throws ArgumentError SF.orientations!(ang_buf, ori_ws, ramp, 33, 33, 1e20)
     @test SF.descriptor(zeros(Float32,30,30),15.,15.,2.,0.) == zeros(Float32,128)
     # Regression for #8: large-scale keypoints whose descriptor column slice exceeds
     # 256 rows must not overflow _DescriptorWorkspace even when levels[1] is released early.
@@ -374,14 +415,17 @@ end
     h36 = Memory{Float64}(undef, 36)
     s36 = Memory{Float64}(undef, 36)
     wtab = Vector{Float32}(undef, 64)
+    ori_ws = SF.OrientationWorkspace(64)
     @inferred SF._orientations!(ang, h36, s36, wtab, gp[1][2], 16, 16, 1.6)
+    @inferred SF.orientations!(ang, ori_ws, gp[1][2], 16, 16, 1.6)
     @inferred SF.orientations!(ang, h36, s36, gp[1][2], 16, 16, 1.6)
     @inferred SF.orientations(gp[1][2], 16, 16, 1.6)
 
     out128 = Vector{Float32}(undef, 128)
     h128 = Memory{Float64}(undef, 128)
-    ws = SF._DescriptorWorkspace(256)
+    ws = SF.DescriptorWorkspace(256)
     @inferred SF._descriptor!(out128, ws, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
+    @inferred SF.descriptor!(out128, ws, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
     @inferred SF.descriptor!(out128, h128, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
     @inferred SF.descriptor(gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
     kp, desc = @inferred sift(a)
@@ -397,7 +441,9 @@ end
     @test (@allocated SF.derivatives(dogs_ext, 10, 10, 3)) == 0
     @test (@allocated SF.localize(dogs_ext, 10, 10, 3, c)) == 0
     @test (@allocated SF._orientations!(ang, h36, s36, wtab, gp[1][2], 16, 16, 1.6)) == 0
+    @test (@allocated SF.orientations!(ang, ori_ws, gp[1][2], 16, 16, 1.6)) == 0
     @test (@allocated SF._descriptor!(out128, ws, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)) == 0
+    @test (@allocated SF.descriptor!(out128, ws, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)) == 0
     @test (@allocated SF.sqdist128(desc, 1, desc, 2)) == 0
     k_blur = Memory{Float32}(undef, 5)
     fill!(k_blur, 0.1f0)

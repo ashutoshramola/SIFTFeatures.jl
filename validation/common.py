@@ -18,6 +18,27 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def load_csv(path, cols):
+    """Read a headered CSV into a 2D float64 array, returning shape (0, cols) if header-only."""
+    import numpy as np
+    lines = Path(path).read_text(encoding="utf-8").splitlines()
+    if len(lines) <= 1:
+        return np.empty((0, cols), np.float64)
+    return np.loadtxt(path, delimiter=",", skiprows=1, ndmin=2)
+
+
+def load_julia_env(path):
+    """Parse key<tab>value lines written by validation/export.jl."""
+    path = Path(path)
+    if not path.is_file():
+        return {}
+    return dict(
+        line.split("\t", 1)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if "\t" in line
+    )
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 

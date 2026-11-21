@@ -13,7 +13,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "validation"))
-from common import execute
+from common import execute, load_csv, load_julia_env
 
 
 def fixtures():
@@ -125,9 +125,10 @@ def run(args, report, gates):
             img.tofile(work/(name+".u8"))
             (work/(name+".shape")).write_text(f"{img.shape[0]} {img.shape[1]}")
         subprocess.run([args.julia,"--startup-file=no",f"--project={ROOT}",str(ROOT/"validation/export.jl"),tmp],check=True)
+        report["julia_environment"] = load_julia_env(work/"julia-environment.tsv")
         native,reference = {},{}
         for name,img in images.items():
-            j = np.loadtxt(work/(name+".kp.csv"),delimiter=',',skiprows=1,ndmin=2)
+            j = load_csv(work/(name+".kp.csv"), 7)
             jd = np.fromfile(work/(name+".desc.f32"),dtype=np.float32).reshape(-1,128)
             rk,rd = sift.detectAndCompute(img,None)
             ref = np.array([[*p.pt,p.size/2,np.deg2rad(p.angle)] for p in rk])
@@ -180,7 +181,7 @@ def run(args, report, gates):
             gates.require(stats["cross_match_precision"] >= 0.95, name+": cross-library precision", stats["cross_match_precision"])
         for name,H in transforms.items():
             a,ad = native["base"]; b,bd = native[name]
-            matches = np.loadtxt(work/(name+".matches.csv"),delimiter=',',skiprows=1,ndmin=2)
+            matches = load_csv(work/(name+".matches.csv"), 3)
             pairs = [tuple(map(int,p[:2])) for p in matches]
             gates.require(set(pairs)==set(ratio_matches(ad,bd)), name+": same-descriptor matcher agreement")
             errors = geometric_errors(pairs,a,b,H)

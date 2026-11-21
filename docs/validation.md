@@ -31,7 +31,7 @@ A separately fitted homography had mean error below 3 pixels at five fixed sourc
 
 ¹ Sum of correct descriptor matches across the five target images. ² Out of five pairs, using the mean error at the five probes.
 
-![Correct matches by sequence](../validation/real-world-summary.png)
+![Correct matches by sequence (reference v0.1.0 benchmark chart)](../validation/real-world-summary.png)
 
 ## Difficult cases
 
@@ -63,7 +63,7 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 ## Validation integrity and Julia regression tests
 
-The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed under `Pkg.test()` with bounds checking enabled for the original 0.1.0 run. The current suite expands to 170 Julia checks on Julia 1.13.4 (both single-threaded and multi-threaded).
+The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Under `Pkg.test()` with bounds checking enabled, the Julia test suite passes on Julia 1.13.4 (both single-threaded and multi-threaded).
 
 - [Descriptor-corruption control](../validation/guard-negative-control.txt)
 - [Machine-readable original-resolution results](../validation/real-world-results.json)

@@ -53,6 +53,18 @@ jobs:
         run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
       - if: steps.check.outputs.should_run == 'true'
         run: python -m pip install -r validation/requirements.txt
+      - name: Run Julia test suite (1 thread and auto threads)
+        id: julia_tests
+        if: steps.check.outputs.should_run == 'true'
+        run: |
+          COUNT=$(julia --startup-file=no --project=. --check-bounds=yes -t 1 -e '
+            using Test
+            ts = @testset "All" begin include("test/runtests.jl") end
+            c = Test.get_test_counts(ts)
+            println("JULIA_TEST_COUNT=", c.passes + c.cumulative_passes)
+          ' | awk -F= '/^JULIA_TEST_COUNT=/{print $2}')
+          julia --startup-file=no --project=. --check-bounds=yes -t auto -e 'using Test; @testset "All" begin include("test/runtests.jl") end'
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
       - name: Run synthetic validation unit tests
         if: steps.check.outputs.should_run == 'true'
         run: python -m unittest discover -s validation -p 'test_*.py'
@@ -76,7 +88,7 @@ jobs:
         run: python benchmark/compare.py --data-dir validation-data --samples 5 --warmups 1
       - name: Update Markdown evaluation & benchmark reports
         if: steps.check.outputs.should_run == 'true'
-        run: python validation/update_reports.py
+        run: python validation/update_reports.py --julia-test-count "${{ steps.julia_tests.outputs.count }}"
       - name: Commit updated validation and benchmark reports
         if: steps.check.outputs.should_run == 'true'
         run: |
