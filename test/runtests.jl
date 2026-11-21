@@ -116,6 +116,13 @@ end
         d_ang = SF.descriptor!(out_buf, hist_buf, horizontal, center, center, sigma, ang)
         @test all(isfinite, d_ang) && abs(norm(d_ang) - 1f0) < 2f-6
     end
+    # Regression for #9: bound _exp_neg_f32 and _atan2_f32 minimax approximation errors.
+    exp_xs = range(0f0, 1.5625f0; length=10_001)
+    @test maximum(x -> abs(SF._exp_neg_f32(x) - exp(-Float64(x))), exp_xs) < 5e-7
+    @test maximum(x -> abs(SF._exp_neg_f32(x) - exp(-Float64(x))) / exp(-Float64(x)), exp_xs) < 2.5e-6
+    atan_grid = range(-1f0, 1f0; length=101)
+    @test maximum(abs(SF._atan2_f32(y, x) - atan(Float64(y), Float64(x)))
+                  for y in atan_grid, x in atan_grid if !(y == 0f0 && x == 0f0)) < 5e-6
     # Undersized _DescriptorWorkspace grows safely instead of writing out of bounds.
     expected_big = SF.descriptor(horizontal, center, center, 2.7, 0.4)
     for init_cap in (0, 8, 16)

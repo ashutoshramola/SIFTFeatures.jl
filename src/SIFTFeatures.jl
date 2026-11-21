@@ -617,13 +617,15 @@ end
     return ifelse(y < 0f0, -r, r)
 end
 
-# Minimax degree-5 approximation of exp(-x) on x in [0, 1.5625] for descriptor spatial weights.
+# Minimax degree-6 approximation of exp(-x) on x in [0, 1.5625] for descriptor spatial weights
+# (Remez fit; max Float32 absolute error < 4e-7, max relative error < 2e-6 on [0, 1.5625]).
 @inline function _exp_neg_f32(x::Float32)
-    p = muladd(x, -0.0046062f0, 0.0293684f0)
-    p = muladd(p, x, -0.1573072f0)
-    p = muladd(p, x, 0.4976051f0)
-    p = muladd(p, x, -0.9997653f0)
-    return muladd(p, x, 0.9999968f0)
+    p = muladd(x, 0.0006516392f0, -0.0069679245f0)
+    p = muladd(p, x, 0.04032194f0)
+    p = muladd(p, x, -0.16596726f0)
+    p = muladd(p, x, 0.49982446f0)
+    p = muladd(p, x, -0.9999834f0)
+    return muladd(p, x, 0.99999976f0)
 end
 
 @noinline function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
