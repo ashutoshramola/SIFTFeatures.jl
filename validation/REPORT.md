@@ -3,7 +3,7 @@
 The synthetic validation harness passed all 84 explicit checks on 2026-11-14 and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
 
 Executed with Julia 1.13.4, OpenCV 5.0.0, and NumPy 2.5.4. All reference gates passed.
-Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
+Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.5, StaticArrays 1.9.25.
 
 The six images are generated reproducibly by `validate.py`: shapes and lettering, four known geometric transforms, and an independent smoothed random texture. OpenCV precise upscaling is explicitly enabled. Keypoints are paired one-to-one using position, scale, and orientation only; descriptors do not choose the pairs.
 
@@ -48,6 +48,6 @@ Julia ratio/mutual matches agreed exactly with OpenCV BFMatcher when supplied th
 
 This is a synthetic reference suite, not a natural-image benchmark or proof of bitwise identity. Shape repetition produces some incorrect ratio-test matches in both implementations; RANSAC remains necessary for geometric use. Exact keypoint counts can differ around histogram peaks and plateau/tie cases. The descriptor comparison separates detector variation from descriptor arithmetic and quantization.
 
-All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia 1.13.4 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
+Under `Pkg.test()` with bounds checking enabled, the Julia test suite passes on Julia 1.13.4 (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
 
 Run `python validation/validate.py` to regenerate the JSON. This Markdown report records the run; the JSON includes minima, p05, medians, p95, maxima, and per-transform details. See the README for setup and numerical conventions.

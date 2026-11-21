@@ -49,7 +49,7 @@ sequences, including blur, viewpoint, zoom/rotation, illumination, and JPEG
 compression. Both libraries use a strict 0.8 ratio and mutual nearest neighbors.
 Correct matches are scored against the supplied homographies, within 3 pixels.
 
-| Metric | SIFTFeatures.jl | OpenCV 4.10 |
+| Metric | SIFTFeatures.jl | OpenCV 5.0.0 |
 |---|---:|---:|
 | Detected feature instances | 249,541 | 249,572 |
 | Descriptor matches across 40 pairs | 38,552 | 38,572 |
@@ -69,7 +69,7 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Full validation, thresholds, and difficult cases](docs/validation.md).
-The current source also passes 170 Julia checks on Julia 1.13.4 (both single-threaded
+On the current source, the Julia test suite passes on Julia 1.13.4 (both single-threaded
 and multi-threaded).
 
 ## Installation
@@ -110,7 +110,8 @@ kp, desc = sift(img; config)
 - Inputs are one-based `AbstractMatrix` values, including views and transposes,
   of real intensities, unsigned integers, or JuliaImages colors. Unsigned pixels
   are divided by their type's maximum. Other real values are not rescaled.
-  RGB is converted to luminance and alpha is ignored. Converted Float32
+  RGB is converted to luminance via `ColorTypes.Gray(color(v))` (matching
+  JuliaImages `Gray.(img)`) and alpha is ignored. Converted Float32
   intensities must be finite and in `[0,1]`. Offset axes are unsupported.
 - `SIFTKeypoint{Float32}` stores `y`, `x`, `sigma`, `angle`, `response`, `octave`,
   and `layer`. Coordinates refer to the original image; `(x=1,y=1)` is its first

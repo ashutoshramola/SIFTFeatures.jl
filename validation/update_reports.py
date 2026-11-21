@@ -25,11 +25,34 @@ def fmt_med_count(values) -> str:
     return f"{int(m)}" if m == int(m) else f"{m:.1f}"
 
 
-def update_report_md(latest: dict, path: Path):
+def fmt_err(value) -> str:
+    return "N/A" if value is None else f"{value:.2f}"
+
+
+def format_julia_deps(report: dict, fallback: dict | None = None) -> str:
+    jenv = report.get("julia_environment") or (fallback.get("julia_environment") if fallback else None) or {}
+    parts = [
+        f"{pkg} {jenv[pkg]}"
+        for pkg in ("ImageCore", "ColorTypes", "StaticArrays")
+        if pkg in jenv
+    ]
+    return ", ".join(parts)
+
+
+def format_julia_tests_clause(test_count: int | None, julia_ver: str) -> str:
+    if test_count is not None:
+        return f"all {test_count} Julia checks pass on Julia {julia_ver} (both single-threaded and multi-threaded)"
+    return f"the Julia test suite passes on Julia {julia_ver} (both single-threaded and multi-threaded)"
+
+
+def update_report_md(latest: dict, path: Path, fallback: dict | None = None, julia_test_count: int | None = None):
     date = latest["started_utc"][:10]
     julia_ver = latest["julia"].replace("julia version ", "")
     opencv_ver = latest["opencv"]
     numpy_ver = latest["numpy"]
+    deps_str = format_julia_deps(latest, fallback)
+    deps_line = f"Julia runtime dependencies: {deps_str}.\n" if deps_str else ""
+    tests_clause = format_julia_tests_clause(julia_test_count, julia_ver)
 
     img_rows = []
     probe_rows = []
@@ -61,8 +84,7 @@ def update_report_md(latest: dict, path: Path):
 The synthetic validation harness passed all {len(latest['checks'])} explicit checks on {date} and records run provenance and failures in `latest-results.json`. See the [real-photograph study](../docs/validation.md) for 48 original-resolution images, known-homography matching, and validation guards.
 
 Executed with Julia {julia_ver}, OpenCV {opencv_ver}, and NumPy {numpy_ver}. All reference gates passed.
-Julia runtime dependencies: ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23.
-
+{deps_line}
 The six images are generated reproducibly by `validate.py`: shapes and lettering, four known geometric transforms, and an independent smoothed random texture. OpenCV precise upscaling is explicitly enabled. Keypoints are paired one-to-one using position, scale, and orientation only; descriptors do not choose the pairs.
 
 | Image | Julia / OpenCV features | Paired | Coverage Julia / OpenCV | Position p95 (px) | Scale relative error p95 | Angle p95 (degrees) | Descriptor median cosine |
@@ -93,7 +115,7 @@ Julia ratio/mutual matches agreed exactly with OpenCV BFMatcher when supplied th
 
 This is a synthetic reference suite, not a natural-image benchmark or proof of bitwise identity. Shape repetition produces some incorrect ratio-test matches in both implementations; RANSAC remains necessary for geometric use. Exact keypoint counts can differ around histogram peaks and plateau/tie cases. The descriptor comparison separates detector variation from descriptor arithmetic and quantization.
 
-All 170 Julia tests pass under `Pkg.test()` with bounds checking enabled on Julia {julia_ver} (both single-threaded and multi-threaded), and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
+Under `Pkg.test()` with bounds checking enabled, {tests_clause}, and hosted GitHub Actions CI executes both `Tests` and `Evaluation & Benchmarks` workflows.
 
 Run `python validation/validate.py` to regenerate the JSON. This Markdown report records the run; the JSON includes minima, p05, medians, p95, maxima, and per-transform details. See the README for setup and numerical conventions.
 """
@@ -107,12 +129,8 @@ def update_comparison_md(comp: dict, path: Path):
     cpu = comp["cpu"]
     cpu_target = jenv.get("cpu_target", "")
     cpu_desc = f"{cpu} (`{cpu_target}`)" if cpu_target and cpu_target not in cpu else cpu
-    pkg_line = (
-        f"ImageCore {jenv.get('ImageCore', '0.10.5')}, "
-        f"ColorTypes {jenv.get('ColorTypes', '0.12.4')}"
-    )
-    if "StaticArrays" in jenv:
-        pkg_line += f", StaticArrays {jenv['StaticArrays']}"
+    pkg_line = format_julia_deps(comp)
+    pkg_sentence = f"{pkg_line}.\n" if pkg_line else ""
 
     rows = []
     for name, v in comp["images"].items():
@@ -131,8 +149,7 @@ Five measured samples after one warmup per image, using img1 from each of eight
 Oxford sequences at original resolution. The samples run sequentially on
 {cpu_desc}. Julia {julia_ver}, OpenCV {comp['opencv']},
 NumPy {comp['numpy']}, Python {comp['python']}; Julia/OpenCV/BLAS each use one thread.
-{pkg_line}.
-
+{pkg_sentence}
 | Photograph | Julia median (ms) | OpenCV raw median (ms) | OpenCV unit-output median (ms) | Julia / unit-output time | Julia minimum allocation (MiB) |
 |---|---:|---:|---:|---:|---:|
 {chr(10).join(rows)}
@@ -181,9 +198,13 @@ report destination. Images and decoded interchange data remain local.
     path.write_text(content, encoding="utf-8")
 
 
-def update_real_world_docs(rw: dict, validation_md: Path, baseline_md: Path):
+def update_real_world_docs(rw: dict, validation_md: Path, baseline_md: Path,
+                           fallback: dict | None = None, julia_test_count: int | None = None):
     date = rw["started_utc"][:10]
     julia_ver = rw["julia"].replace("julia version ", "")
+    deps_str = format_julia_deps(rw, fallback)
+    deps_mid = f", {deps_str}" if deps_str else ""
+    tests_clause = format_julia_tests_clause(julia_test_count, julia_ver)
     s = rw["summary"]
     images = rw["images"]
     pairs = rw["pairs"]
@@ -231,7 +252,7 @@ def update_real_world_docs(rw: dict, validation_md: Path, baseline_md: Path):
             diff_rows.append(
                 f"| {v['source']} → {v['target']} | {nj['matches']} / {nj['correct_within_3px']} | "
                 f"{nr['matches']} / {nr['correct_within_3px']} | "
-                f"{nj['homography_mean_probe_error_px']:.2f} / {nr['homography_mean_probe_error_px']:.2f} |"
+                f"{fmt_err(nj['homography_mean_probe_error_px'])} / {fmt_err(nr['homography_mean_probe_error_px'])} |"
             )
 
     val_content = f"""# Real-photograph validation — {date}
@@ -260,7 +281,7 @@ A separately fitted homography had mean error below 3 pixels at five fixed sourc
 
 ¹ Sum of correct descriptor matches across the five target images. ² Out of five pairs, using the mean error at the five probes.
 
-![Correct matches by sequence](../validation/real-world-summary.png)
+![Correct matches by sequence (reference v0.1.0 benchmark chart)](../validation/real-world-summary.png)
 
 ## Difficult cases
 
@@ -290,7 +311,7 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 ## Validation integrity and Julia regression tests
 
-The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Seven harness tests passed in both modes for the photographic run; the current suite has eight, including non-finite report handling. All 98 Julia tests passed under `Pkg.test()` with bounds checking enabled for the original 0.1.0 run. The current suite expands to 170 Julia checks on Julia {julia_ver} (both single-threaded and multi-threaded).
+The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Under `Pkg.test()` with bounds checking enabled, {tests_clause}.
 
 - [Descriptor-corruption control](../validation/guard-negative-control.txt)
 - [Machine-readable original-resolution results](../validation/real-world-results.json)
@@ -322,7 +343,7 @@ Data: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/researc
 
 This extends the synthetic baseline with the eight Oxford sequences used for real-photo validation. Each row summarizes six original-resolution photographs with unlimited features. Timings are one observational sample per photograph after a separate Julia/OpenCV warmup, not a controlled multi-repeat speed benchmark.
 
-Julia {julia_ver}, ImageCore 0.10.5, ColorTypes 0.12.4, StaticArrays 1.9.23, OpenCV {rw['opencv']}; Julia and OpenCV each used one thread. Julia timings exclude file interchange. OpenCV timing includes detection, descriptor computation, conversion to the reference frame array, and unit normalization. Hardware and system load were not controlled; avoid treating these numbers as a universal speed ratio.
+Julia {julia_ver}{deps_mid}, OpenCV {rw['opencv']}; Julia and OpenCV each used one thread. Julia timings exclude file interchange. OpenCV timing includes detection, descriptor computation, conversion to the reference frame array, and unit normalization. Hardware and system load were not controlled; avoid treating these numbers as a universal speed ratio.
 
 | Sequence | Features: median / maximum | Julia SIFT median (s) | OpenCV observation median (s) | Julia allocations median (MiB) | Julia matcher median (s) |
 |---|---:|---:|---:|---:|---:|
@@ -335,10 +356,11 @@ The implementation uses a separable symmetric Float32 FIR Gaussian filter with D
     baseline_md.write_text(base_content, encoding="utf-8")
 
 
-def update_readme(comp: dict, rw: dict, readme_path: Path):
+def update_readme(comp: dict, rw: dict, readme_path: Path, julia_test_count: int | None = None):
     comp_date = comp["started_utc"][:10]
     julia_ver = comp["julia"].replace("julia version ", "")
     cpu = comp["cpu"]
+    tests_clause = format_julia_tests_clause(julia_test_count, julia_ver)
 
     timing_rows = []
     ratios = []
@@ -397,7 +419,7 @@ sequences, including blur, viewpoint, zoom/rotation, illumination, and JPEG
 compression. Both libraries use a strict 0.8 ratio and mutual nearest neighbors.
 Correct matches are scored against the supplied homographies, within 3 pixels.
 
-| Metric | SIFTFeatures.jl | OpenCV 4.10 |
+| Metric | SIFTFeatures.jl | OpenCV {rw['opencv']} |
 |---|---:|---:|
 | Detected feature instances | {fmt_int(s['native_features'])} | {fmt_int(s['opencv_features'])} |
 | Descriptor matches across 40 pairs | {fmt_int(s['native_matches'])} | {fmt_int(s['opencv_matches'])} |
@@ -417,8 +439,7 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Full validation, thresholds, and difficult cases](docs/validation.md).
-The current source also passes 170 Julia checks on Julia {julia_ver} (both single-threaded
-and multi-threaded)."""
+On the current source, {tests_clause}."""
 
     text = readme_path.read_text(encoding="utf-8")
     pattern = re.compile(r"## Comparative benchmarks\n.*?(?=\n\n## Installation)", re.DOTALL)
@@ -433,22 +454,25 @@ def main():
     parser.add_argument("--latest", type=Path, default=ROOT / "validation/latest-results.json")
     parser.add_argument("--real-world", type=Path, default=ROOT / "validation/real-world-results.json")
     parser.add_argument("--comparison", type=Path, default=ROOT / "benchmark/comparison-results.json")
+    parser.add_argument("--julia-test-count", type=int, default=None)
     args = parser.parse_args()
+
+    comp = load_passed_json(args.comparison) if args.comparison.is_file() else None
 
     if args.latest.is_file():
         latest = load_passed_json(args.latest)
-        update_report_md(latest, ROOT / "validation/REPORT.md")
+        update_report_md(latest, ROOT / "validation/REPORT.md", fallback=comp, julia_test_count=args.julia_test_count)
 
-    if args.comparison.is_file():
-        comp = load_passed_json(args.comparison)
+    if comp is not None:
         update_comparison_md(comp, ROOT / "benchmark/comparison.md")
 
     if args.real_world.is_file():
         rw = load_passed_json(args.real_world)
-        update_real_world_docs(rw, ROOT / "docs/validation.md", ROOT / "benchmark/real-world-baseline.md")
+        update_real_world_docs(rw, ROOT / "docs/validation.md", ROOT / "benchmark/real-world-baseline.md",
+                               fallback=comp, julia_test_count=args.julia_test_count)
 
-    if args.comparison.is_file() and args.real_world.is_file():
-        update_readme(comp, rw, ROOT / "README.md")
+    if comp is not None and args.real_world.is_file():
+        update_readme(comp, rw, ROOT / "README.md", julia_test_count=args.julia_test_count)
 
 
 if __name__ == "__main__":

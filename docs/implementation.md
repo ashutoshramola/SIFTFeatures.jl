@@ -13,7 +13,7 @@ around the nearest octave pixel.
 
 ## OpenCV compatibility
 
-Comparison uses OpenCV 4.10 with precise upscaling explicitly enabled. OpenCV
+Comparison uses OpenCV (5.0.0 in current CI; originally developed against 4.10) with precise upscaling explicitly enabled. OpenCV
 disables that option by default. Its descriptor vectors are transposed and
 unit-normalized for comparison; its floating output is quantized near 512 times
 a unit vector, whereas Julia returns unquantized unit vectors.

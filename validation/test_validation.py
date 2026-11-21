@@ -11,8 +11,9 @@ import unittest
 
 import numpy as np
 
-from common import Gates, execute
+from common import Gates, execute, load_csv, load_julia_env
 from real_world import matching_stats, project, resize_image
+import update_reports
 from validate import angles, frame_pairs
 
 
@@ -126,6 +127,127 @@ class GeometryTests(unittest.TestCase):
         self.assertEqual(correct["correct_within_3px"], 5)
         self.assertLess(correct["homography_mean_probe_error_px"], 1e-5)
         self.assertEqual(bad["correct_within_3px"], 0)
+
+
+class ReportGeneratorTests(unittest.TestCase):
+    def test_load_csv_handles_header_only_and_rows(self):
+        with tempfile.TemporaryDirectory() as directory:
+            empty_csv = Path(directory) / "empty.matches.csv"
+            empty_csv.write_text("query,train,distance\n", encoding="utf-8")
+            arr = load_csv(empty_csv, 3)
+            self.assertEqual(arr.shape, (0, 3))
+
+            nonempty_csv = Path(directory) / "one.matches.csv"
+            nonempty_csv.write_text("query,train,distance\n0,2,0.125\n", encoding="utf-8")
+            arr2 = load_csv(nonempty_csv, 3)
+            self.assertEqual(arr2.shape, (1, 3))
+            self.assertAlmostEqual(arr2[0, 2], 0.125)
+
+    def test_load_julia_env(self):
+        with tempfile.TemporaryDirectory() as directory:
+            env_path = Path(directory) / "julia-environment.tsv"
+            env_path.write_text("ImageCore\t0.10.5\nColorTypes\t0.12.5\nStaticArrays\t1.9.25\n", encoding="utf-8")
+            env = load_julia_env(env_path)
+            self.assertEqual(env["ColorTypes"], "0.12.5")
+            self.assertEqual(env["StaticArrays"], "1.9.25")
+            self.assertEqual(load_julia_env(Path(directory) / "missing.tsv"), {})
+
+    def test_update_reports_dynamic_versions_and_none_homography(self):
+        self.assertEqual(update_reports.fmt_err(None), "N/A")
+        self.assertEqual(update_reports.fmt_err(3.067), "3.07")
+
+        jenv = {"ImageCore": "0.10.5", "ColorTypes": "0.12.5", "StaticArrays": "1.9.25"}
+        rw = {
+            "started_utc": "2026-11-21T00:00:00+00:00",
+            "julia": "julia version 1.13.4",
+            "opencv": "5.0.0",
+            "numpy": "2.5.5",
+            "python": "3.13.18",
+            "python_optimization": 1,
+            "run_id": "testrun",
+            "passed": True,
+            "checks": [{"name": "ok", "passed": True, "detail": ""}],
+            "failures": [],
+            "julia_environment": jenv,
+            "sequences": [{"name": "graf", "condition": "viewpoint"}],
+            "images": {
+                "graf_1": {
+                    "native_count": 100, "opencv_count": 100, "paired_count": 100,
+                    "native_coverage": 1.0, "opencv_coverage": 1.0,
+                    "position_px": {"p95": 0.0001},
+                    "relative_scale_error": {"p95": 1e-5},
+                    "angle_error_deg": {"p95": 0.001},
+                    "detected_descriptor_cosine": {"median": 0.99999},
+                    "native_sift": {"seconds": 0.1, "bytes": 1024 * 1024},
+                    "opencv_seconds": 0.1,
+                }
+            },
+            "pairs": {
+                "graf_2": {
+                    "source": "graf_1", "target": "graf_2",
+                    "native_match": {"seconds": 0.01},
+                    "native": {
+                        "matches": 2, "correct_within_3px": 0,
+                        "homography_accurate_3px": False,
+                        "homography_mean_probe_error_px": None,
+                    },
+                    "opencv": {
+                        "matches": 2, "correct_within_3px": 0,
+                        "homography_accurate_3px": False,
+                        "homography_mean_probe_error_px": None,
+                    },
+                }
+            },
+            "summary": {
+                "images": 1, "pairs": 1,
+                "native_features": 100, "opencv_features": 100, "paired_frames": 100,
+                "native_matches": 2, "opencv_matches": 2,
+                "native_correct_matches_3px": 0, "opencv_correct_matches_3px": 0,
+                "native_accurate_homographies_3px": 0, "opencv_accurate_homographies_3px": 0,
+            },
+        }
+        comp = {
+            "started_utc": "2026-11-21T00:00:00+00:00",
+            "julia": "julia version 1.13.4",
+            "opencv": "5.0.0",
+            "numpy": "2.5.5",
+            "python": "3.13.18",
+            "cpu": "TestCPU",
+            "passed": True,
+            "checks": [],
+            "julia_environment": jenv,
+            "images": {
+                "graf_1": {
+                    "shape": [640, 800], "julia_features": 100, "opencv_features": 100,
+                    "julia_seconds": {"median": 0.1},
+                    "opencv_seconds": {"median": 0.1},
+                    "opencv_unit_descriptor_seconds": {"median": 0.1},
+                    "julia_over_opencv_unit_time": 1.0,
+                    "julia_allocated_bytes": {"minimum": 1024 * 1024},
+                }
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            d = Path(directory)
+            val_md = d / "validation.md"
+            base_md = d / "baseline.md"
+            readme_md = d / "README.md"
+            readme_md.write_text("# Top\n\n## Comparative benchmarks\nold\n\n## Installation\nend\n", encoding="utf-8")
+
+            update_reports.update_real_world_docs(rw, val_md, base_md, julia_test_count=555)
+            update_reports.update_readme(comp, rw, readme_md, julia_test_count=555)
+
+            val_text = val_md.read_text(encoding="utf-8")
+            base_text = base_md.read_text(encoding="utf-8")
+            readme_text = readme_md.read_text(encoding="utf-8")
+
+            self.assertIn("N/A / N/A", val_text)
+            self.assertIn("555 Julia checks", val_text)
+            self.assertNotIn("170 Julia", val_text)
+            self.assertIn("ColorTypes 0.12.5, StaticArrays 1.9.25", base_text)
+            self.assertIn("| Metric | SIFTFeatures.jl | OpenCV 5.0.0 |", readme_text)
+            self.assertNotIn("OpenCV 4.10", readme_text)
+            self.assertIn("555 Julia checks", readme_text)
 
 
 if __name__ == "__main__":

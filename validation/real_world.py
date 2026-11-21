@@ -12,7 +12,7 @@ import time
 import cv2
 import numpy as np
 
-from common import ROOT, execute, sha256, write_report
+from common import ROOT, execute, load_csv, load_julia_env, sha256, write_report
 from validate import angles, frame_pairs, geometric_errors, normalized, ratio_matches, summarize
 
 
@@ -34,9 +34,7 @@ def project(points, H):
 
 
 def load_frames(path):
-    if len(path.read_text().splitlines()) == 1:
-        return np.empty((0, 7), np.float64)
-    return np.loadtxt(path, delimiter=",", skiprows=1, ndmin=2)
+    return load_csv(path, 7)
 
 
 def reference_features(sift, image):
@@ -160,6 +158,7 @@ def run(args, report, gates):
     (work / "pairs.txt").write_text("\n".join(f"{name.split('_')[0]}_1 {name}" for name in homographies) + "\n")
     subprocess.run([args.julia, "--startup-file=no", f"--project={ROOT}",
                     str(ROOT / "validation/export.jl"), str(work)], check=True)
+    report["julia_environment"] = load_julia_env(work / "julia-environment.tsv")
     performance = {}
     with (work / "performance.csv").open() as f:
         for row in csv.DictReader(f):
@@ -221,7 +220,7 @@ def run(args, report, gates):
         source = name.split("_")[0] + "_1"
         a, ad = native[source]; b, bd = native[name]
         ra, rad = reference[source]; rb, rbd = reference[name]
-        matches = load_frames(work / (name + ".matches.csv"))
+        matches = load_csv(work / (name + ".matches.csv"), 3)
         pairs = [tuple(map(int, p[:2])) for p in matches]
         check = ratio_matches(ad, bd)
         rpairs = ratio_matches(rad, rbd)
