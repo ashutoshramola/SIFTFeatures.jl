@@ -726,7 +726,10 @@ end
     cy, cx = round(Int, y - 1) + 1, round(Int, x - 1) + 1
     width = 3.0 * sigma
     # Internal gradient angles use upward y, as in the standard SIFT convention.
-    phi = -Float64(angle)
+    # Reduce angles outside [0, 2π) in Float64 before casting to Float32 so large
+    # finite angles neither overflow to ±Inf32/NaN32 nor suffer Float32 cancellation.
+    a64 = Float64(angle)
+    phi = -((0.0 <= a64 < 2pi) ? a64 : rem2pi(a64, RoundDown))
     cs64, sn64 = cos(phi) / width, sin(phi) / width
     cs, sn = Float32(cs64), Float32(sn64)
     h, w = size(a)
