@@ -1,6 +1,6 @@
 using Test, SIFTFeatures, LinearAlgebra
 using ColorTypes: Gray, RGB, RGBA
-using ImageCore: N0f8
+using FixedPointNumbers: N0f8
 const SF = SIFTFeatures
 include("fixtures.jl")
 

@@ -146,9 +146,10 @@ class ReportGeneratorTests(unittest.TestCase):
     def test_load_julia_env(self):
         with tempfile.TemporaryDirectory() as directory:
             env_path = Path(directory) / "julia-environment.tsv"
-            env_path.write_text("ImageCore\t0.10.5\nColorTypes\t0.12.5\nStaticArrays\t1.9.25\n", encoding="utf-8")
+            env_path.write_text("ColorTypes\t0.12.5\nFixedPointNumbers\t0.8.6\nStaticArrays\t1.9.25\n", encoding="utf-8")
             env = load_julia_env(env_path)
             self.assertEqual(env["ColorTypes"], "0.12.5")
+            self.assertEqual(env["FixedPointNumbers"], "0.8.6")
             self.assertEqual(env["StaticArrays"], "1.9.25")
             self.assertEqual(load_julia_env(Path(directory) / "missing.tsv"), {})
 
@@ -156,7 +157,7 @@ class ReportGeneratorTests(unittest.TestCase):
         self.assertEqual(update_reports.fmt_err(None), "N/A")
         self.assertEqual(update_reports.fmt_err(3.067), "3.07")
 
-        jenv = {"ImageCore": "0.10.5", "ColorTypes": "0.12.5", "StaticArrays": "1.9.25"}
+        jenv = {"ColorTypes": "0.12.5", "FixedPointNumbers": "0.8.6", "StaticArrays": "1.9.25"}
         rw = {
             "started_utc": "2026-11-21T00:00:00+00:00",
             "julia": "julia version 1.13.4",
@@ -244,7 +245,7 @@ class ReportGeneratorTests(unittest.TestCase):
             self.assertIn("N/A / N/A", val_text)
             self.assertIn("555 Julia checks", val_text)
             self.assertNotIn("170 Julia", val_text)
-            self.assertIn("ColorTypes 0.12.5, StaticArrays 1.9.25", base_text)
+            self.assertIn("ColorTypes 0.12.5, FixedPointNumbers 0.8.6, StaticArrays 1.9.25", base_text)
             self.assertIn("| Metric | SIFTFeatures.jl | OpenCV 5.0.0 |", readme_text)
             self.assertNotIn("OpenCV 4.10", readme_text)
             self.assertIn("555 Julia checks", readme_text)

@@ -3,7 +3,7 @@
 # Run from the repository root:
 #   julia --threads=auto --project=. examples/04_visual_odometry.jl
 
-include("homography_ransac.jl")
+@isdefined(ransac_homography) || include("homography_ransac.jl")
 
 """
     track_sequence(frames; config=SIFTConfig(nfeatures=800), ratio=0.8, thresh_px=2.5)
@@ -28,8 +28,8 @@ function track_sequence(frames::AbstractVector{<:AbstractMatrix};
         matches = match_descriptors(prev_desc, cur_desc; ratio, crosscheck=true)
         H_step, inliers = ransac_homography(prev_kp, cur_kp, matches; thresh_px)
         step_inliers[t - 1] = count(inliers)
-        cumulative_H[t] = H_step * cumulative_H[t - 1]
-        cumulative_H[t] /= cumulative_H[t][3, 3]
+        H_cum = H_step * cumulative_H[t - 1]
+        cumulative_H[t] = abs(H_cum[3, 3]) > 1e-12 ? H_cum / H_cum[3, 3] : H_cum
         prev_kp, prev_desc = cur_kp, cur_desc
     end
     return (cumulative_H=cumulative_H, step_inliers=step_inliers)

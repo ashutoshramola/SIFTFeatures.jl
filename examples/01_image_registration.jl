@@ -3,7 +3,7 @@
 # Run from the repository root:
 #   julia --threads=auto --project=. examples/01_image_registration.jl
 
-include("homography_ransac.jl")
+@isdefined(ransac_homography) || include("homography_ransac.jl")
 
 """
     register_images(img_ref, img_target; config=SIFTConfig(), ratio=0.8, thresh_px=3.0)

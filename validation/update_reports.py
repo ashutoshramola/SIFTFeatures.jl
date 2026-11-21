@@ -33,7 +33,7 @@ def format_julia_deps(report: dict, fallback: dict | None = None) -> str:
     jenv = report.get("julia_environment") or (fallback.get("julia_environment") if fallback else None) or {}
     parts = [
         f"{pkg} {jenv[pkg]}"
-        for pkg in ("ImageCore", "ColorTypes", "StaticArrays")
+        for pkg in ("ColorTypes", "Colors", "FixedPointNumbers", "ImageCore", "StaticArrays")
         if pkg in jenv
     ]
     return ", ".join(parts)

@@ -7,11 +7,23 @@ concurrency:
   cancel-in-progress: true
 jobs:
   julia:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        julia: ['1.13']
-        threads: ['1', 'auto']
+        include:
+          - os: ubuntu-24.04
+            julia: '1.13'
+            threads: '1'
+          - os: ubuntu-24.04
+            julia: '1.13'
+            threads: 'auto'
+          - os: macos-latest
+            julia: '1.13'
+            threads: 'auto'
+          - os: windows-latest
+            julia: '1.13'
+            threads: 'auto'
     env:
       JULIA_NUM_THREADS: ${{ matrix.threads }}
     steps:
@@ -21,6 +33,18 @@ jobs:
           version: ${{ matrix.julia }}
       - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-runtest@v1
+      - name: Run standalone examples
+        if: matrix.os == 'ubuntu-24.04' && matrix.threads == 'auto'
+        run: julia --startup-file=no --project=. --threads=auto examples/run_all.jl
+      - name: Verify single-thread vs multi-thread bitwise determinism
+        if: matrix.os == 'ubuntu-24.04' && matrix.threads == 'auto'
+        shell: bash
+        run: |
+          T1=$(julia --startup-file=no --project=. -t 1 -e 'using SIFTFeatures; include("test/fixtures.jl"); a = fixture(256, 256); k, d = sift(a); m = match_descriptors(d, d; crosscheck=true); println(length(k), " ", hash(d), " ", [(t.query, t.train, t.distance) for t in m] |> hash)')
+          TA=$(julia --startup-file=no --project=. -t auto -e 'using SIFTFeatures; include("test/fixtures.jl"); a = fixture(256, 256); k, d = sift(a); m = match_descriptors(d, d; crosscheck=true); println(length(k), " ", hash(d), " ", [(t.query, t.train, t.distance) for t in m] |> hash)')
+          echo "1-thread:    $T1"
+          echo "auto-thread: $TA"
+          test "$T1" = "$TA"
   opencv:
     runs-on: ubuntu-24.04
     steps:
@@ -37,6 +61,7 @@ jobs:
       - run: python -m unittest discover -s validation -p 'test_*.py'
       - run: python -O -m unittest discover -s validation -p 'test_*.py'
       - run: python validation/validate.py
+      - run: python validation/check_guards.py
       - uses: actions/upload-artifact@v7
         if: always()
         with:

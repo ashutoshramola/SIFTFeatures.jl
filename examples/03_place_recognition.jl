@@ -3,7 +3,7 @@
 # Run from the repository root:
 #   julia --threads=auto --project=. examples/03_place_recognition.jl
 
-include("homography_ransac.jl")
+@isdefined(ransac_homography) || include("homography_ransac.jl")
 
 struct ImageDatabaseEntry
     name::String

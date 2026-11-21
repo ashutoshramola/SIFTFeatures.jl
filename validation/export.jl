@@ -1,12 +1,13 @@
-using SIFTFeatures, ImageCore, ColorTypes, StaticArrays
+using SIFTFeatures, ColorTypes, Colors, FixedPointNumbers, StaticArrays
 # Small dependency-free interchange: image bytes are row-major, descriptors are
 # Julia columns (equivalently row-major N×128), and keypoints are readable CSV.
 root = ARGS[1]
 open(joinpath(root, "julia-environment.tsv"), "w") do io
     for (key, value) in (("julia", VERSION), ("cpu_target", Sys.CPU_NAME),
                          ("julia_threads", Threads.nthreads()),
-                         ("ImageCore", Base.pkgversion(ImageCore)),
                          ("ColorTypes", Base.pkgversion(ColorTypes)),
+                         ("Colors", Base.pkgversion(Colors)),
+                         ("FixedPointNumbers", Base.pkgversion(FixedPointNumbers)),
                          ("StaticArrays", Base.pkgversion(StaticArrays)))
         println(io, key, '\t', value)
     end
