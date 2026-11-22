@@ -1,2 +1,6 @@
 * text=auto eol=lf
 *.png binary
+
+# Exclude optional Python/OpenCV validation & benchmark harnesses from GitHub language stats
+validation/*.py linguist-detectable=false
+benchmark/*.py linguist-detectable=false
