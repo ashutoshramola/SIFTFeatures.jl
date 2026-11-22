@@ -68,7 +68,9 @@ function fit_homography_dlt(pa::AbstractMatrix{<:Real}, pb::AbstractMatrix{<:Rea
         A[r2, 4] = -x; A[r2, 5] = -y; A[r2, 6] = -1.0
         A[r2, 7] = v * x; A[r2, 8] = v * y; A[r2, 9] = v
     end
-    F = svd(A; full=true)
+    # The minimal 8×9 system needs the ninth right singular vector.
+    # Taller systems already contain that vector in their thin SVD.
+    F = svd(A; full=(n == 4))
     v9 = @view F.V[:, 9]
     # Row-major 3×3 reconstruction from the 9-element nullspace vector
     Hn = SMatrix{3,3,Float64,9}(

@@ -179,6 +179,20 @@ end
     @test rootsift(Float32[1, 3, 0, 0]) ≈ Float32[0.5, sqrt(0.75f0), 0, 0] atol=1e-6
     @test rootsift(Float32[10, 30, 0, 0]) ≈ rootsift(Float32[1, 3, 0, 0]) atol=1e-6
     @test rootsift(Int[1, 3, 0, 0]) ≈ Float32[0.5, sqrt(0.75f0), 0, 0] atol=1e-6
+    for T in (Float16, Float32, Float64)
+        tiny, huge = nextfloat(zero(T)), floatmax(T)
+        bins = hcat(fill(tiny, 128), fill(huge, 128), zeros(T, 128))
+        expected = fill(T(inv(sqrt(128))), 128)
+        @test rootsift(bins[:, 1]) ≈ expected
+        @test rootsift!(bins) === bins
+        @test bins[:, 1] ≈ expected
+        @test bins[:, 2] ≈ expected
+        @test all(iszero, bins[:, 3])
+    end
+    # The bin-to-peak ratio underflows in Float64, but its square root is representable.
+    smallest, largest = nextfloat(0.0), floatmax(Float64)
+    @test rootsift([smallest, largest])[1] ≈ Float64(sqrt(big(smallest) / big(largest)))
+    @test rootsift(fill(big(2)^1024, 4)) == fill(0.5f0, 4)
     mat_rs = Float32[1 0; 3 0; 0 2; 0 2]
     mat_rs_copy = copy(mat_rs)
     @test rootsift!(mat_rs_copy) === mat_rs_copy
@@ -547,3 +561,4 @@ end
 end
 
 include("self_contained_validation.jl")
+include("validation_report.jl")
