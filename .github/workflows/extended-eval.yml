@@ -1,0 +1,81 @@
+name: Extended Evaluation & HPatches (Manual)
+on:
+  workflow_dispatch:
+    inputs:
+      run_configs_stress_scaling:
+        description: 'Run non-default SIFTConfig parity, stress tests, and multi-thread scaling'
+        type: boolean
+        default: true
+      run_hpatches:
+        description: 'Download and run HPatches (116 scenes, 696 photos, 580 pairs)'
+        type: boolean
+        default: false
+      hpatches_max_side:
+        description: 'HPatches max image side in px (800 default, 0 for full resolution)'
+        type: string
+        default: '800'
+      julia_version:
+        description: 'Julia version to evaluate'
+        type: string
+        default: '1.13'
+permissions:
+  contents: read
+concurrency:
+  group: extended-eval-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  extended-evaluate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: ${{ inputs.julia_version }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: julia-actions/cache@v3
+      - name: Cache Oxford validation dataset
+        uses: actions/cache@v6
+        with:
+          path: validation-data
+          key: oxford-data-${{ hashFiles('validation/oxford-sources.json') }}
+      - name: Cache HPatches dataset
+        if: inputs.run_hpatches
+        uses: actions/cache@v6
+        with:
+          path: hpatches-data
+          key: hpatches-release-v1
+      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+      - run: python -m pip install -r validation/requirements.txt
+      - name: Download or verify Oxford dataset (for configs/stress/scaling)
+        if: inputs.run_configs_stress_scaling
+        run: python validation/download_oxford.py --data-dir validation-data
+      - name: Run extended evaluation
+        run: |
+          SUITES=""
+          if [ "${{ inputs.run_configs_stress_scaling }}" = "true" ]; then
+            SUITES="configs,stress,scaling"
+          fi
+          if [ "${{ inputs.run_hpatches }}" = "true" ]; then
+            SUITES="${SUITES:+${SUITES},}hpatches"
+          fi
+          if [ -z "$SUITES" ]; then
+            echo "No suites selected; enable at least one input."
+            exit 1
+          fi
+          python -O validation/extended_eval.py \
+            --suites "$SUITES" \
+            --data-dir validation-data \
+            --hpatches-dir hpatches-data \
+            --hpatches-max-side "${{ inputs.hpatches_max_side }}" \
+            --threads 1,4 \
+            --samples 3 \
+            --work-dir extended-eval-work \
+            --output extended-eval-work/extended-results.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: extended-evaluation-results
+          path: extended-eval-work/extended-results.json

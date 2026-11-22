@@ -179,6 +179,14 @@ runtime. Optional `--figures /path/to/figures` needs matplotlib and generates
 local diagnostic match plots. Dataset archives and extracted images stay local.
 The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) runs this benchmark weekly (when commits were made) or manually on demand.
 
+For broader manual checks—non-default `SIFTConfig` parity, noise/low-light/`UInt16`/panoramic stress tests, multi-threaded scaling, and the optional 116-scene HPatches benchmark—run locally or trigger the manual-only `Extended Evaluation & HPatches (Manual)` workflow (`extended-eval.yml`):
+
+```sh
+python -O validation/extended_eval.py --suites configs,stress,scaling --threads 1,4
+# Include HPatches (downloads ~1.2 GB into gitignored hpatches-data/ on first run):
+python -O validation/extended_eval.py --suites all --hpatches-max-side 800
+```
+
 Validation uses explicit checks that remain active under Python `-O`, writes
 failures with a nonzero exit status, and replaces stale success reports before
 starting. [Synthetic timing samples](benchmark/baseline.md) and
