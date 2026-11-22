@@ -102,6 +102,10 @@ matches = match_descriptors(descriptors, desc2; ratio=0.8, crosscheck=true)
 config = SIFTConfig(nfeatures=1000, octave_layers=3,
                     contrast_threshold=0.04, edge_threshold=10, sigma=1.6)
 kp, desc = sift(img; config)
+
+# Optional RootSIFT (Hellinger) descriptors for higher matching accuracy:
+kp_r, desc_r = sift(img; config=SIFTConfig(rootsift=true))
+desc_r2 = rootsift(desc) # or rootsift!(desc) in-place
 ```
 
 ## Data conventions

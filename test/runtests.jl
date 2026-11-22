@@ -162,6 +162,29 @@ end
         @test length(small_ws.rb) >= 29
         @test (@allocated SF._descriptor!(out_small, small_ws, horizontal, center, center, 2.7, 0.4)) == 0
     end
+    # RootSIFT descriptor transform and integrated SIFTConfig(rootsift=true).
+    r_direct = SF.descriptor(impulse, center, center, 1/3, 0; rootsift=true)
+    r_post = rootsift(actual)
+    @test r_direct ≈ r_post atol=2e-6
+    @test abs(norm(r_direct) - 1f0) < 2f-6
+    @test SF.descriptor!(out_buf, desc_ws, impulse, center, center, 1/3, 0; rootsift=true) === out_buf
+    @test out_buf == r_direct
+    @test (@allocated SF.descriptor!(out_buf, desc_ws, impulse, center, center, 1/3, 0; rootsift=true)) == 0
+    # Zero vector stays zero; scale-invariance holds; invalid inputs throw ArgumentError.
+    @test rootsift(zeros(Float32, 128)) == zeros(Float32, 128)
+    @test rootsift(Float32[1, 3, 0, 0]) ≈ Float32[0.5, sqrt(0.75f0), 0, 0] atol=1e-6
+    @test rootsift(Float32[10, 30, 0, 0]) ≈ rootsift(Float32[1, 3, 0, 0]) atol=1e-6
+    @test rootsift(Int[1, 3, 0, 0]) ≈ Float32[0.5, sqrt(0.75f0), 0, 0] atol=1e-6
+    mat_rs = Float32[1 0; 3 0; 0 2; 0 2]
+    mat_rs_copy = copy(mat_rs)
+    @test rootsift!(mat_rs_copy) === mat_rs_copy
+    @test mat_rs_copy ≈ Float32[0.5 0; sqrt(0.75f0) 0; 0 sqrt(0.5f0); 0 sqrt(0.5f0)] atol=1e-6
+    @test (@allocated rootsift!(mat_rs_copy)) == 0
+    @test_throws ArgumentError rootsift(Float32[-0.1, 1.0])
+    @test_throws ArgumentError rootsift(Float32[NaN32, 1.0])
+    @test_throws ArgumentError rootsift(Float32[Inf32, 1.0])
+    @test_throws ArgumentError rootsift!(Float32[-1.0 0.0; 1.0 1.0])
+    @test_throws ArgumentError rootsift!(_ZeroBasedArray(Float32[1.0, 2.0]))
 end
 
 @testset "Independent descriptor layout and interpolation" begin
@@ -212,7 +235,7 @@ end
     cols_ir = string(only(Base.code_lowered(SF._blur_cols!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
     rows_ir = string(only(Base.code_lowered(SF._blur_rows!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
     scan_ir = string(only(Base.code_lowered(SF._scan_octave_columns!, (Vector{SF.LocalizedCandidate}, Vector{Matrix{Float32}}, Int, Int, Int, UnitRange{Int}, Int, Float32, SIFTConfig))))
-    desc_ir = string(only(Base.code_lowered(SF._descriptor!, (Vector{Float32}, SF.DescriptorWorkspace, Matrix{Float32}, Float64, Float64, Float64, Float32))))
+    desc_ir = string(only(Base.code_lowered(SF._descriptor!, (Vector{Float32}, SF.DescriptorWorkspace, Matrix{Float32}, Float64, Float64, Float64, Float32, Bool))))
     @test occursin("gc_preserve", cols_ir)
     @test occursin("gc_preserve", rows_ir)
     @test occursin("gc_preserve", scan_ir)
@@ -299,6 +322,12 @@ end
     k0,d0 = sift(a;config=SIFTConfig(first_octave=0))
     @test !isempty(k0) && minimum(p.octave for p in k0)>=0
     @test size(d0,2)==length(k0)
+    k_rs, d_rs = sift(a; config=SIFTConfig(rootsift=true))
+    @test k_rs == k
+    @test size(d_rs) == size(d)
+    @test all(isfinite, d_rs) && all(d_rs .>= 0)
+    @test all(abs.(vec(sum(abs2, d_rs; dims=1)) .- 1) .< 2e-6)
+    @test maximum(abs.(d_rs .- rootsift(d))) < 2e-6
     kr,dr = sift(rotl90(a))
     m = match_descriptors(d,dr;crosscheck=true)
     @test length(m) >= 0.65length(k)
@@ -437,6 +466,8 @@ end
     @inferred SF.descriptor!(out128, h128, gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
     @inferred SF.descriptor(gp[1][2], 16.0, 16.0, 1.6, 0.2f0)
     kp, desc = @inferred sift(a)
+    @inferred sift(a; config=SIFTConfig(rootsift=true))
+    @inferred rootsift(desc)
     @inferred match_descriptors(desc, desc; crosscheck=true)
 
     # Zero-allocation assertions on pre-allocated hot kernels (including a true extremum solve)
