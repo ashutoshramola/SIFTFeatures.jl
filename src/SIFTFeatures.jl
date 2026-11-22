@@ -65,6 +65,7 @@ struct LocalizedCandidate
     response::Float64
 end
 
+"""Validate a [`SIFTConfig`](@ref), throwing `ArgumentError` on invalid parameters."""
 function validate(c::SIFTConfig)
     c.nfeatures >= 0 || throw(ArgumentError("nfeatures must be nonnegative"))
     c.octave_layers >= 1 || throw(ArgumentError("octave_layers must be positive"))
@@ -103,6 +104,9 @@ function _grayscale_float_chunk!(a::Matrix{Float32}, invalid::Memory{Bool},
     return nothing
 end
 
+"""Convert a one-based real, unsigned integer, or color matrix into a `Matrix{Float32}`
+with intensities validated to lie in `[0, 1]`. Unsigned pixels are divided by `typemax`.
+"""
 function grayscale_float(img::AbstractMatrix{<:Union{Real,Colorant}})
     Base.require_one_based_indexing(img)
     a = Matrix{Float32}(undef, size(img))
@@ -163,6 +167,7 @@ function _double_image_cols!(b::Matrix{Float32}, a::Matrix{Float32}, cols::UnitR
     return b
 end
 
+"""Upsample `a` by `2×` using pixel-aligned bilinear interpolation (`x -> 2x`, edge replication at the far border)."""
 function double_image(a::Matrix{Float32})
     h, w = size(a)
     b = Matrix{Float32}(undef, 2h, 2w)
@@ -342,6 +347,7 @@ end
     return dst
 end
 
+"""Separable symmetric four-sigma Float32 Gaussian blur with reflect-101 borders, writing into `dst`."""
 function gaussian_blur!(dst::Matrix{Float32}, tmp::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) == size(tmp) ||
         throw(DimensionMismatch("dst, tmp, and src must have the same size"))
@@ -403,6 +409,7 @@ function gaussian_blur!(dst::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     return gaussian_blur!(dst, similar(src), src, sigma)
 end
 
+"""Return a Gaussian-blurred copy of `a` with standard deviation `sigma`. See [`gaussian_blur!`](@ref)."""
 gaussian_blur(a::Matrix{Float32}, sigma::Real) =
     gaussian_blur!(similar(a), a, sigma)
 
@@ -420,6 +427,7 @@ end
 downsample_2x(src::Matrix{Float32}) =
     downsample_2x!(Matrix{Float32}(undef, size(src) .÷ 2), src)
 
+"""Compute the default number of SIFT pyramid octaves for image `img` and configuration `c`."""
 function default_octaves(img, c)
     m = minimum(size(img))
     m < 2 && return 0
@@ -544,6 +552,7 @@ end
     end
 end
 
+"""Test whether DoG sample `(y, x, l)` is strictly greater or strictly less than all 26 scale-space neighbors."""
 @inline function is_extremum(d, y::Int, x::Int, l::Int)
     _check_dog_neighborhood(d, y, x, l)
     return _is_extremum(d, y, x, l)
@@ -573,6 +582,7 @@ end
     return g, H
 end
 
+"""Compute the 3D finite-difference gradient and Hessian `(g, H)` (ordered `x, y, scale`) at DoG sample `(y, x, l)`."""
 @inline function derivatives(d, y::Int, x::Int, l::Int)
     _check_dog_neighborhood(d, y, x, l)
     return _derivatives(d, y, x, l)
@@ -603,6 +613,7 @@ function _localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
     return nothing
 end
 
+"""Iteratively refine a discrete DoG extremum `(y, x, l)` via 3D quadratic interpolation, rejecting low-contrast and edge responses. Returns a named tuple or `nothing`."""
 function localize(d, y::Int, x::Int, l::Int, c::SIFTConfig)
     validate(c)
     Base.require_one_based_indexing(d)
@@ -809,6 +820,7 @@ end
     return angles
 end
 
+"""Compute dominant keypoint orientations in radians `[0, 2π)` (clockwise from `+x`) into `angles` using a reusable [`OrientationWorkspace`](@ref)."""
 function orientations!(angles::Vector{Float64}, ws::OrientationWorkspace,
                        a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
     Base.require_one_based_indexing(angles)
@@ -833,6 +845,7 @@ function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, s
     return _orientations!(angles, hist, sm, wtab, a, y, x, sigma)
 end
 
+"""Compute dominant keypoint orientations in radians `[0, 2π)` around `(y, x)` at octave scale `sigma`. See [`orientations!`](@ref)."""
 orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
     orientations!(Float64[], OrientationWorkspace(), a, y, x, sigma)
 
@@ -1087,6 +1100,7 @@ end
     return nothing
 end
 
+"""Compute a 128-element unit-L2 SIFT (or RootSIFT when `rootsift=true`) descriptor into `out` using a reusable [`DescriptorWorkspace`](@ref)."""
 function descriptor!(out::AbstractVector{Float32}, ws::DescriptorWorkspace,
                      a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real;
                      rootsift::Bool=false)
@@ -1110,6 +1124,7 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
     return out
 end
 
+"""Compute a 128-element unit-L2 SIFT (or RootSIFT when `rootsift=true`) descriptor around `(y, x, sigma, angle)`. See [`descriptor!`](@ref)."""
 function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real;
                     rootsift::Bool=false)
     _validate_descriptor_args(y, x, sigma, angle)
@@ -1174,6 +1189,7 @@ rootsift(m::AbstractMatrix{T}) where {T<:AbstractFloat} = rootsift!(copy(m))
 rootsift(x::AbstractVecOrMat{<:Real}) = rootsift!(Float32.(x))
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
+"""Reduce `angle` modulo `2π` and convert to `Float32` guaranteed to lie strictly in `[0, 2π)`."""
 @inline function angle32(angle)
     a = Float32(mod(angle, 2pi))
     return a < 2pi ? a : 0f0

@@ -1,5 +1,8 @@
 # SIFTFeatures.jl
 
+[![Docs Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://ashutoshramola.github.io/SIFTFeatures.jl/stable/)
+[![Docs Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://ashutoshramola.github.io/SIFTFeatures.jl/dev/)
+
 Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
 descriptors, and L2 matching. Uses `ColorTypes`, `Colors`, `FixedPointNumbers`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
