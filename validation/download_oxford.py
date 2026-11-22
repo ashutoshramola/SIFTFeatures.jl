@@ -12,7 +12,7 @@ from common import sha256
 
 
 def fetch_with_retries(url: str, destination: Path, retries: int = 5):
-    headers = {"User-Agent": "SIFTFeatures.jl-validation/0.2 (+https://github.com/ashutoshramola/SIFTFeatures.jl)"}
+    headers = {"User-Agent": "SIFTFeatures.jl-validation/1.0 (+https://github.com/ashutoshramola/SIFTFeatures.jl)"}
     for attempt in range(1, retries + 1):
         try:
             req = urllib.request.Request(url, headers=headers)
