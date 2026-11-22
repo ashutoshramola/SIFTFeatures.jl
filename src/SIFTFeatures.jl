@@ -3,7 +3,7 @@ module SIFTFeatures
 using ColorTypes: Colorant, Gray, AbstractGray, color, gray
 using Colors: Colors # registers Colorant -> Gray luminance conversions
 using FixedPointNumbers: Normed
-using LinearAlgebra: norm, dot, det
+using LinearAlgebra: norm, dot, det, mul!
 using StaticArrays: SVector, SMatrix
 
 export SIFTConfig, SIFTKeypoint, DescriptorMatch, sift, match_descriptors,
@@ -196,6 +196,8 @@ end
 
 @inline _load8(a::Matrix{Float32}, y::Int, x::Int) =
     unsafe_load(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)))
+@inline _load8(v::Vector{Float32}, i::Int) =
+    unsafe_load(Ptr{SVector{8,Float32}}(pointer(v, i)))
 @inline _store8!(a::Matrix{Float32}, y::Int, x::Int, v::SVector{8,Float32}) =
     unsafe_store!(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)), v)
 @inline _load2(a::Memory{Float32}, i::Int) =
@@ -1455,14 +1457,17 @@ function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=noth
     return kp, desc
 end
 
-@inline function sqdist128(a::AbstractMatrix{Float32}, i::Int, b::AbstractMatrix{Float32}, j::Int)
+@inline function _sqdist128_f32(a::AbstractMatrix{Float32}, i::Int, b::AbstractMatrix{Float32}, j::Int)
     s = 0f0
     @inbounds @simd for k in 1:128
         diff = a[k, i] - b[k, j]
         s = muladd(diff, diff, s)
     end
-    return Float64(s)
+    return s
 end
+
+@inline sqdist128(a::AbstractMatrix{Float32}, i::Int, b::AbstractMatrix{Float32}, j::Int) =
+    Float64(_sqdist128_f32(a, i, b, j))
 
 @inline function sqdist128(a::AbstractMatrix, i::Int, b::AbstractMatrix, j::Int)
     s = 0.0
@@ -1594,6 +1599,153 @@ function _filter_crosscheck!(matches::Vector{DescriptorMatch}, reverse_idx::Memo
     return matches
 end
 
+# Two-stage exact-bounded hybrid BLAS matcher for large dense Float32 descriptor matrices:
+# Stage 1 uses tiled SGEMM (`G = a' * b`) as a conservative dot-product prefilter;
+# Stage 2 immediately re-scores every candidate within the rounding margin using exact
+# direct subtraction (`_sqdist128_f32`), eliminating catastrophic cancellation on near-ties.
+@noinline function _match_blas_hybrid(a::Matrix{Float32}, b::Matrix{Float32},
+                                      r2::Float64, crosscheck::Bool)
+    na, nb = size(a, 2), size(b, 2)
+    na2 = Vector{Float32}(undef, na)
+    nb2 = Vector{Float32}(undef, nb)
+    @inbounds for i in 1:na
+        s = 0f0
+        @simd for k in 1:128
+            v = a[k, i]
+            s = muladd(v, v, s)
+        end
+        (!isfinite(s) || s > 1f18 || (s > 0f0 && s < 1f-18)) && return nothing
+        na2[i] = s
+    end
+    @inbounds for j in 1:nb
+        s = 0f0
+        @simd for k in 1:128
+            v = b[k, j]
+            s = muladd(v, v, s)
+        end
+        (!isfinite(s) || s > 1f18 || (s > 0f0 && s < 1f-18)) && return nothing
+        nb2[j] = s
+    end
+
+    b_best = fill(Inf32, na)
+    b_sec  = fill(Inf32, na)
+    b_idx  = zeros(Int, na)
+    r_dist = crosscheck ? fill(Inf, nb) : Float64[]
+    r_idx  = crosscheck ? zeros(Int, nb) : Int[]
+
+    T = 1024
+    G = Matrix{Float32}(undef, min(T, na), min(T, nb))
+    tfwd = Vector{Float32}(undef, min(T, na))
+    ha2  = Vector{Float32}(undef, min(T, na))
+    # Conservative Float32 rounding bound on |‖a-b‖² - (‖a‖² + ‖b‖² - 2 a⋅b)|.
+    err_c = 256f0 * eps(Float32)
+
+    for i0 in 1:T:na
+        i1 = min(na, i0 + T - 1)
+        ni = i1 - i0 + 1
+        Av = @view a[:, i0:i1]
+        @inbounds for li in 1:ni
+            ai2 = na2[i0 + li - 1]
+            ha2[li] = 0.5f0 * ai2 - err_c * ai2
+            tfwd[li] = -Inf32
+        end
+        for j0 in 1:T:nb
+            j1 = min(nb, j0 + T - 1)
+            nj = j1 - j0 + 1
+            Bv = @view b[:, j0:j1]
+            mul!(@view(G[1:ni, 1:nj]), transpose(Av), Bv)
+            GC.@preserve G tfwd ha2 @inbounds for lj in 1:nj
+                j = j0 + lj - 1
+                bj2 = nb2[j]
+                hbj2 = 0.5f0 * bj2 - err_c * bj2
+                rd = crosscheck ? r_dist[j] : -Inf
+                ri = crosscheck ? r_idx[j] : 0
+                trev = crosscheck ? (isinf(rd) ? -Inf32 : Float32(0.5 * (bj2 - rd)) - err_c * bj2) : Inf32
+
+                li = 1
+                while li + 7 <= ni
+                    gv = _load8(G, li, lj)
+                    c_fwd = gv .>= (_load8(tfwd, li) .+ hbj2)
+                    cand = crosscheck ? (c_fwd .| (gv .>= (_load8(ha2, li) .+ trev))) : c_fwd
+                    if any(cand)
+                        for k in 0:7
+                            if cand[k + 1]
+                                lii = li + k
+                                i = i0 + lii - 1
+                                d_ex = _sqdist128_f32(a, i, b, j)
+                                b_cur = b_best[i]
+                                s_cur = b_sec[i]
+                                if d_ex < b_cur
+                                    b_sec[i] = b_cur
+                                    b_best[i] = d_ex
+                                    b_idx[i] = j
+                                    if isfinite(b_cur)
+                                        ai2 = na2[i]
+                                        tfwd[lii] = Float32(0.5 * (ai2 - b_cur)) - err_c * ai2
+                                    end
+                                elseif d_ex < s_cur
+                                    b_sec[i] = d_ex
+                                    ai2 = na2[i]
+                                    tfwd[lii] = Float32(0.5 * (ai2 - d_ex)) - err_c * ai2
+                                end
+                                if crosscheck && Float64(d_ex) < rd
+                                    rd = Float64(d_ex)
+                                    ri = i
+                                    trev = Float32(0.5 * (bj2 - rd)) - err_c * bj2
+                                end
+                            end
+                        end
+                    end
+                    li += 8
+                end
+                while li <= ni
+                    gv = G[li, lj]
+                    if gv >= tfwd[li] + hbj2 || (crosscheck && gv >= ha2[li] + trev)
+                        i = i0 + li - 1
+                        d_ex = _sqdist128_f32(a, i, b, j)
+                        b_cur = b_best[i]
+                        s_cur = b_sec[i]
+                        if d_ex < b_cur
+                            b_sec[i] = b_cur
+                            b_best[i] = d_ex
+                            b_idx[i] = j
+                            if isfinite(b_cur)
+                                ai2 = na2[i]
+                                tfwd[li] = Float32(0.5 * (ai2 - b_cur)) - err_c * ai2
+                            end
+                        elseif d_ex < s_cur
+                            b_sec[i] = d_ex
+                            ai2 = na2[i]
+                            tfwd[li] = Float32(0.5 * (ai2 - d_ex)) - err_c * ai2
+                        end
+                        if crosscheck && Float64(d_ex) < rd
+                            rd = Float64(d_ex)
+                            ri = i
+                            trev = Float32(0.5 * (bj2 - rd)) - err_c * bj2
+                        end
+                    end
+                    li += 1
+                end
+                if crosscheck
+                    r_dist[j] = rd
+                    r_idx[j] = ri
+                end
+            end
+        end
+    end
+
+    matches = DescriptorMatch[]
+    @inbounds for i in 1:na
+        b1, s1, idx1 = b_best[i], b_sec[i], b_idx[i]
+        if (b1 == 0f0 && s1 > 0f0) || Float64(b1) < r2 * Float64(s1)
+            if !crosscheck || r_idx[idx1] == i
+                push!(matches, DescriptorMatch(i, idx1, sqrt(b1)))
+            end
+        end
+    end
+    return matches
+end
+
 """
     match_descriptors(a, b; ratio=0.8, crosscheck=false)
 
@@ -1612,6 +1764,11 @@ function match_descriptors(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real};
     (na >= 1 && nb >= 2) || return matches
     r2 = Float64(ratio)^2
     nt = Threads.nthreads()
+    if nt == 1 && a isa Matrix{Float32} && b isa Matrix{Float32} &&
+            na >= 1024 && nb >= 1024 && na * nb >= 2_000_000
+        hybrid = _match_blas_hybrid(a, b, r2, crosscheck)
+        hybrid !== nothing && return hybrid
+    end
     nblocks = cld(na, 4)
     if nt > 1 && na * nb >= 4096 && nblocks >= 2
         nchunks = min(nt, nblocks)

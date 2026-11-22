@@ -1,4 +1,5 @@
 using Test, Aqua, SIFTFeatures, LinearAlgebra
+import Random
 using ColorTypes: Gray, RGB, RGBA
 using FixedPointNumbers: N0f8
 const SF = SIFTFeatures
@@ -254,10 +255,12 @@ end
     rows_ir = string(only(Base.code_lowered(SF._blur_rows!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
     scan_ir = string(only(Base.code_lowered(SF._scan_octave_columns!, (Vector{SF.LocalizedCandidate}, Vector{Matrix{Float32}}, Int, Int, Int, UnitRange{Int}, Int, Float32, SIFTConfig))))
     desc_ir = string(only(Base.code_lowered(SF._descriptor!, (Vector{Float32}, SF.DescriptorWorkspace, Matrix{Float32}, Float64, Float64, Float64, Float32, Bool))))
+    blas_ir = string(only(Base.code_lowered(SF._match_blas_hybrid, (Matrix{Float32}, Matrix{Float32}, Float64, Bool))))
     @test occursin("gc_preserve", cols_ir)
     @test occursin("gc_preserve", rows_ir)
     @test occursin("gc_preserve", scan_ir)
     @test occursin("gc_preserve", desc_ir)
+    @test occursin("gc_preserve", blas_ir)
     # Candidate deduplication when two neighboring lattice points converge to the same extremum,
     # including large coordinates beyond 2^18 that would collide under narrow bit-packing.
     dup_cands = [
@@ -440,6 +443,49 @@ end
     eq_q = zeros(Float32, 128, 1); eq_q[1, 1] = 1f0
     eq_t = zeros(Float32, 128, 2); eq_t[1, 2] = -1f0 # dists: 1.0 and 2.0 -> ratio 0.5 is exact equality
     @test isempty(match_descriptors(eq_q, eq_t; ratio=0.5))
+    # Hybrid BLAS matcher: exact parity against direct _match_chunk! including near-identical
+    # descriptors (~1e-10 sqdist where naive Float32 dot-product cancels), ties, zeros, and extreme scales.
+    rng = Random.MersenneTwister(2026)
+    qa = abs.(randn(rng, Float32, 128, 600))
+    qb = abs.(randn(rng, Float32, 128, 600))
+    for col in eachcol(qa); col ./= norm(col); end
+    for col in eachcol(qb); col ./= norm(col); end
+    # Embed near-identical pair (sqdist 1e-10 vs 4e-10), exact match, duplicate tie, and zero columns.
+    qa[:, 1] .= 0f0; qa[1, 1] = 1f0
+    qb[:, 1] .= 0f0; qb[1, 1] = 1f0; qb[2, 1] = 1f-5
+    qb[:, 2] .= 0f0; qb[1, 2] = 1f0; qb[2, 2] = 2f-5
+    qa[:, 2] .= qb[:, 10]
+    qa[:, 3] .= qb[:, 20]; qb[:, 21] .= qb[:, 20] # duplicate exact tie
+    qa[:, 4] .= 0f0; qb[:, 30] .= 0f0 # unique zero match
+    for cc in (false, true)
+        m_ref = DescriptorMatch[]
+        rd_ref, ri_ref = SF._alloc_rev_buffers(size(qb, 2), cc)
+        SF._match_chunk!(m_ref, rd_ref, ri_ref, qa, qb, 1:size(qa, 2), 0.64, cc)
+        cc && SF._filter_crosscheck!(m_ref, ri_ref)
+        m_hyb = SF._match_blas_hybrid(qa, qb, 0.64, cc)
+        @test m_hyb !== nothing
+        @test [(m.query, m.train) for m in m_hyb] == [(m.query, m.train) for m in m_ref]
+        @test all(isapprox(m_hyb[k].distance, m_ref[k].distance; atol=1f-6, rtol=1f-6) for k in eachindex(m_ref))
+        @test any(m -> m.query == 1 && m.train == 1, m_hyb)
+        @test !any(m -> m.query == 3, m_hyb)
+    end
+    # Also exercise the public dispatch threshold (> 2M pairs when single-threaded) on a 1500x1500 pair.
+    qa_big = hcat(qa, abs.(randn(rng, Float32, 128, 900)))
+    qb_big = hcat(qb, abs.(randn(rng, Float32, 128, 900)))
+    for col in eachcol(@view(qa_big[:, 601:end])); col ./= norm(col); end
+    for col in eachcol(@view(qb_big[:, 601:end])); col ./= norm(col); end
+    m_big_ref = DescriptorMatch[]
+    rd_big, ri_big = SF._alloc_rev_buffers(size(qb_big, 2), true)
+    SF._match_chunk!(m_big_ref, rd_big, ri_big, qa_big, qb_big, 1:size(qa_big, 2), 0.64, true)
+    SF._filter_crosscheck!(m_big_ref, ri_big)
+    m_big = match_descriptors(qa_big, qb_big; ratio=0.8, crosscheck=true)
+    @test [(m.query, m.train) for m in m_big] == [(m.query, m.train) for m in m_big_ref]
+    @test any(m -> m.query == 1 && m.train == 1, m_big)
+    # Extreme magnitudes safely fall back from BLAS prefilter without overflow/underflow.
+    @test SF._match_blas_hybrid(qa .* 1f12, qb .* 1f12, 0.64, true) === nothing
+    @test SF._match_blas_hybrid(qa .* 1f-12, qb .* 1f-12, 0.64, true) === nothing
+    @test !isempty(match_descriptors(qa .* 1f12, qb .* 1f12; ratio=0.8, crosscheck=true))
+    @test !isempty(match_descriptors(qa .* 1f-12, qb .* 1f-12; ratio=0.8, crosscheck=true))
     @test_throws DimensionMismatch match_descriptors(zeros(127,2),b)
     @test_throws ArgumentError match_descriptors(a,b;ratio=1)
     @test_throws ArgumentError match_descriptors(a,fill(NaN,128,2))
