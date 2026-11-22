@@ -1,8 +1,25 @@
 using Random: MersenneTwister
-using StaticArrays: SMatrix, SVector
+using StaticArrays: SMatrix, SVector, @SMatrix
 using Statistics: median
 
 include(joinpath(@__DIR__, "..", "examples", "homography_ransac.jl"))
+
+@testset "Minimal and overdetermined homography fits" begin
+    H = @SMatrix [1.1 -0.2 3.0; 0.3 0.9 -2.0; 0.001 0.002 1.0]
+    corners = [0.0 0.0; 20.0 0.0; 0.0 20.0; 20.0 20.0]
+    points = rand(MersenneTwister(42), 1000, 2) .* 20
+    for src in (corners, points)
+        dst = similar(src)
+        for i in axes(src, 1)
+            dst[i, :] = project_point(H, src[i, 1], src[i, 2])
+        end
+        @test fit_homography_dlt(src, dst) ≈ H atol=1e-11
+        if size(src, 1) == 1000
+            # A full 2000×2000 left singular matrix alone would take ~31 MiB.
+            @test (@allocated fit_homography_dlt(src, dst)) < 4 * 1024^2
+        end
+    end
+end
 
 @noinline function test_synthetic_geometric_warps()
     src = synthetic_scene(256, 320; seed=7)

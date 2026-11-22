@@ -7,7 +7,7 @@ Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
 descriptors, and L2 matching. Uses `ColorTypes`, `Colors`, `FixedPointNumbers`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
-Version 1.1.0 is a 100% pure-Julia implementation focused on correctness and performance.
+Version 1.1.1 is a 100% pure-Julia implementation focused on correctness and performance.
 See the [documentation](https://ashutoshramola.github.io/SIFTFeatures.jl/stable/),
 [validation report](validation/REPORT.md), and [implementation notes](docs/implementation.md).
 
@@ -70,7 +70,7 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Historical v1.0.0 OpenCV validation details](docs/validation.md).
-On `v1.1.0`, all 747 pure-Julia checks (including `Aqua.jl`, synthetic geometric
+On `v1.1.1`, all 776 pure-Julia checks (including `Aqua.jl`, synthetic geometric
 warps, and `v1.0.0` golden regression anchors) pass on Julia 1.13 (both
 single-threaded and multi-threaded).
 
@@ -162,7 +162,7 @@ julia --project=. -t auto examples/run_all.jl
 julia --project=. benchmark/run.jl
 ```
 
-The Julia test suite (747 checks) covers `Aqua.jl` package quality, analytical
+The Julia test suite (776 checks) covers `Aqua.jl` package quality, analytical
 localization and descriptor-layout anchors, orientation/interpolation checks,
 synthetic geometric warps (translation, rotation, similarity, perspective for
 both SIFT and RootSIFT), `v1.0.0` golden regression anchors, stress invariants,

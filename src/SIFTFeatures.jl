@@ -1141,39 +1141,33 @@ have unit L2 norm so Euclidean matching computes the Hellinger kernel.
 """
 function rootsift!(v::AbstractVector{T}) where {T<:AbstractFloat}
     Base.require_one_based_indexing(v)
-    s = zero(T)
+    S = promote_type(T, Float64)
+    peak = zero(S)
     @inbounds for i in eachindex(v)
         x = v[i]
         isfinite(x) && x >= zero(T) ||
             throw(ArgumentError("RootSIFT descriptors must be finite and nonnegative"))
-        s += x
+        peak = max(peak, S(x))
     end
-    if s > zero(T)
-        inv_s = inv(s)
-        @inbounds @simd for i in eachindex(v)
-            v[i] = sqrt(v[i] * inv_s)
-        end
+    iszero(peak) && return v
+
+    scaled_sum = zero(S)
+    @inbounds @simd for i in eachindex(v)
+        scaled_sum += S(v[i]) / peak
+    end
+    # Taking the roots first preserves small bins even if v[i] / peak underflows.
+    root_peak = sqrt(peak)
+    inv_root_sum = inv(sqrt(scaled_sum))
+    @inbounds @simd for i in eachindex(v)
+        v[i] = (sqrt(S(v[i])) / root_peak) * inv_root_sum
     end
     return v
 end
 
 function rootsift!(m::AbstractMatrix{T}) where {T<:AbstractFloat}
     Base.require_one_based_indexing(m)
-    nrows, ncols = size(m)
-    @inbounds for j in 1:ncols
-        s = zero(T)
-        for i in 1:nrows
-            x = m[i, j]
-            isfinite(x) && x >= zero(T) ||
-                throw(ArgumentError("RootSIFT descriptors must be finite and nonnegative"))
-            s += x
-        end
-        if s > zero(T)
-            inv_s = inv(s)
-            @simd for i in 1:nrows
-                m[i, j] = sqrt(m[i, j] * inv_s)
-            end
-        end
+    for column in eachcol(m)
+        rootsift!(column)
     end
     return m
 end
@@ -1186,7 +1180,7 @@ column-wise matrix. See [`rootsift!`](@ref).
 """
 rootsift(v::AbstractVector{T}) where {T<:AbstractFloat} = rootsift!(copy(v))
 rootsift(m::AbstractMatrix{T}) where {T<:AbstractFloat} = rootsift!(copy(m))
-rootsift(x::AbstractVecOrMat{<:Real}) = rootsift!(Float32.(x))
+rootsift(x::AbstractVecOrMat{<:Real}) = Float32.(rootsift!(float.(x)))
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
 """Reduce `angle` modulo `2π` and convert to `Float32` guaranteed to lie strictly in `[0, 2π)`."""

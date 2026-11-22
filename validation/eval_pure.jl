@@ -290,15 +290,16 @@ function benchmark_oxford(oxford_dir::AbstractString; samples::Int=5, warmups::I
     return rows
 end
 
-function write_markdown_report(path::AbstractString, r_sift, r_root, bench_rows)
+function write_markdown_report(path::AbstractString, datasets, bench_rows)
     lines = String[
         "# Pure-Julia Validation & Benchmark Report — $(today())",
         "",
         "Runtime: Julia `$(VERSION)` (`$(Sys.CPU_NAME)`, `$(Threads.nthreads())` thread(s)). Zero Python or OpenCV dependencies.",
         "",
     ]
-    if !isnothing(r_sift)
-        push!(lines, "## Oxford 48-Photograph Ground-Truth Accuracy (40 pairs)", "")
+    for (name, r_sift, r_root) in datasets
+        photos = r_sift.pairs + length(r_sift.scenes)
+        push!(lines, "## $name $photos-Photograph Ground-Truth Accuracy ($(r_sift.pairs) pairs)", "")
         push!(lines, "| Mode | Features | Matches | Correct (≤3 px) | Pooled Precision | Accurate Homographies |")
         push!(lines, "|---|---:|---:|---:|---:|---:|")
         push!(lines, @sprintf("| SIFT (`ratio=0.80`) | %d | %d | %d | %.3f%% | %d / %d |",
@@ -307,7 +308,8 @@ function write_markdown_report(path::AbstractString, r_sift, r_root, bench_rows)
             push!(lines, @sprintf("| RootSIFT (`ratio=0.80`) | %d | %d | %d | %.3f%% | %d / %d |",
                                   r_root.features, r_root.matches, r_root.correct, r_root.precision, r_root.homographies, r_root.pairs))
         end
-        push!(lines, "", "### Per-Sequence Breakdown (SIFT / RootSIFT)", "")
+        modes = isnothing(r_root) ? "SIFT" : "SIFT / RootSIFT"
+        push!(lines, "", "### Per-Sequence Breakdown ($modes)", "")
         push!(lines, "| Scene | Correct Matches (SIFT) | Homographies (SIFT) |" * (isnothing(r_root) ? "" : " Correct Matches (RootSIFT) | Homographies (RootSIFT) |"))
         push!(lines, "|---|---:|---:|" * (isnothing(r_root) ? "" : "---:|---:|"))
         for (idx, row) in enumerate(r_sift.scenes)
@@ -331,7 +333,7 @@ function write_markdown_report(path::AbstractString, r_sift, r_root, bench_rows)
     println("Wrote report: $path")
 end
 
-function main()
+function main(args=ARGS)
     oxford_dir = nothing
     hpatches_dir = nothing
     max_side = 0
@@ -343,22 +345,22 @@ function main()
     limit = 0
     samples = 5
     i = 1
-    while i <= length(ARGS)
-        arg = ARGS[i]
+    while i <= length(args)
+        arg = args[i]
         if arg == "--oxford"
-            oxford_dir = ARGS[i + 1]; i += 2
+            oxford_dir = args[i + 1]; i += 2
         elseif arg == "--hpatches"
-            hpatches_dir = ARGS[i + 1]; i += 2
+            hpatches_dir = args[i + 1]; i += 2
         elseif arg == "--max-side"
-            max_side = parse(Int, ARGS[i + 1]); i += 2
+            max_side = parse(Int, args[i + 1]); i += 2
         elseif arg == "--hpatches-max-side"
-            hpatches_max_side = parse(Int, ARGS[i + 1]); i += 2
+            hpatches_max_side = parse(Int, args[i + 1]); i += 2
         elseif arg == "--limit"
-            limit = parse(Int, ARGS[i + 1]); i += 2
+            limit = parse(Int, args[i + 1]); i += 2
         elseif arg == "--samples"
-            samples = parse(Int, ARGS[i + 1]); i += 2
+            samples = parse(Int, args[i + 1]); i += 2
         elseif arg == "--write-report"
-            report_path = ARGS[i + 1]; i += 2
+            report_path = args[i + 1]; i += 2
         elseif arg == "--compare-rootsift"
             compare_rootsift = true; i += 1
         elseif arg == "--download"
@@ -374,8 +376,7 @@ function main()
 
     println("Pure-Julia SIFTFeatures.jl Evaluator (Julia $(VERSION), threads=$(Threads.nthreads()))")
     failed = false
-    ox_sift = nothing
-    ox_root = nothing
+    datasets = NamedTuple[]
     bench_rows = NamedTuple[]
 
     if !isnothing(oxford_dir)
@@ -384,10 +385,12 @@ function main()
         dirs = [joinpath(oxford_dir, s) for s in scenes]
         ox_sift = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=false)
         (ox_sift.max_norm_err < 2e-6 && ox_sift.precision >= 90.0 && ox_sift.homographies >= 32) || (failed = true)
+        ox_root = nothing
         if compare_rootsift
             ox_root = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=true)
             (ox_root.max_norm_err < 2e-6 && ox_root.precision >= 92.0 && ox_root.homographies >= 33) || (failed = true)
         end
+        push!(datasets, (name="Oxford", sift=ox_sift, root=ox_root))
         if do_benchmark
             bench_rows = benchmark_oxford(oxford_dir; samples=samples)
         end
@@ -402,18 +405,22 @@ function main()
         limit > 0 && (dirs = dirs[1:min(limit, length(dirs))])
         r_sift = evaluate_dataset("HPatches", dirs, :hpatches; max_side=hpatches_max_side, rootsift=false)
         (r_sift.max_norm_err < 2e-6 && r_sift.precision >= 89.0) || (failed = true)
+        r_root = nothing
         if compare_rootsift
             r_root = evaluate_dataset("HPatches", dirs, :hpatches; max_side=hpatches_max_side, rootsift=true)
             (r_root.max_norm_err < 2e-6 && r_root.precision >= 91.0) || (failed = true)
         end
+        push!(datasets, (name="HPatches", sift=r_sift, root=r_root))
     end
 
     if !isnothing(report_path)
-        write_markdown_report(report_path, ox_sift, ox_root, bench_rows)
+        write_markdown_report(report_path, datasets, bench_rows)
     end
 
     println(failed ? "PURE-JULIA EVAL: FAIL" : "PURE-JULIA EVAL: PASS")
-    exit(failed ? 1 : 0)
+    return failed ? 1 : 0
 end
 
-main()
+if abspath(PROGRAM_FILE) == @__FILE__
+    exit(main())
+end

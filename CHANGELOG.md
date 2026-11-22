@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 — 2026-11-23
+
+- Fixed overflow (`Float16` / large floats) and underflow (tiny `Float32` / subnormals) in `rootsift!` and `rootsift` by scaling through `sqrt(peak)` in widened precision while preserving zero allocations.
+- Avoided quadratic `2n × 2n` left-singular allocation in `fit_homography_dlt` (`examples/homography_ransac.jl`) by using thin SVD (`full=(n == 4)`) for `n >= 5` pairs.
+- Included HPatches accuracy tables in Markdown reports written by `validation/eval_pure.jl --write-report` and added regression tests for all three fixes.
+
 ## 1.1.0 — 2026-11-22
 
 - **100% pure-Julia self-sufficient testing & evaluation** (removed Python/OpenCV harness dependencies):
