@@ -12,12 +12,12 @@ struct ImageDatabaseEntry
 end
 
 """
-    build_image_database(named_images; config=SIFTConfig(nfeatures=500))
+    build_image_database(named_images; config=SIFTConfig(nfeatures=500, rootsift=true))
 
-Extract and index SIFT descriptors for a collection of `(name, image)` pairs.
+Extract and index descriptors for a collection of `(name, image)` pairs.
 Using `nfeatures` (e.g. 500–1000) keeps each database entry compact and fast to query.
 """
-function build_image_database(named_images; config::SIFTConfig=SIFTConfig(nfeatures=500))
+function build_image_database(named_images; config::SIFTConfig=SIFTConfig(nfeatures=500, rootsift=true))
     db = Vector{ImageDatabaseEntry}(undef, length(named_images))
     for (idx, (name, img)) in enumerate(named_images)
         kp, desc = sift(img; config)
@@ -27,15 +27,20 @@ function build_image_database(named_images; config::SIFTConfig=SIFTConfig(nfeatu
 end
 
 """
-    query_image_database(db, query_img; config=SIFTConfig(nfeatures=500), ratio=0.8)
+    query_image_database(db, query_img; config=SIFTConfig(nfeatures=500, rootsift=true),
+                         ratio=0.8, min_matches=10)
 
-Extract SIFT descriptors from `query_img` and rank all entries in `db` by the number
-of mutual Lowe-ratio descriptor matches.
+Extract descriptors from `query_img` and rank all entries in `db` by the number
+of mutual Lowe-ratio descriptor matches. Returns `best_match=nothing` whenever
+the top score is below `min_matches` (preventing false positives on blank or
+unrelated textured queries).
 """
 function query_image_database(db::Vector{ImageDatabaseEntry}, query_img::AbstractMatrix;
-                              config::SIFTConfig=SIFTConfig(nfeatures=500),
-                              ratio::Real=0.8)
+                              config::SIFTConfig=SIFTConfig(nfeatures=500, rootsift=true),
+                              ratio::Real=0.8,
+                              min_matches::Int=10)
     isempty(db) && throw(ArgumentError("image database must not be empty"))
+    min_matches >= 1 || throw(ArgumentError("min_matches must be at least 1"))
     kp_q, desc_q = sift(query_img; config)
     scores = Vector{Pair{String,Int}}(undef, length(db))
     for (i, entry) in enumerate(db)
@@ -43,7 +48,9 @@ function query_image_database(db::Vector{ImageDatabaseEntry}, query_img::Abstrac
         scores[i] = entry.name => length(m)
     end
     sort!(scores; by=last, rev=true)
-    return (best_match=first(scores).first, best_count=first(scores).second,
+    top_name, top_count = first(scores)
+    best = top_count >= min_matches ? top_name : nothing
+    return (best_match=best, best_count=top_count,
             ranking=scores, query_keypoints=kp_q)
 end
 
@@ -55,18 +62,24 @@ function run_place_recognition_demo()
         "scene_gamma" => synthetic_scene(256, 320; seed=3),
         "scene_delta" => synthetic_scene(256, 320; seed=4),
     ]
-    cfg = SIFTConfig(nfeatures=400)
+    cfg = SIFTConfig(nfeatures=400, rootsift=true)
     db = build_image_database(scenes; config=cfg)
 
-    # Create a distorted query from "scene_gamma" (90° rotated + blurred + darkened)
+    # 1. Known scene (distorted: 90° rotated + blurred + darkened) -> matched
     query_img = clamp.(SIFTFeatures.gaussian_blur(rotl90(scenes[3].second), 1.4) .* 0.75f0 .+ 0.05f0, 0f0, 1f0)
-
     query_image_database(db, query_img; config=cfg)
     t_sec = @elapsed res = query_image_database(db, query_img; config=cfg)
 
-    println("  Database size      : ", length(db), " scenes (nfeatures=400)")
+    # 2. Blank query -> rejected (nothing)
+    res_blank = query_image_database(db, zeros(Float32, 256, 320); config=cfg)
+    # 3. Unrelated textured distractor -> rejected (nothing)
+    res_dist = query_image_database(db, synthetic_scene(256, 320; seed=99); config=cfg)
+
+    println("  Database size      : ", length(db), " scenes (nfeatures=400, RootSIFT)")
     println("  Top-1 retrieved    : ", res.best_match, " (", res.best_count, " matches)")
     println("  Full ranking       : ", join(["$(k): $(v)" for (k, v) in res.ranking], ", "))
+    println("  Blank query        : best_match=", res_blank.best_match, " (", res_blank.best_count, " matches)")
+    println("  Textured distractor: best_match=", res_dist.best_match, " (top accidental=", res_dist.best_count, " < min_matches=10)")
     println("  Query + search time: ", round(t_sec * 1000; digits=1), " ms")
     return res
 end

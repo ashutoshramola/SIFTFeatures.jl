@@ -7,7 +7,7 @@ Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
 descriptors, and L2 matching. Uses `ColorTypes`, `Colors`, `FixedPointNumbers`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
-Version 1.1.1 is a 100% pure-Julia implementation focused on correctness and performance.
+Version 1.2.0 is a 100% pure-Julia implementation focused on correctness and performance.
 See the [documentation](https://ashutoshramola.github.io/SIFTFeatures.jl/stable/),
 [validation report](validation/REPORT.md), and [implementation notes](docs/implementation.md).
 
@@ -70,8 +70,8 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
 [Historical v1.0.0 OpenCV validation details](docs/validation.md).
-On `v1.1.1`, all 776 pure-Julia checks (including `Aqua.jl`, synthetic geometric
-warps, and `v1.0.0` golden regression anchors) pass on Julia 1.13 (both
+On `v1.2.0`, all 809 pure-Julia checks (including `Aqua.jl`, synthetic geometric
+warps, `v1.0.0` golden regression anchors, and example rejection tests) pass on Julia 1.13 (both
 single-threaded and multi-threaded).
 
 ## Installation
@@ -95,21 +95,29 @@ Pkg.add(url="https://github.com/ashutoshramola/SIFTFeatures.jl")
 ```julia
 using SIFTFeatures
 
-# Loaded JuliaImages Gray/RGB matrices also work.
-img = Float32[exp(-((x-50.3)^2+(y-49.7)^2)/32) for y in 1:101, x in 1:101]
-keypoints, descriptors = sift(img)
+# Non-periodic multi-scale textured image (also accepts UInt8/UInt16 or JuliaImages Gray/RGB)
+img = Float32[
+    0.5 + 0.25 * sin(0.0012 * x^2 + 0.09y) * cos(0.0015 * y^2 - 0.08x) +
+          0.20 * exp(-((x - 70)^2 + (y - 55)^2) / 90) -
+          0.20 * exp(-((x - 130)^2 + (y - 110)^2) / 140)
+    for y in 1:161, x in 1:193
+]
 
-kp2, desc2 = sift(rotl90(img))
-matches = match_descriptors(descriptors, desc2; ratio=0.8, crosscheck=true)
+# Practical starting point for registration: capped features + RootSIFT (Hellinger) descriptors
+cfg = SIFTConfig(nfeatures=1000, rootsift=true)
+kp1, desc1 = sift(img; config=cfg)
+kp2, desc2 = sift(rotl90(img); config=cfg)
+matches = match_descriptors(desc1, desc2; ratio=0.8, crosscheck=true)
 
-config = SIFTConfig(nfeatures=1000, octave_layers=3,
-                    contrast_threshold=0.04, edge_threshold=10, sigma=1.6)
-kp, desc = sift(img; config)
-
-# Optional RootSIFT (Hellinger) descriptors for higher matching accuracy:
-kp_r, desc_r = sift(img; config=SIFTConfig(rootsift=true))
-desc_r2 = rootsift(desc) # or rootsift!(desc) in-place
+# Verify recovered 90° rotation alignment: (x, y) -> (y, width + 1 - x)
+w = size(img, 2)
+errors = [hypot(kp2[m.train].x - kp1[m.query].y,
+                kp2[m.train].y - (w + 1 - kp1[m.query].x)) for m in matches]
+println("Matches: ", length(matches), ", within 1 px: ", count(<(1.0), errors))
 ```
+
+Existing SIFT descriptors can also be converted to RootSIFT via `rootsift(desc)` or in-place `rootsift!(desc)`.
+See [examples/](examples/) for end-to-end registration, object localization, place recognition, and visual odometry with explicit no-match rejection.
 
 ## Data conventions
 
@@ -162,7 +170,7 @@ julia --project=. -t auto examples/run_all.jl
 julia --project=. benchmark/run.jl
 ```
 
-The Julia test suite (776 checks) covers `Aqua.jl` package quality, analytical
+The Julia test suite (809 checks) covers `Aqua.jl` package quality, analytical
 localization and descriptor-layout anchors, orientation/interpolation checks,
 synthetic geometric warps (translation, rotation, similarity, perspective for
 both SIFT and RootSIFT), `v1.0.0` golden regression anchors, stress invariants,

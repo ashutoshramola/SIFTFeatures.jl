@@ -29,16 +29,23 @@ Pkg.add(url="https://github.com/ashutoshramola/SIFTFeatures.jl")
 ```julia
 using SIFTFeatures
 
-# Accepts Float32/Float64 in [0, 1], UInt8/UInt16, or JuliaImages Gray/RGB/RGBA matrices.
-img = Float32[exp(-((x - 50.3)^2 + (y - 49.7)^2) / 32) for y in 1:101, x in 1:101]
+# Non-periodic multi-scale textured image (also accepts UInt8/UInt16 or JuliaImages Gray/RGB)
+img = Float32[
+    0.5 + 0.25 * sin(0.0012 * x^2 + 0.09y) * cos(0.0015 * y^2 - 0.08x) +
+          0.20 * exp(-((x - 70)^2 + (y - 55)^2) / 90) -
+          0.20 * exp(-((x - 130)^2 + (y - 110)^2) / 140)
+    for y in 1:161, x in 1:193
+]
 
-# Detect keypoints and 128×N unit-L2 Float32 descriptors
-keypoints, descriptors = sift(img)
+# Practical starting point for registration: capped features + RootSIFT descriptors
+cfg = SIFTConfig(nfeatures=1000, rootsift=true)
+kp1, desc1 = sift(img; config=cfg)
+kp2, desc2 = sift(rotl90(img); config=cfg)
+matches = match_descriptors(desc1, desc2; ratio=0.8, crosscheck=true)
 
-# Match descriptors across views with Lowe's strict ratio test and mutual check
-kp2, desc2 = sift(rotl90(img))
-matches = match_descriptors(descriptors, desc2; ratio=0.8, crosscheck=true)
-
-# Optional RootSIFT (Hellinger) descriptors for higher matching accuracy
-kp_r, desc_r = sift(img; config=SIFTConfig(rootsift=true))
+# Verify recovered 90° rotation alignment: (x, y) -> (y, width + 1 - x)
+w = size(img, 2)
+errors = [hypot(kp2[m.train].x - kp1[m.query].y,
+                kp2[m.train].y - (w + 1 - kp1[m.query].x)) for m in matches]
+println("Matches: ", length(matches), ", within 1 px: ", count(<(1.0), errors))
 ```

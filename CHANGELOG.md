@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.0 — 2026-11-23
+
+- **Safer "no-match" rejection in workflow examples**:
+  - Added `distinct_inlier_locations` in `examples/homography_ransac.jl` so multiple SIFT orientation instances at a single pixel location do not inflate homography support.
+  - Updated `register_images` (`examples/01_image_registration.jl`) and `detect_object` (`examples/02_object_detection.jl`) to require `min_inliers` distinct spatial locations (`default = 8`), returning `found=false` and `nothing` for geometry/corners/warped output when unsupported.
+  - Updated `query_image_database` (`examples/03_place_recognition.jl`) with `min_matches` (`default = 10`), returning `best_match=nothing` on blank or unrelated textured distractor queries.
+  - Added `test/examples_test.jl` covering valid matches, blank inputs, unrelated textured distractors, and single-location multi-orientation blobs.
+- **Improved Quickstart & Registration Guide**:
+  - Replaced the single-blob quickstart in `README.md` and `docs/src/index.md` with a multi-feature textured alignment example recovering >250 verified matches across >140 distinct locations.
+  - Added measured Oxford `nfeatures` (`500`, `1000`, `2000`, unlimited × SIFT/RootSIFT) extraction-plus-matching trade-offs and recommended `SIFTConfig(nfeatures=1000, rootsift=true)` as a practical registration starting point.
+
 ## 1.1.1 — 2026-11-23
 
 - Fixed overflow (`Float16` / large floats) and underflow (tiny `Float32` / subnormals) in `rootsift!` and `rootsift` by scaling through `sqrt(peak)` in widened precision while preserving zero allocations.
