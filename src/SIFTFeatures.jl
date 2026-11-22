@@ -190,6 +190,10 @@ end
     unsafe_load(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)))
 @inline _store8!(a::Matrix{Float32}, y::Int, x::Int, v::SVector{8,Float32}) =
     unsafe_store!(Ptr{SVector{8,Float32}}(pointer(a, (x - 1) * size(a, 1) + y)), v)
+@inline _load2(a::Memory{Float32}, i::Int) =
+    unsafe_load(Ptr{SVector{2,Float32}}(pointer(a, i)))
+@inline _store2!(a::Memory{Float32}, i::Int, v::SVector{2,Float32}) =
+    unsafe_store!(Ptr{SVector{2,Float32}}(pointer(a, i)), v)
 
 @noinline function _blur_cols!(tmp::Matrix{Float32}, src::Matrix{Float32},
                                k::Memory{Float32}, r::Int, cols::UnitRange{Int})
@@ -645,13 +649,110 @@ struct OrientationWorkspace
     hist::Memory{Float64}
     sm::Memory{Float64}
     wtab::Vector{Float32}
+    gx::Vector{Float32}
+    gy::Vector{Float32}
+    w::Vector{Float32}
+    bin::Vector{Int32}
 end
 
-OrientationWorkspace(cap::Int=64) = OrientationWorkspace(
-    Memory{Float64}(undef, 36),
-    Memory{Float64}(undef, 36),
-    Vector{Float32}(undef, max(1, cap)),
-)
+function OrientationWorkspace(cap::Int=64)
+    wcap = max(1, cap)
+    pcap = max(1024, wcap * 16)
+    return OrientationWorkspace(
+        Memory{Float64}(undef, 36),
+        Memory{Float64}(undef, 36),
+        Vector{Float32}(undef, wcap),
+        Vector{Float32}(undef, pcap),
+        Vector{Float32}(undef, pcap),
+        Vector{Float32}(undef, pcap),
+        Vector{Int32}(undef, pcap),
+    )
+end
+
+@noinline function _orientations!(angles::Vector{Float64}, ws::OrientationWorkspace,
+                                  a::Matrix{Float32}, y::Int, x::Int, sigma::Real)
+    hist = ws.hist
+    sm = ws.sm
+    fill!(hist, 0.0)
+    empty!(angles)
+    h, w = size(a)
+    radius = round(Int, 4.5 * sigma)
+    j_min = max(-radius, 2 - x)
+    j_max = min(radius, w - 1 - x)
+    i_min = max(-radius, 2 - y)
+    i_max = min(radius, h - 1 - y)
+    (j_min > j_max || i_min > i_max) && return angles
+    max_k = max(abs(j_min), abs(j_max), abs(i_min), abs(i_max))
+    wtab = ws.wtab
+    length(wtab) < max_k + 1 && resize!(wtab, max_k + 1)
+    inv_2sigma2 = Float32(-1.0 / (2.0 * (1.5 * sigma)^2))
+    @inbounds for k in 0:max_k
+        wtab[k + 1] = exp(Float32(k * k) * inv_2sigma2)
+    end
+    n_i = i_max - i_min + 1
+    n_j = j_max - j_min + 1
+    n = n_i * n_j
+    if length(ws.gx) < n
+        new_cap = max(n, 2 * length(ws.gx))
+        resize!(ws.gx, new_cap)
+        resize!(ws.gy, new_cap)
+        resize!(ws.w, new_cap)
+        resize!(ws.bin, new_cap)
+    end
+    gx_buf = ws.gx
+    gy_buf = ws.gy
+    w_buf = ws.w
+    bin_buf = ws.bin
+
+    # Pack contiguous column gradients and Gaussian weights into flat L1 buffers.
+    off = 0
+    yy0 = y + i_min
+    @inbounds for j in j_min:j_max
+        xx = x + j
+        wj = wtab[abs(j) + 1]
+        @simd for idx in 1:n_i
+            i = i_min + idx - 1
+            yy = yy0 + idx - 1
+            gx_buf[off + idx] = a[yy, xx + 1] - a[yy, xx - 1]
+            gy_buf[off + idx] = a[yy - 1, xx] - a[yy + 1, xx]
+            w_buf[off + idx]  = wj * wtab[abs(i) + 1]
+        end
+        off += n_i
+    end
+
+    # Single flat SIMD sweep for atan2, sqrt, and bin index; overwrites w_buf in place.
+    scale = Float32(36.0 / (2pi))
+    @inbounds @simd for k in 1:n
+        gx = gx_buf[k]
+        gy = gy_buf[k]
+        b = unsafe_trunc(Int32, round(_atan2_f32(gy, gx) * scale))
+        bin_buf[k] = ifelse(b < Int32(0), b + Int32(36), ifelse(b >= Int32(36), b - Int32(36), b)) + Int32(1)
+        w_buf[k] = Base.sqrt_llvm(muladd(gx, gx, gy * gy)) * w_buf[k]
+    end
+
+    @inbounds for k in 1:n
+        hist[bin_buf[k]] += Float64(w_buf[k])
+    end
+
+    peak = 0.0
+    @inbounds for b in 1:36
+        v = (hist[mod1(b - 2, 36)] + 4.0 * hist[mod1(b - 1, 36)] + 6.0 * hist[b] +
+             4.0 * hist[mod1(b + 1, 36)] + hist[mod1(b + 2, 36)]) * 0.0625
+        sm[b] = v
+        v > peak && (peak = v)
+    end
+    peak > 0.0 || return angles
+    thresh = 0.8 * peak
+    @inbounds for b in 1:36
+        left, mid, right = sm[mod1(b - 1, 36)], sm[b], sm[mod1(b + 1, 36)]
+        if mid > left && mid > right && mid >= thresh
+            offset = (left - right) / (2.0 * (left - 2.0 * mid + right))
+            # Convert the upward-y histogram angle to clockwise image coordinates.
+            push!(angles, mod(-(b - 1 + offset) * (2pi / 36.0), 2pi))
+        end
+    end
+    return angles
+end
 
 @noinline function _orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64},
                                   sm::AbstractVector{Float64}, wtab::Vector{Float32},
@@ -710,7 +811,7 @@ function orientations!(angles::Vector{Float64}, ws::OrientationWorkspace,
     Base.require_one_based_indexing(angles)
     isfinite(sigma) && sigma > 0 && 4.5 * Float64(sigma) < Float64(typemax(Int32)) ||
         throw(ArgumentError("sigma must be finite, positive, and within orientation window limits"))
-    return _orientations!(angles, ws.hist, ws.sm, ws.wtab, a, y, x, sigma)
+    return _orientations!(angles, ws, a, y, x, sigma)
 end
 
 function orientations!(angles::Vector{Float64}, hist::AbstractVector{Float64}, sm::AbstractVector{Float64},
@@ -734,31 +835,53 @@ orientations(a::Matrix{Float32}, y::Int, x::Int, sigma::Real) =
 
 """Reusable workspace for zero-allocation calls to [`descriptor!`](@ref)."""
 mutable struct DescriptorWorkspace
-    const phist::Memory{Float32}
+    const phist::Memory{Float32} # 6×6×10 padded histogram (bins 9..10 fold into 1..2)
     rb::Memory{Float32}
     cb::Memory{Float32}
-    ob::Memory{Float32}
-    mag::Memory{Float32}
+    gx::Memory{Float32}
+    gy::Memory{Float32}
+    ew::Memory{Float32}
+    idx::Memory{Int32}
 end
 
 const _DescriptorWorkspace = DescriptorWorkspace
 
-function DescriptorWorkspace(cap::Int=256)
+function DescriptorWorkspace(cap::Int=4096)
     c = max(0, cap)
     return DescriptorWorkspace(
-        Memory{Float32}(undef, 288),
+        Memory{Float32}(undef, 360),
         Memory{Float32}(undef, c),
         Memory{Float32}(undef, c),
         Memory{Float32}(undef, c),
         Memory{Float32}(undef, c),
+        Memory{Float32}(undef, c),
+        Memory{Int32}(undef, c),
     )
 end
 
-@noinline function _grow_descriptor_workspace!(ws::DescriptorWorkspace, cap::Int)
-    ws.rb  = Memory{Float32}(undef, cap)
-    ws.cb  = Memory{Float32}(undef, cap)
-    ws.ob  = Memory{Float32}(undef, cap)
-    ws.mag = Memory{Float32}(undef, cap)
+@noinline function _grow_descriptor_workspace!(ws::DescriptorWorkspace, cap::Int, keep::Int=0)
+    new_rb = Memory{Float32}(undef, cap)
+    new_cb = Memory{Float32}(undef, cap)
+    new_gx = Memory{Float32}(undef, cap)
+    new_gy = Memory{Float32}(undef, cap)
+    new_ew = Memory{Float32}(undef, cap)
+    new_idx = Memory{Int32}(undef, cap)
+    if keep > 0
+        old_rb, old_cb, old_gx, old_gy, old_ew = ws.rb, ws.cb, ws.gx, ws.gy, ws.ew
+        @inbounds for k in 1:keep
+            new_rb[k] = old_rb[k]
+            new_cb[k] = old_cb[k]
+            new_gx[k] = old_gx[k]
+            new_gy[k] = old_gy[k]
+            new_ew[k] = old_ew[k]
+        end
+    end
+    ws.rb  = new_rb
+    ws.cb  = new_cb
+    ws.gx  = new_gx
+    ws.gy  = new_gy
+    ws.ew  = new_ew
+    ws.idx = new_idx
     return ws
 end
 
@@ -790,14 +913,11 @@ end
         fill!(out, 0f0)
         return out
     end
-    min_cap = min(length(ws.rb), length(ws.cb), length(ws.ob), length(ws.mag))
-    if max_ni > min_cap
-        _grow_descriptor_workspace!(ws, max(max_ni, 2 * min_cap))
-    end
-    phist = ws.phist
-    fill!(phist, 0f0)
-    rb_buf, cb_buf, ob_buf, mag_buf = ws.rb, ws.cb, ws.ob, ws.mag
+    rb_buf, cb_buf, gx_buf, gy_buf, ew_buf = ws.rb, ws.cb, ws.gx, ws.gy, ws.ew
+    cap = min(length(rb_buf), length(cb_buf), length(gx_buf), length(gy_buf), length(ew_buf), length(ws.idx))
+    total = 0
 
+    # Pass 1: pack all valid rotated-patch columns into contiguous L1-resident arrays.
     @inbounds for j in j_min:j_max
         xx = cx + j
         j_cs64 = j * cs64
@@ -826,82 +946,116 @@ end
         end
         n_i = i_hi - i_lo + 1
         n_i <= 0 && continue
+        if total + n_i > cap
+            new_cap = max(total + n_i, 2 * cap, 256)
+            _grow_descriptor_workspace!(ws, new_cap, total)
+            rb_buf, cb_buf, gx_buf, gy_buf, ew_buf = ws.rb, ws.cb, ws.gx, ws.gy, ws.ew
+            cap = new_cap
+        end
 
         j_cs = Float32(j_cs64)
         j_sn = Float32(j_sn64)
-        # Pass 1: branchless SIMD math over the contiguous column slice
-        @simd for idx in 1:n_i
-            i = i_lo + idx - 1
-            yy = cy + i
-            if32 = Float32(i)
-            u = muladd(-if32, sn, j_cs)
-            v = muladd( if32, cs, j_sn)
-            rb_buf[idx] = v + 1.5f0
-            cb_buf[idx] = u + 1.5f0
-            gx = a[yy, xx + 1] - a[yy, xx - 1]
-            gy = a[yy - 1, xx] - a[yy + 1, xx]
-            raw_ob = (_atan2_f32(gy, gx) - phi_f32) * scale
-            ob_buf[idx] = raw_ob - 8f0 * floor(raw_ob * 0.125f0)
-            mag_buf[idx] = sqrt(muladd(gx, gx, gy * gy)) * _exp_neg_f32((u * u + v * v) * 0.125f0)
+        u0 = muladd(-Float32(i_lo), sn, j_cs)
+        v0 = muladd( Float32(i_lo), cs, j_sn)
+        yy0 = cy + i_lo
+        @simd for k in 0:(n_i - 1)
+            kf = Float32(k)
+            u = muladd(-kf, sn, u0)
+            v = muladd( kf, cs, v0)
+            yy = yy0 + k
+            p = total + k + 1
+            rb_buf[p] = v + 1.5f0
+            cb_buf[p] = u + 1.5f0
+            gx_buf[p] = a[yy, xx + 1] - a[yy, xx - 1]
+            gy_buf[p] = a[yy - 1, xx] - a[yy + 1, xx]
+            ew_buf[p] = (u * u + v * v) * 0.125f0
         end
+        total += n_i
+    end
 
-        # Pass 2: 8-way trilinear scatter into 1-cell-padded 6×6×8 histogram
-        for idx in 1:n_i
-            rb = rb_buf[idx]
-            cb = cb_buf[idx]
-            (-1.0f0 < rb < 4.0f0 && -1.0f0 < cb < 4.0f0) || continue
-            ob = ob_buf[idx]
-            mag = mag_buf[idx]
-            r0 = floor(Int, rb)
-            c0 = floor(Int, cb)
-            o0 = unsafe_trunc(Int, ob)
-            fr = rb - r0
-            fc = cb - c0
-            fo = ob - o0
-            b0 = o0 & 7
-            b1 = (o0 + 1) & 7
-            base00 = ((r0 + 1) * 6 + (c0 + 1)) * 8 + 1
-            w_r1 = mag * fr
-            w_r0 = mag - w_r1
-            w_r0c1 = w_r0 * fc
-            w_r0c0 = w_r0 - w_r0c1
-            w_r1c1 = w_r1 * fc
-            w_r1c0 = w_r1 - w_r1c1
+    if total == 0
+        fill!(out, 0f0)
+        return out
+    end
 
-            phist[base00 + b0]      += w_r0c0 - w_r0c0 * fo
-            phist[base00 + b1]      += w_r0c0 * fo
-            phist[base00 + 8 + b0]  += w_r0c1 - w_r0c1 * fo
-            phist[base00 + 8 + b1]  += w_r0c1 * fo
-            phist[base00 + 48 + b0] += w_r1c0 - w_r1c0 * fo
-            phist[base00 + 48 + b1] += w_r1c0 * fo
-            phist[base00 + 56 + b0] += w_r1c1 - w_r1c1 * fo
-            phist[base00 + 56 + b1] += w_r1c1 * fo
-        end
+    # Pass 2: single flat branchless SIMD sweep computing bin index and trilinear weights
+    # in place (rb->w00, cb->w01, gx->w10, gy->w11, ew->fo) to stay within L1 cache.
+    idx_buf = ws.idx
+    @inbounds @simd for k in 1:total
+        rb_raw = rb_buf[k]
+        cb_raw = cb_buf[k]
+        valid = (-1.0f0 < rb_raw) & (rb_raw < 4.0f0) & (-1.0f0 < cb_raw) & (cb_raw < 4.0f0)
+        rb = ifelse(valid, rb_raw, 0f0)
+        cb = ifelse(valid, cb_raw, 0f0)
+        gx = gx_buf[k]
+        gy = gy_buf[k]
+        mag = ifelse(valid, Base.sqrt_llvm(muladd(gx, gx, gy * gy)) * _exp_neg_f32(ew_buf[k]), 0f0)
+        raw_ob = (_atan2_f32(gy, gx) - phi_f32) * scale
+        # raw_ob lies in [-4, 12); branchless wrap into [0, 8) (exact 8.0f0 wraps via & 7).
+        ob = raw_ob + ifelse(raw_ob < 0f0, 8f0, ifelse(raw_ob >= 8f0, -8f0, 0f0))
+        r0f = floor(rb)
+        c0f = floor(cb)
+        o0f = floor(ob)
+        fr = rb - r0f
+        fc = cb - c0f
+        fo = ob - o0f
+        r0 = unsafe_trunc(Int32, r0f)
+        c0 = unsafe_trunc(Int32, c0f)
+        o0 = unsafe_trunc(Int32, o0f) & Int32(7)
+        idx_buf[k] = ((r0 + Int32(1)) * Int32(6) + (c0 + Int32(1))) * Int32(10) + o0 + Int32(1)
+        w_r1 = mag * fr
+        w_r0 = mag - w_r1
+        w01 = w_r0 * fc
+        w00 = w_r0 - w01
+        w11 = w_r1 * fc
+        w10 = w_r1 - w11
+        rb_buf[k] = w00
+        cb_buf[k] = w01
+        gx_buf[k] = w10
+        gy_buf[k] = w11
+        ew_buf[k] = fo
+    end
+
+    # Pass 3: branchless 2-wide SIMD scatter into 6×6×10 padded histogram.
+    phist = ws.phist
+    fill!(phist, 0f0)
+    GC.@preserve phist @inbounds for k in 1:total
+        base = Int(idx_buf[k])
+        fo = ew_buf[k]
+        vf = SVector{2,Float32}(1f0 - fo, fo)
+        _store2!(phist, base,      muladd(rb_buf[k], vf, _load2(phist, base)))
+        _store2!(phist, base + 10, muladd(cb_buf[k], vf, _load2(phist, base + 10)))
+        _store2!(phist, base + 60, muladd(gx_buf[k], vf, _load2(phist, base + 60)))
+        _store2!(phist, base + 70, muladd(gy_buf[k], vf, _load2(phist, base + 70)))
     end
 
     s1 = 0f0
-    idx = 1
+    out_idx = 1
     @inbounds for pr in 1:4, pc in 1:4
-        base = (pr * 6 + pc) * 8
-        @simd for b in 1:8
+        base = (pr * 6 + pc) * 10
+        # Orientation bin 7's upper neighbor lands in padded slot 9; fold back into bin 0.
+        v0 = phist[base + 1] + phist[base + 9]
+        out[out_idx] = v0
+        s1 = muladd(v0, v0, s1)
+        @simd for b in 2:8
             v = phist[base + b]
-            out[idx + b - 1] = v
+            out[out_idx + b - 1] = v
             s1 = muladd(v, v, s1)
         end
-        idx += 8
+        out_idx += 8
     end
     if s1 <= 0f0
         fill!(out, 0f0)
         return out
     end
-    inv_n1 = 1f0 / sqrt(s1)
+    inv_n1 = 1f0 / Base.sqrt_llvm(s1)
     s2 = 0f0
     @inbounds for k in 1:128
         v = min(out[k] * inv_n1, 0.2f0)
         out[k] = v
         s2 = muladd(v, v, s2)
     end
-    inv_n2 = 1f0 / sqrt(s2)
+    inv_n2 = 1f0 / Base.sqrt_llvm(s2)
     @inbounds @simd for k in 1:128
         out[k] *= inv_n2
     end
@@ -930,7 +1084,7 @@ function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64}
     (length(out) == 128 && length(hist) == 128) ||
         throw(DimensionMismatch("descriptor buffers must have length 128"))
     _validate_descriptor_args(y, x, sigma, angle)
-    _descriptor!(out, DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+    _descriptor!(out, DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle)
     @inbounds for k in 1:128
         hist[k] = Float64(out[k])
     end
@@ -939,7 +1093,7 @@ end
 
 function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
     _validate_descriptor_args(y, x, sigma, angle)
-    return _descriptor!(Vector{Float32}(undef, 128), DescriptorWorkspace(max(256, size(a, 1))), a, y, x, sigma, angle)
+    return _descriptor!(Vector{Float32}(undef, 128), DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle)
 end
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
@@ -957,15 +1111,51 @@ function _scan_octave_columns!(out::Vector{LocalizedCandidate}, d::Vector{Matrix
         dn = d[l + 1]
     end
     neg_thresh = -prelim_thresh
-    @inbounds for x in cols, y in 6:h-5
-        v = dl[y, x]
-        (v >= prelim_thresh || v <= neg_thresh) || continue
-        _is_extremum(dp, dl, dn, y, x, v) || continue
-        p = _localize(d, y, x, l, c)
-        isnothing(p) && continue
-        push!(out, LocalizedCandidate(
-            o, octave, p.layer, p.iy, p.ix, p.y, p.x, p.sigma, p.response
-        ))
+    y_hi = h - 5
+    GC.@preserve dp dl dn @inbounds for x in cols
+        y = 6
+        while y + 7 <= y_hi
+            v = _load8(dl, y, x)
+            # 8-wide 6-neighbor axial prefilter (exact necessary condition for 26-neighbor extremum).
+            dl_u = _load8(dl, y - 1, x)
+            dl_d = _load8(dl, y + 1, x)
+            dl_l = _load8(dl, y, x - 1)
+            dl_r = _load8(dl, y, x + 1)
+            dp_c = _load8(dp, y, x)
+            dn_c = _load8(dn, y, x)
+
+            max6 = max.(max.(max.(dl_u, dl_d), max.(dl_l, dl_r)), max.(dp_c, dn_c))
+            min6 = min.(min.(min.(dl_u, dl_d), min.(dl_l, dl_r)), min.(dp_c, dn_c))
+            cand = ((v .>= prelim_thresh) .& (v .> max6)) .| ((v .<= neg_thresh) .& (v .< min6))
+            if any(cand)
+                for k in 1:8
+                    if cand[k]
+                        yk = y + k - 1
+                        _is_extremum(dp, dl, dn, yk, x, v[k]) || continue
+                        p = _localize(d, yk, x, l, c)
+                        isnothing(p) && continue
+                        push!(out, LocalizedCandidate(
+                            o, octave, p.layer, p.iy, p.ix, p.y, p.x, p.sigma, p.response
+                        ))
+                    end
+                end
+            end
+            y += 8
+        end
+        while y <= y_hi
+            v = dl[y, x]
+            if v >= prelim_thresh || v <= neg_thresh
+                if _is_extremum(dp, dl, dn, y, x, v)
+                    p = _localize(d, y, x, l, c)
+                    if !isnothing(p)
+                        push!(out, LocalizedCandidate(
+                            o, octave, p.layer, p.iy, p.ix, p.y, p.x, p.sigma, p.response
+                        ))
+                    end
+                end
+            end
+            y += 1
+        end
     end
     return out
 end
@@ -1089,7 +1279,7 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
         cand = cands[idx]
         factor = 2.0^cand.octave
         _orientations!(
-            angles_buf, ws.hist, ws.sm, ws.wtab,
+            angles_buf, ws,
             gp[cand.o][cand.layer], cand.iy, cand.ix, cand.sigma
         )
         y_img = Float32(1 + (cand.y - 1) * factor)
@@ -1106,21 +1296,12 @@ function _build_keypoints_range!(out::Vector{SIFTKeypoint{Float32}},
     return out
 end
 
-function _max_octave_height(gp::Vector{Vector{Matrix{Float32}}})
-    max_h = 0
-    for levels in gp, lvl in levels
-        h = size(lvl, 1)
-        h > max_h && (max_h = h)
-    end
-    return max_h
-end
-
 function _build_descriptors_range!(desc::Matrix{Float32},
                                    kp::Vector{SIFTKeypoint{Float32}},
                                    gp::Vector{Vector{Matrix{Float32}}},
                                    first_octave::Int,
                                    r::UnitRange{Int})
-    ws = _DescriptorWorkspace(max(256, _max_octave_height(gp)))
+    ws = _DescriptorWorkspace(4096)
     @views for i in r
         k = kp[i]
         factor = 2.0^k.octave

@@ -211,8 +211,12 @@ end
     @test SF.gaussian_blur(exact32, 0.05) == exact32
     cols_ir = string(only(Base.code_lowered(SF._blur_cols!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
     rows_ir = string(only(Base.code_lowered(SF._blur_rows!, (Matrix{Float32}, Matrix{Float32}, Memory{Float32}, Int, UnitRange{Int}))))
+    scan_ir = string(only(Base.code_lowered(SF._scan_octave_columns!, (Vector{SF.LocalizedCandidate}, Vector{Matrix{Float32}}, Int, Int, Int, UnitRange{Int}, Int, Float32, SIFTConfig))))
+    desc_ir = string(only(Base.code_lowered(SF._descriptor!, (Vector{Float32}, SF.DescriptorWorkspace, Matrix{Float32}, Float64, Float64, Float64, Float32))))
     @test occursin("gc_preserve", cols_ir)
     @test occursin("gc_preserve", rows_ir)
+    @test occursin("gc_preserve", scan_ir)
+    @test occursin("gc_preserve", desc_ir)
     # Candidate deduplication when two neighboring lattice points converge to the same extremum,
     # including large coordinates beyond 2^18 that would collide under narrow bit-packing.
     dup_cands = [
@@ -326,6 +330,10 @@ end
     @test SF.orientations!(ang_buf, ori_ws, ramp, 33, 33, 2.0) === ang_buf
     @test ang_buf == SF.orientations(ramp, 33, 33, 2.0)
     @test_throws ArgumentError SF.orientations!(ang_buf, ori_ws, ramp, 33, 33, 1e20)
+    # Small OrientationWorkspace grows safely for larger windows and stays zero-alloc on reuse.
+    small_ori_ws = SF.OrientationWorkspace(1)
+    @test SF.orientations!(ang_buf, small_ori_ws, ramp, 33, 33, 5.0) == SF.orientations(ramp, 33, 33, 5.0)
+    @test (@allocated SF.orientations!(ang_buf, small_ori_ws, ramp, 33, 33, 5.0)) == 0
     @test SF.descriptor(zeros(Float32,30,30),15.,15.,2.,0.) == zeros(Float32,128)
     # Regression for #8: large-scale keypoints whose descriptor column slice exceeds
     # 256 rows must not overflow _DescriptorWorkspace even when levels[1] is released early.
