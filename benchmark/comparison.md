@@ -39,21 +39,13 @@ compared as an optimization or regression.
 
 The benchmark checks pinned image hashes, descriptor shape/norms, repeatable
 feature counts, and comparable output counts. All 32 explicit gates passed.
-The [JSON](comparison-results.json) records every timing and allocation sample,
-input/source hashes, package versions, configuration, and measurement scope.
 The independent accuracy and matching study uses all 48 images; see
-[validation results](../docs/validation.md).
+[historical v1.0.0 validation details](../docs/validation.md).
 
-## Reproduction
-
-From the package directory, after installing `validation/requirements.txt` and
-instantiating the Julia project:
-
-```sh
-python validation/download_oxford.py --data-dir validation-data
-python benchmark/compare.py --data-dir validation-data --samples 5 --warmups 1
-```
-
-`--julia /path/to/julia` selects the runtime. `--work-dir` selects scratch storage;
-the default `benchmark-work/` directory is ignored. `--output` selects the JSON
-report destination. Images and decoded interchange data remain local.
+> **Historical note (`v1.0.0`)**: Starting in `v1.1.0`, the repository removed the
+> Python/OpenCV comparison harness to stay 100% pure Julia. To run the ongoing
+> pure-Julia Oxford accuracy and timing suite:
+>
+> ```sh
+> julia --project=. -t 1 validation/eval_pure.jl --oxford validation-data --download --compare-rootsift --benchmark
+> ```

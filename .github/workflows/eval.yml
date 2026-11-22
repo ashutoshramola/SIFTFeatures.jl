@@ -11,7 +11,7 @@ concurrency:
 jobs:
   evaluate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -37,10 +37,6 @@ jobs:
         if: steps.check.outputs.should_run == 'true'
         with:
           version: '1.13'
-      - uses: actions/setup-python@v7
-        if: steps.check.outputs.should_run == 'true'
-        with:
-          python-version: '3.13'
       - uses: julia-actions/cache@v3
         if: steps.check.outputs.should_run == 'true'
       - name: Cache Oxford validation dataset
@@ -48,55 +44,31 @@ jobs:
         if: steps.check.outputs.should_run == 'true'
         with:
           path: validation-data
-          key: oxford-data-${{ hashFiles('validation/oxford-sources.json') }}
+          key: oxford-data-${{ hashFiles('validation/oxford-sources.toml') }}
       - if: steps.check.outputs.should_run == 'true'
         run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
-      - if: steps.check.outputs.should_run == 'true'
-        run: python -m pip install -r validation/requirements.txt
       - name: Run Julia test suite (1 thread and auto threads)
-        id: julia_tests
         if: steps.check.outputs.should_run == 'true'
         run: |
-          COUNT=$(julia --startup-file=no --project=. --check-bounds=yes -t 1 -e '
-            using Test
-            ts = @testset "All" begin include("test/runtests.jl") end
-            c = Test.get_test_counts(ts)
-            println("JULIA_TEST_COUNT=", c.passes + c.cumulative_passes)
-          ' | awk -F= '/^JULIA_TEST_COUNT=/{print $2}')
-          julia --startup-file=no --project=. --check-bounds=yes -t auto -e 'using Test; @testset "All" begin include("test/runtests.jl") end'
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
-      - name: Run synthetic validation unit tests
-        if: steps.check.outputs.should_run == 'true'
-        run: python -m unittest discover -s validation -p 'test_*.py'
-      - name: Run synthetic validation unit tests (-O)
-        if: steps.check.outputs.should_run == 'true'
-        run: python -O -m unittest discover -s validation -p 'test_*.py'
-      - name: Validate Julia SIFT against OpenCV on synthetic suite
-        if: steps.check.outputs.should_run == 'true'
-        run: python validation/validate.py
+          julia --startup-file=no --project=. --check-bounds=yes -t 1 -e 'using Pkg; Pkg.test()'
+          julia --startup-file=no --project=. --check-bounds=yes -t auto -e 'using Pkg; Pkg.test()'
       - name: Run synthetic Julia SIFT baseline benchmark
         if: steps.check.outputs.should_run == 'true'
-        run: julia --project=. benchmark/run.jl
-      - name: Download or verify Oxford 48-photo dataset
+        run: julia --startup-file=no --project=. -t 1 benchmark/run.jl
+      - name: Run pure-Julia Oxford 48-photo ground-truth evaluation & benchmark
         if: steps.check.outputs.should_run == 'true'
-        run: python validation/download_oxford.py --data-dir validation-data
-      - name: Validate Julia SIFT & homographies on 48 Oxford photographs
-        if: steps.check.outputs.should_run == 'true'
-        run: python -O validation/real_world.py --data-dir validation-data --work-dir validation-work --max-side 0
-      - name: Benchmark Julia SIFT vs OpenCV on Oxford sequences
-        if: steps.check.outputs.should_run == 'true'
-        run: python benchmark/compare.py --data-dir validation-data --samples 5 --warmups 1
-      - name: Update Markdown evaluation & benchmark reports
-        if: steps.check.outputs.should_run == 'true'
-        run: python validation/update_reports.py --julia-test-count "${{ steps.julia_tests.outputs.count }}"
-      - name: Commit updated validation and benchmark reports
+        run: |
+          julia --startup-file=no --project=. -t 1 validation/eval_pure.jl \
+            --oxford validation-data --download --compare-rootsift --benchmark \
+            --write-report validation/REPORT.md
+      - name: Commit updated evaluation and benchmark reports
         if: steps.check.outputs.should_run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md docs/validation.md validation/REPORT.md validation/latest-results.json validation/real-world-results.json benchmark/baseline.md benchmark/comparison.md benchmark/comparison-results.json benchmark/real-world-baseline.md
+          git add validation/REPORT.md benchmark/baseline.md
           if ! git diff --cached --quiet; then
-            git commit -m "chore(ci): update evaluation and benchmark reports [skip ci]"
+            git commit -m "chore(ci): update pure-Julia evaluation and benchmark reports [skip ci]"
             git pull --rebase origin "${{ github.ref_name }}"
             git push origin "HEAD:${{ github.ref_name }}"
           fi
@@ -105,6 +77,5 @@ jobs:
         with:
           name: evaluation-results
           path: |
-            validation/latest-results.json
-            validation/real-world-results.json
-            benchmark/comparison-results.json
+            validation/REPORT.md
+            benchmark/baseline.md

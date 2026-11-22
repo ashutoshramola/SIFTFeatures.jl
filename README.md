@@ -7,19 +7,18 @@ Native Julia SIFT detection, floating-point subpixel keypoints, 128-dimensional
 descriptors, and L2 matching. Uses `ColorTypes`, `Colors`, `FixedPointNumbers`, and `StaticArrays`
 with ordinary Julia arrays. The package runs without Python or OpenCV.
 
-Version 1.0.0 is a native Julia implementation focused on correctness and performance. OpenCV
-comparison tests cover synthetic images and 48 photographs from eight Oxford
-benchmark sequences. See [validation results](docs/validation.md) and
-[implementation notes](docs/implementation.md).
+Version 1.1.0 is a 100% pure-Julia implementation focused on correctness and performance.
+See the [documentation](https://ashutoshramola.github.io/SIFTFeatures.jl/stable/),
+[validation report](validation/REPORT.md), and [implementation notes](docs/implementation.md).
 
-## Comparative benchmarks
+## Comparative benchmarks (v1.0.0 OpenCV 5.0.0 reference)
 
 ### Detection and descriptor timing
 
 Median of **five measured runs after one warmup per image**, using the first
 original-resolution photograph from each Oxford sequence. AMD EPYC 7763 64-Core Processor;
 Julia 1.13.4 and OpenCV 5.0.0; one thread each; unlimited features.
-Measured 2026-11-22.
+Measured 2026-11-22 against `v1.0.0`.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
@@ -41,8 +40,7 @@ GC triggered inside a measured call is included. Parameters match, with OpenCV
 ¹ OpenCV `detectAndCompute` plus transpose-copy to `128×N` and unit-L2
 normalization, matching Julia's output layout and normalization. The descriptor
 values still differ: OpenCV quantizes, while Julia returns unquantized Float32.
-[Raw samples and allocation values](benchmark/comparison-results.json),
-[method and reproduction](benchmark/comparison.md), and the
+[Comparison notes](benchmark/comparison.md) and
 [48-photo timing observations](benchmark/real-world-baseline.md) are available.
 
 ### Accuracy and matching
@@ -71,8 +69,10 @@ Correct matches are scored against the supplied homographies, within 3 pixels.
 ² Mean fitted-homography error below 3 px at five fixed image probes, evaluated
 against independent reference geometry. Severe viewpoint pairs still fail in
 both implementations; these results describe a small planar-scene benchmark.
-[Full validation, thresholds, and difficult cases](docs/validation.md).
-On the current source, all 602 Julia checks pass on Julia 1.13.4 (both single-threaded and multi-threaded).
+[Historical v1.0.0 OpenCV validation details](docs/validation.md).
+On `v1.1.0`, all 747 pure-Julia checks (including `Aqua.jl`, synthetic geometric
+warps, and `v1.0.0` golden regression anchors) pass on Julia 1.13 (both
+single-threaded and multi-threaded).
 
 ## Installation
 
@@ -151,53 +151,44 @@ Use `sift(img; octaves=n)` or `gaussian_pyramid(img, config; octaves=n)` to over
 the automatic octave count. Every requested octave must retain at least two
 pixels along each axis. `dog_pyramid(gaussian)` computes adjacent differences.
 
-## Tests and reference validation
+## Tests and validation
+
+All tests, benchmarks, and real-photograph evaluations run in 100% pure Julia
+(no Python or OpenCV required):
 
 ```sh
 julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+julia --project=. -t auto examples/run_all.jl
 julia --project=. benchmark/run.jl
 ```
 
-The Julia tests include analytical localization and descriptor-layout anchors,
-orientation/interpolation checks, geometric consistency, and matcher edge cases.
-CI runs Julia 1.13 on Linux (single-threaded and multi-threaded), macOS, and Windows.
+The Julia test suite (747 checks) covers `Aqua.jl` package quality, analytical
+localization and descriptor-layout anchors, orientation/interpolation checks,
+synthetic geometric warps (translation, rotation, similarity, perspective for
+both SIFT and RootSIFT), `v1.0.0` golden regression anchors, stress invariants,
+and matcher edge cases. CI runs Julia 1.13 on Linux (single-threaded and
+multi-threaded), macOS, and Windows.
 
-Python is used only in the optional OpenCV comparison environment:
-
-```sh
-python -m pip install -r validation/requirements.txt
-python -m unittest discover -s validation -p 'test_*.py'
-python -O -m unittest discover -s validation -p 'test_*.py'
-python validation/validate.py
-python validation/check_guards.py
-```
-
-To reproduce the photographic tests with supplied homographies:
+To run the pure-Julia photographic ground-truth evaluation (Oxford 48 photos /
+40 pairs, scored directly against published `H1toNp` homographies):
 
 ```sh
-python validation/download_oxford.py --data-dir validation-data
-python -O validation/real_world.py --data-dir validation-data \
-    --work-dir validation-work --max-side 0
+julia --project=. -t auto validation/eval_pure.jl \
+    --oxford validation-data --download --compare-rootsift --benchmark
 ```
 
-`--max-side 0` keeps original resolution; the default maximum side is 640.
-`--sequences graf,leuven` selects a subset. `--julia /path/to/julia` selects the
-runtime. Optional `--figures /path/to/figures` needs matplotlib and generates
-local diagnostic match plots. Dataset archives and extracted images stay local.
-The `Evaluation & Benchmarks` GitHub workflow (`eval.yml`) runs this benchmark weekly (when commits were made) or manually on demand.
-
-For broader manual checks—non-default `SIFTConfig` parity, noise/low-light/`UInt16`/panoramic stress tests, multi-threaded scaling, and the optional 116-scene HPatches benchmark—run locally or trigger the manual-only `Extended Evaluation & HPatches (Manual)` workflow (`extended-eval.yml`):
+To include the 116-scene HPatches benchmark (696 photos / 580 pairs; downloads
+~1.2 GB into gitignored `hpatches-data/` on first run):
 
 ```sh
-python -O validation/extended_eval.py --suites configs,stress,scaling --threads 1,4
-# Include HPatches (downloads ~1.2 GB into gitignored hpatches-data/ on first run):
-python -O validation/extended_eval.py --suites all --hpatches-max-side 800
+julia --project=. -t auto validation/eval_pure.jl \
+    --hpatches hpatches-data --download --hpatches-max-side 800 --compare-rootsift
 ```
 
-Validation uses explicit checks that remain active under Python `-O`, writes
-failures with a nonzero exit status, and replaces stale success reports before
-starting. [Synthetic timing samples](benchmark/baseline.md) and
-[photographic timing observations](benchmark/real-world-baseline.md) are recorded;
+The `Evaluation & Benchmarks` workflow (`eval.yml`) runs the Oxford suite weekly
+(when commits were made) or manually on demand; `Extended Evaluation & HPatches`
+(`extended-eval.yml`) runs manually on demand. [Synthetic timing samples](benchmark/baseline.md)
+and [latest pure-Julia evaluation report](validation/REPORT.md) are recorded;
 no GPU kernels have been added.
 
 ## References and development

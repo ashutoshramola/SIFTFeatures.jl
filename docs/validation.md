@@ -65,13 +65,11 @@ A preliminary, uncapped run of the same 48 photographs at maximum side 640 also 
 
 The previous Python assertion-removal issue is repaired: explicit checks collect failures, reports are written on failure, exit status is nonzero, and a pending failed-state report replaces any stale success before work starts. Deliberately zeroing descriptors is rejected in both normal and optimized Python, with `passed=false`. Under `Pkg.test()` with bounds checking enabled, all 602 Julia checks pass on Julia 1.13.4 (both single-threaded and multi-threaded).
 
-- [Descriptor-corruption control](../validation/guard-negative-control.txt)
-- [Machine-readable original-resolution results](../validation/real-world-results.json)
-- [Machine-readable resized results](../validation/real-world-resized-results.json)
-- [Pinned sources and individual file hashes](../validation/oxford-sources.json)
-- [Exact dataset-manifest snapshot used by these runs](../validation/run-snapshots/oxford-sources.json)
-
-The current manifest labels its retrieval date in the user’s local timezone. The exact original manifest bytes, whose hash is recorded in both run reports, are preserved in the linked run snapshot. Archive and image hashes are unchanged.
+> **Historical reference (`v1.0.0`)**: This document records the OpenCV 5.0.0
+> parity audit performed at `v1.0.0`. Starting in `v1.1.0`, ongoing CI and
+> evaluation run in 100% pure Julia via `validation/eval_pure.jl` (see
+> [latest pure-Julia report](../validation/REPORT.md) and
+> [pinned Oxford sources](../validation/oxford-sources.toml)).
 
 ## Scope and reproduction
 

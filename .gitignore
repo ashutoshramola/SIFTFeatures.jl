@@ -2,8 +2,6 @@ Manifest.toml
 docs/Manifest.toml
 docs/build/
 *.ji
-__pycache__/
-.venv/
 validation-data/
 validation-work/
 benchmark-work/
