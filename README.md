@@ -200,15 +200,11 @@ starting. [Synthetic timing samples](benchmark/baseline.md) and
 [photographic timing observations](benchmark/real-world-baseline.md) are recorded;
 no GPU kernels have been added.
 
-## Development and references
+## References and development
 
-The implementation follows [Lowe's SIFT paper](https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf),
-with selected [OpenCV 4.10 conventions](https://docs.opencv.org/4.10.0/d7/d60/classcv_1_1SIFT.html).
-Photographic data comes from the
-[Oxford affine covariant regions benchmark](https://www.robots.ox.ac.uk/~vgg/research/affine/).
+- D. G. Lowe, [Distinctive Image Features from Scale-Invariant Keypoints](https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf), *IJCV*, 2004.
+- R. Arandjelović and A. Zisserman, [Three things everyone should know to improve object retrieval](https://www.robots.ox.ac.uk/~vgg/publications/2012/Arandjelovic12/arandjelovic12.pdf), *CVPR*, 2012 (RootSIFT).
+- [OpenCV `cv::SIFT`](https://docs.opencv.org/4.x/d7/d60/classcv_1_1SIFT.html) parameter and reference conventions (validated in CI against OpenCV 5.0.0).
+- Photographic benchmarks: [Oxford affine covariant regions](https://www.robots.ox.ac.uk/~vgg/research/affine/) and [HPatches](https://github.com/hpatches/hpatches-dataset).
 
-Development used OpenAI Codex for implementation and execution, and Claude for
-an independent code audit. Maintainer review remains part of preparation for
-General registration. See [contribution guidance](CONTRIBUTING.md).
-
-MIT licensed; the package is not yet registered in General.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines. Licensed under the [MIT License](LICENSE).

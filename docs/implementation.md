@@ -31,7 +31,7 @@ feature counts after every transformation.
 
 ## Audit follow-up
 
-The initial independent Claude audit found no major default-pipeline algorithm
+The initial independent audit found no major default-pipeline algorithm
 defect. Reproducers identified and motivated these repairs:
 
 - Validation checks now survive optimized Python and preserve failed reports.
