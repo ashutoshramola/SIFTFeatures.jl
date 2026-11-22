@@ -19,7 +19,7 @@ CurrentModule = SIFTFeatures
 
 - **Precision**: `SIFTFeatures.jl` returns unquantized `Float32` unit vectors, whereas OpenCV quantizes descriptors near `512×` a unit vector.
 - **Exactness**: Bitwise equality with OpenCV is not promised due to `atan2` approximation, floating-point accumulation order, strict plateau handling, and initial contrast prefilter rounding (`0.5 * c / S` vs OpenCV's floored 8-bit prefilter).
-- **Validation**: Continuous validation covers synthetic geometric transforms, the 48-photograph Oxford affine benchmark (`eval.yml`), and an opt-in manual extended suite covering non-default `SIFTConfig`s, stress cases (`UInt16`, noise, low light, panoramic aspect ratios), multi-thread scaling, and the 116-scene HPatches benchmark (`extended-eval.yml`).
+- **Validation**: All CI and evaluation workflows run in 100% pure Julia: `Aqua.jl` package quality, synthetic geometric warps, cross-platform `v1.0.0` golden anchors, stress invariants (`ci.yml`), plus pure-Julia ground-truth homography evaluation on the 48-photo Oxford dataset (`eval.yml`) and optional 116-scene HPatches benchmark (`extended-eval.yml`). Full numerical parity against OpenCV 5.0.0 was verified at `v1.0.0` (≥99.96% coverage and 0.99998+ descriptor cosine across 2+ million keypoints).
 
 ## References
 

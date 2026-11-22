@@ -2,8 +2,8 @@ name: Extended Evaluation & HPatches (Manual)
 on:
   workflow_dispatch:
     inputs:
-      run_configs_stress_scaling:
-        description: 'Run non-default SIFTConfig parity, stress tests, and multi-thread scaling'
+      run_oxford:
+        description: 'Run Oxford 48-photo SIFT vs RootSIFT evaluation and timing benchmark'
         type: boolean
         default: true
       run_hpatches:
@@ -26,21 +26,19 @@ concurrency:
 jobs:
   extended-evaluate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
       - uses: julia-actions/setup-julia@v3
         with:
           version: ${{ inputs.julia_version }}
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.13'
       - uses: julia-actions/cache@v3
       - name: Cache Oxford validation dataset
+        if: inputs.run_oxford
         uses: actions/cache@v6
         with:
           path: validation-data
-          key: oxford-data-${{ hashFiles('validation/oxford-sources.json') }}
+          key: oxford-data-${{ hashFiles('validation/oxford-sources.toml') }}
       - name: Cache HPatches dataset
         if: inputs.run_hpatches
         uses: actions/cache@v6
@@ -48,34 +46,23 @@ jobs:
           path: hpatches-data
           key: hpatches-release-v1
       - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
-      - run: python -m pip install -r validation/requirements.txt
-      - name: Download or verify Oxford dataset (for configs/stress/scaling)
-        if: inputs.run_configs_stress_scaling
-        run: python validation/download_oxford.py --data-dir validation-data
-      - name: Run extended evaluation
+      - name: Run pure-Julia extended evaluation
         run: |
-          SUITES=""
-          if [ "${{ inputs.run_configs_stress_scaling }}" = "true" ]; then
-            SUITES="configs,stress,scaling"
+          ARGS="--download --compare-rootsift"
+          if [ "${{ inputs.run_oxford }}" = "true" ]; then
+            ARGS="$ARGS --oxford validation-data --benchmark"
           fi
           if [ "${{ inputs.run_hpatches }}" = "true" ]; then
-            SUITES="${SUITES:+${SUITES},}hpatches"
+            ARGS="$ARGS --hpatches hpatches-data --hpatches-max-side ${{ inputs.hpatches_max_side }}"
           fi
-          if [ -z "$SUITES" ]; then
-            echo "No suites selected; enable at least one input."
+          if [ "${{ inputs.run_oxford }}" != "true" ] && [ "${{ inputs.run_hpatches }}" != "true" ]; then
+            echo "Enable at least one of run_oxford or run_hpatches."
             exit 1
           fi
-          python -O validation/extended_eval.py \
-            --suites "$SUITES" \
-            --data-dir validation-data \
-            --hpatches-dir hpatches-data \
-            --hpatches-max-side "${{ inputs.hpatches_max_side }}" \
-            --threads 1,4 \
-            --samples 3 \
-            --work-dir extended-eval-work \
-            --output extended-eval-work/extended-results.json
+          julia --startup-file=no --project=. -t auto validation/eval_pure.jl \
+            $ARGS --write-report extended-eval-work/extended-report.md
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: extended-evaluation-results
-          path: extended-eval-work/extended-results.json
+          name: extended-evaluation-report
+          path: extended-eval-work/extended-report.md

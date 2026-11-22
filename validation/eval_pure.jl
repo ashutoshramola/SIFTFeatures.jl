@@ -1,24 +1,28 @@
 #!/usr/bin/env julia
 """
-Pure-Julia real-world ground-truth SIFT & RootSIFT evaluator (zero Python / OpenCV).
+Pure-Julia real-world ground-truth SIFT & RootSIFT evaluator and benchmark suite
+(zero Python, zero OpenCV, zero external packages beyond SIFTFeatures + stdlibs).
 
 Evaluates Oxford (48 photos / 40 pairs) and/or HPatches (116 scenes / 696 photos / 580 pairs)
-directly against the datasets' published ground-truth homographies (`H1toNp` / `H_1_N`).
+directly against each dataset's published ground-truth homographies (`H1toNp` / `H_1_N`),
+and optionally runs repeated single/multi-threaded timing benchmarks and writes a Markdown report.
 
 Usage:
-    julia --project=. -t auto validation/eval_pure.jl --oxford validation-data
     julia --project=. -t auto validation/eval_pure.jl --oxford validation-data --compare-rootsift
-    julia --project=. -t auto validation/eval_pure.jl --hpatches /path/to/hpatches --max-side 800
+    julia --project=. -t auto validation/eval_pure.jl --oxford validation-data --download --benchmark --write-report validation/REPORT.md
+    julia --project=. -t auto validation/eval_pure.jl --hpatches hpatches-data --download --compare-rootsift
 """
 
 using SIFTFeatures
+using Dates: Dates, today
 using LinearAlgebra: inv, norm
-using Printf: @printf
+using Printf: @printf, @sprintf
 using Random: MersenneTwister
 using StaticArrays: SMatrix, SVector
 using Statistics: median
 
 include(joinpath(@__DIR__, "..", "examples", "homography_ransac.jl"))
+include(joinpath(@__DIR__, "download_datasets.jl"))
 
 # --- Pure-Julia Netpbm (.ppm / .pgm, P5/P6) binary image decoder ---
 function _read_pnm_token(io::IO)
@@ -51,7 +55,7 @@ function read_pnm_gray(path::AbstractString)
         else
             raw = read(io, 3 * w * h)
             img = Matrix{UInt8}(undef, h, w)
-            # ITU-R BT.601 luminance matching OpenCV IMREAD_GRAYSCALE
+            # ITU-R BT.601 luminance
             idx = 1
             @inbounds for y in 1:h, x in 1:w
                 r = raw[idx]; g = raw[idx + 1]; b = raw[idx + 2]
@@ -117,7 +121,6 @@ function read_homography(path::AbstractString)
         end
     end
     length(vals) == 9 || error("Expected 9 floats in $path, got $(length(vals))")
-    # Input files are row-major 3×3
     return SMatrix{3,3,Float64,9}(
         vals[1], vals[4], vals[7],
         vals[2], vals[5], vals[8],
@@ -143,7 +146,6 @@ function score_pair(kp1, d1, kp2, d2, H_gt::SMatrix{3,3,Float64,9}, h1::Int, w1:
         H_fit, inliers = ransac_homography(kp1, kp2, m; thresh_px=3.0, iters=ransac_iters,
                                            zero_based=true, rng=MersenneTwister(7))
         if count(inliers) >= 4
-            # Second inlier re-collection + DLT polish around fitted model
             t2 = 9.0
             in2 = BitVector(undef, length(m))
             @inbounds for (idx, t) in enumerate(m)
@@ -175,7 +177,6 @@ end
 function evaluate_dataset(name::String, scene_dirs::Vector{String}, kind::Symbol;
                           max_side::Int=0, rootsift::Bool=false, ratio::Float64=0.8)
     cfg = SIFTConfig(rootsift=rootsift)
-    # Warm compilation
     sift(UInt8[mod(17x + 31y + 7x * y, 256) for y in 1:64, x in 1:64]; config=cfg)
     match_descriptors(ones(Float32, 128, 2), zeros(Float32, 128, 3); crosscheck=true)
 
@@ -187,8 +188,10 @@ function evaluate_dataset(name::String, scene_dirs::Vector{String}, kind::Symbol
     max_norm_err = 0.0
     sift_time = 0.0
     match_time = 0.0
+    scene_rows = NamedTuple[]
 
     for sdir in scene_dirs
+        sname = basename(sdir)
         img_paths = String[]
         for n in 1:6
             if kind == :oxford
@@ -212,6 +215,9 @@ function evaluate_dataset(name::String, scene_dirs::Vector{String}, kind::Symbol
             nerr > max_norm_err && (max_norm_err = nerr)
         end
 
+        sc_matches = 0
+        sc_correct = 0
+        sc_homog = 0
         for n in 2:6
             rawn = read_pnm_gray(img_paths[n])
             imgn, Cn = resize_gray(rawn, max_side)
@@ -235,7 +241,11 @@ function evaluate_dataset(name::String, scene_dirs::Vector{String}, kind::Symbol
             tot_matches += st.matches
             tot_correct += st.correct
             tot_homog += st.accurate_h ? 1 : 0
+            sc_matches += st.matches
+            sc_correct += st.correct
+            sc_homog += st.accurate_h ? 1 : 0
         end
+        push!(scene_rows, (scene=sname, matches=sc_matches, correct=sc_correct, homographies=sc_homog))
     end
 
     prec = tot_matches > 0 ? 100.0 * tot_correct / tot_matches : 0.0
@@ -245,7 +255,80 @@ function evaluate_dataset(name::String, scene_dirs::Vector{String}, kind::Symbol
             tot_correct, tot_matches, prec, tot_homog, tot_pairs, sift_time, match_time, max_norm_err)
     return (features=tot_features, matches=tot_matches, correct=tot_correct,
             precision=prec, homographies=tot_homog, pairs=tot_pairs,
-            max_norm_err=max_norm_err, sift_time=sift_time)
+            max_norm_err=max_norm_err, sift_time=sift_time, scenes=scene_rows)
+end
+
+function benchmark_oxford(oxford_dir::AbstractString; samples::Int=5, warmups::Int=1)
+    scenes = ["bikes", "trees", "graf", "wall", "bark", "boat", "leuven", "ubc"]
+    rows = NamedTuple[]
+    println("\n--- Oxford timing benchmark (Julia $(VERSION), $(Sys.CPU_NAME), threads=$(Threads.nthreads()), median of $samples runs) ---")
+    for s in scenes
+        sdir = joinpath(oxford_dir, s)
+        cand = first(filter(f -> startswith(f, "img1.") && (endswith(f, ".ppm") || endswith(f, ".pgm")), readdir(sdir)))
+        img = read_pnm_gray(joinpath(sdir, cand))
+        kp = SIFTKeypoint{Float32}[]
+        for _ in 1:warmups
+            kp, _ = sift(img)
+        end
+        times = Float64[]
+        allocs = Int[]
+        for _ in 1:samples
+            GC.gc()
+            res = @timed sift(img)
+            kp = res.value[1]
+            push!(times, res.time * 1000.0)
+            push!(allocs, res.bytes)
+        end
+        med_ms = median(times)
+        min_ms = minimum(times)
+        mib = minimum(allocs) / 2.0^20
+        @printf("  %-9s (%4d×%-4d) | %5d kp | median=%6.1f ms | min=%6.1f ms | alloc=%5.1f MiB\n",
+                "$(s)_1", size(img, 2), size(img, 1), length(kp), med_ms, min_ms, mib)
+        push!(rows, (name="$(s)_1", w=size(img, 2), h=size(img, 1), features=length(kp),
+                     median_ms=med_ms, min_ms=min_ms, alloc_mib=mib))
+    end
+    return rows
+end
+
+function write_markdown_report(path::AbstractString, r_sift, r_root, bench_rows)
+    lines = String[
+        "# Pure-Julia Validation & Benchmark Report — $(today())",
+        "",
+        "Runtime: Julia `$(VERSION)` (`$(Sys.CPU_NAME)`, `$(Threads.nthreads())` thread(s)). Zero Python or OpenCV dependencies.",
+        "",
+    ]
+    if !isnothing(r_sift)
+        push!(lines, "## Oxford 48-Photograph Ground-Truth Accuracy (40 pairs)", "")
+        push!(lines, "| Mode | Features | Matches | Correct (≤3 px) | Pooled Precision | Accurate Homographies |")
+        push!(lines, "|---|---:|---:|---:|---:|---:|")
+        push!(lines, @sprintf("| SIFT (`ratio=0.80`) | %d | %d | %d | %.3f%% | %d / %d |",
+                              r_sift.features, r_sift.matches, r_sift.correct, r_sift.precision, r_sift.homographies, r_sift.pairs))
+        if !isnothing(r_root)
+            push!(lines, @sprintf("| RootSIFT (`ratio=0.80`) | %d | %d | %d | %.3f%% | %d / %d |",
+                                  r_root.features, r_root.matches, r_root.correct, r_root.precision, r_root.homographies, r_root.pairs))
+        end
+        push!(lines, "", "### Per-Sequence Breakdown (SIFT / RootSIFT)", "")
+        push!(lines, "| Scene | Correct Matches (SIFT) | Homographies (SIFT) |" * (isnothing(r_root) ? "" : " Correct Matches (RootSIFT) | Homographies (RootSIFT) |"))
+        push!(lines, "|---|---:|---:|" * (isnothing(r_root) ? "" : "---:|---:|"))
+        for (idx, row) in enumerate(r_sift.scenes)
+            extra = isnothing(r_root) ? "" : @sprintf(" %d / %d | %d / 5 |", r_root.scenes[idx].correct, r_root.scenes[idx].matches, r_root.scenes[idx].homographies)
+            push!(lines, @sprintf("| %s | %d / %d | %d / 5 |%s", row.scene, row.correct, row.matches, row.homographies, extra))
+        end
+        push!(lines, "")
+    end
+    if !isempty(bench_rows)
+        push!(lines, "## Oxford Timing Benchmark (`$(Threads.nthreads())` thread(s))", "")
+        push!(lines, "| Photograph | Size (w×h) | Features | Median (ms) | Min (ms) | Allocated (MiB) |")
+        push!(lines, "|---|---:|---:|---:|---:|---:|")
+        for r in bench_rows
+            push!(lines, @sprintf("| %s | %d×%d | %d | %.1f | %.1f | %.1f |",
+                                  r.name, r.w, r.h, r.features, r.median_ms, r.min_ms, r.alloc_mib))
+        end
+        push!(lines, "")
+    end
+    mkpath(dirname(abspath(path)))
+    write(path, join(lines, "\n") * "\n")
+    println("Wrote report: $path")
 end
 
 function main()
@@ -254,7 +337,11 @@ function main()
     max_side = 0
     hpatches_max_side = 800
     compare_rootsift = false
+    do_download = false
+    do_benchmark = false
+    report_path = nothing
     limit = 0
+    samples = 5
     i = 1
     while i <= length(ARGS)
         arg = ARGS[i]
@@ -268,8 +355,16 @@ function main()
             hpatches_max_side = parse(Int, ARGS[i + 1]); i += 2
         elseif arg == "--limit"
             limit = parse(Int, ARGS[i + 1]); i += 2
+        elseif arg == "--samples"
+            samples = parse(Int, ARGS[i + 1]); i += 2
+        elseif arg == "--write-report"
+            report_path = ARGS[i + 1]; i += 2
         elseif arg == "--compare-rootsift"
             compare_rootsift = true; i += 1
+        elseif arg == "--download"
+            do_download = true; i += 1
+        elseif arg == "--benchmark"
+            do_benchmark = true; i += 1
         else
             error("Unknown argument: $arg")
         end
@@ -279,22 +374,29 @@ function main()
 
     println("Pure-Julia SIFTFeatures.jl Evaluator (Julia $(VERSION), threads=$(Threads.nthreads()))")
     failed = false
+    ox_sift = nothing
+    ox_root = nothing
+    bench_rows = NamedTuple[]
 
     if !isnothing(oxford_dir)
+        do_download && ensure_oxford(oxford_dir)
         scenes = ["bikes", "trees", "graf", "wall", "bark", "boat", "leuven", "ubc"]
         dirs = [joinpath(oxford_dir, s) for s in scenes]
-        r_sift = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=false)
-        # Ground-truth acceptance gates (no OpenCV needed!)
-        (r_sift.max_norm_err < 2e-6 && r_sift.precision >= 90.0 && r_sift.homographies >= 32) || (failed = true)
+        ox_sift = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=false)
+        (ox_sift.max_norm_err < 2e-6 && ox_sift.precision >= 90.0 && ox_sift.homographies >= 32) || (failed = true)
         if compare_rootsift
-            r_root = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=true)
-            (r_root.max_norm_err < 2e-6 && r_root.precision >= 92.0 && r_root.homographies >= 33) || (failed = true)
+            ox_root = evaluate_dataset("Oxford", dirs, :oxford; max_side=max_side, rootsift=true)
+            (ox_root.max_norm_err < 2e-6 && ox_root.precision >= 92.0 && ox_root.homographies >= 33) || (failed = true)
+        end
+        if do_benchmark
+            bench_rows = benchmark_oxford(oxford_dir; samples=samples)
         end
     end
 
     if !isnothing(hpatches_dir)
-        root = isdir(joinpath(hpatches_dir, "i_ajuntament")) ? hpatches_dir :
-               joinpath(hpatches_dir, "hpatches-sequences-release")
+        root = do_download ? ensure_hpatches(hpatches_dir) :
+               (isdir(joinpath(hpatches_dir, "i_ajuntament")) ? hpatches_dir :
+                joinpath(hpatches_dir, "hpatches-sequences-release"))
         dirs = sort([joinpath(root, d) for d in readdir(root)
                      if isdir(joinpath(root, d)) && (startswith(d, "i_") || startswith(d, "v_"))])
         limit > 0 && (dirs = dirs[1:min(limit, length(dirs))])
@@ -304,6 +406,10 @@ function main()
             r_root = evaluate_dataset("HPatches", dirs, :hpatches; max_side=hpatches_max_side, rootsift=true)
             (r_root.max_norm_err < 2e-6 && r_root.precision >= 91.0) || (failed = true)
         end
+    end
+
+    if !isnothing(report_path)
+        write_markdown_report(report_path, ox_sift, ox_root, bench_rows)
     end
 
     println(failed ? "PURE-JULIA EVAL: FAIL" : "PURE-JULIA EVAL: PASS")

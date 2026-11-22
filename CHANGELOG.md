@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-11-22
+
+- **100% pure-Julia self-sufficient testing & evaluation** (removed Python/OpenCV harness dependencies):
+  - Added `Aqua.jl` package quality assurance suite (`test`-only dependency).
+  - Added self-contained pure-Julia synthetic geometric warp tests (translation, rotation, similarity, perspective for both SIFT and RootSIFT), cross-platform `v1.0.0` golden regression anchors across 8 `SIFTConfig` presets, and stress invariants (`UInt16`, noise, low-light, panoramic).
+  - Added pure-Julia dataset downloader/SHA-256 verifier (`validation/download_datasets.jl` + `validation/oxford-sources.toml`) and pure-Julia real-world ground-truth evaluator (`validation/eval_pure.jl`) with native `.ppm`/`.pgm` decoding, area resizing, and Hartley-normalized DLT + 2-pass RANSAC homography evaluation for Oxford (48 photos) and HPatches (116 scenes / 696 photos).
+  - Simplified `ci.yml`, `eval.yml`, and `extended-eval.yml` to run 100% in pure Julia.
+
 ## 1.0.0 — 2026-11-22
 
 - **SIMD performance pipeline (`0.67–0.77×` OpenCV 5.0.0 single-threaded)**:
