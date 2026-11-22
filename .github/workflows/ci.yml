@@ -40,8 +40,36 @@ jobs:
         if: matrix.os == 'ubuntu-24.04' && matrix.threads == 'auto'
         shell: bash
         run: |
-          T1=$(julia --startup-file=no --project=. -t 1 -e 'using SIFTFeatures; include("test/fixtures.jl"); a = fixture(256, 256); k, d = sift(a); m = match_descriptors(d, d; crosscheck=true); println(length(k), " ", hash(d), " ", [(t.query, t.train, t.distance) for t in m] |> hash)')
-          TA=$(julia --startup-file=no --project=. -t auto -e 'using SIFTFeatures; include("test/fixtures.jl"); a = fixture(256, 256); k, d = sift(a); m = match_descriptors(d, d; crosscheck=true); println(length(k), " ", hash(d), " ", [(t.query, t.train, t.distance) for t in m] |> hash)')
+          CHECK=$(cat <<'EOF'
+          using SIFTFeatures
+          include("test/fixtures.jl")
+          kp_bits(ks::Vector{SIFTKeypoint{Float32}}) = [
+              (reinterpret(UInt32, k.y), reinterpret(UInt32, k.x),
+               reinterpret(UInt32, k.sigma), reinterpret(UInt32, k.angle),
+               reinterpret(UInt32, k.response), k.octave, k.layer)
+              for k in ks
+          ]
+          match_bits(ms) = [(m.query, m.train, reinterpret(UInt32, m.distance)) for m in ms]
+          a = fixture(256, 256)
+          b = rotl90(a)
+          k1, d1 = sift(a)
+          k2, d2 = sift(b)
+          _, r1 = sift(a; config=SIFTConfig(rootsift=true))
+          _, r2 = sift(b; config=SIFTConfig(rootsift=true))
+          m_fwd = match_descriptors(d1, d2; crosscheck=false)
+          m_cc  = match_descriptors(d1, d2; crosscheck=true)
+          mr_cc = match_descriptors(r1, r2; crosscheck=true)
+          @assert !isempty(k1) && !isempty(k2) && !isempty(m_cc) && !isempty(mr_cc)
+          digest = hash((kp_bits(k1), kp_bits(k2),
+                         reinterpret(UInt32, d1), reinterpret(UInt32, d2),
+                         reinterpret(UInt32, r1), reinterpret(UInt32, r2),
+                         match_bits(m_fwd), match_bits(m_cc), match_bits(mr_cc)))
+          println("kp=(", length(k1), ",", length(k2), ") matches=(",
+                  length(m_fwd), ",", length(m_cc), ",", length(mr_cc), ") digest=", digest)
+          EOF
+          )
+          T1=$(julia --startup-file=no --project=. -t 1 -e "$CHECK")
+          TA=$(julia --startup-file=no --project=. -t auto -e "$CHECK")
           echo "1-thread:    $T1"
           echo "auto-thread: $TA"
-          test "$T1" = "$TA"
+          test -n "$T1" && test "$T1" = "$TA"
