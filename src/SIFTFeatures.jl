@@ -7,7 +7,7 @@ using LinearAlgebra: norm, dot, det
 using StaticArrays: SVector, SMatrix
 
 export SIFTConfig, SIFTKeypoint, DescriptorMatch, sift, match_descriptors,
-       gaussian_pyramid, dog_pyramid
+       gaussian_pyramid, dog_pyramid, rootsift, rootsift!
 
 public validate, grayscale_float, double_image, gaussian_blur, gaussian_blur!,
        default_octaves, is_extremum, derivatives, localize, orientations, orientations!,
@@ -15,7 +15,9 @@ public validate, grayscale_float, double_image, gaussian_blur, gaussian_blur!,
 
 """SIFT parameters. `first_octave=-1` doubles the input on a pixel-aligned grid.
 Contrast uses OpenCV semantics (the threshold is divided by `octave_layers`).
-Descriptors always have 4×4 spatial cells and 8 orientation bins.
+Descriptors always have 4×4 spatial cells and 8 orientation bins. Set `rootsift=true`
+to return L1-normalized elementwise square-root (RootSIFT / Hellinger) descriptors,
+which remain unit-L2 normalized for standard Euclidean matching.
 """
 @kwdef struct SIFTConfig
     nfeatures::Int = 0
@@ -25,6 +27,7 @@ Descriptors always have 4×4 spatial cells and 8 orientation bins.
     sigma::Float64 = 1.6
     assumed_input_sigma::Float64 = 0.5
     first_octave::Int = -1
+    rootsift::Bool = false
 end
 
 """A subpixel SIFT feature. `x` and `y` are one-based column/row coordinates,
@@ -886,7 +889,8 @@ end
 end
 
 @noinline function _descriptor!(out::AbstractVector{Float32}, ws::DescriptorWorkspace,
-                                a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+                                a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real,
+                                use_rootsift::Bool=false)
     # Round in zero-based coordinates, then convert back. Ties-to-even would
     # choose the opposite pixel if applied directly to a one-based coordinate.
     cy, cx = round(Int, y - 1) + 1, round(Int, x - 1) + 1
@@ -1049,15 +1053,28 @@ end
         return out
     end
     inv_n1 = 1f0 / Base.sqrt_llvm(s1)
-    s2 = 0f0
-    @inbounds for k in 1:128
-        v = min(out[k] * inv_n1, 0.2f0)
-        out[k] = v
-        s2 = muladd(v, v, s2)
-    end
-    inv_n2 = 1f0 / Base.sqrt_llvm(s2)
-    @inbounds @simd for k in 1:128
-        out[k] *= inv_n2
+    if use_rootsift
+        l1 = 0f0
+        @inbounds for k in 1:128
+            v = min(out[k] * inv_n1, 0.2f0)
+            out[k] = v
+            l1 += v
+        end
+        inv_l1 = 1f0 / l1
+        @inbounds @simd for k in 1:128
+            out[k] = Base.sqrt_llvm(out[k] * inv_l1)
+        end
+    else
+        s2 = 0f0
+        @inbounds for k in 1:128
+            v = min(out[k] * inv_n1, 0.2f0)
+            out[k] = v
+            s2 = muladd(v, v, s2)
+        end
+        inv_n2 = 1f0 / Base.sqrt_llvm(s2)
+        @inbounds @simd for k in 1:128
+            out[k] *= inv_n2
+        end
     end
     return out
 end
@@ -1071,30 +1088,90 @@ end
 end
 
 function descriptor!(out::AbstractVector{Float32}, ws::DescriptorWorkspace,
-                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real;
+                     rootsift::Bool=false)
     Base.require_one_based_indexing(out)
     length(out) == 128 || throw(DimensionMismatch("descriptor output buffer must have length 128"))
     _validate_descriptor_args(y, x, sigma, angle)
-    return _descriptor!(out, ws, a, y, x, sigma, angle)
+    return _descriptor!(out, ws, a, y, x, sigma, angle, rootsift)
 end
 
 function descriptor!(out::AbstractVector{Float32}, hist::AbstractVector{Float64},
-                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+                     a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real;
+                     rootsift::Bool=false)
     Base.require_one_based_indexing(out, hist)
     (length(out) == 128 && length(hist) == 128) ||
         throw(DimensionMismatch("descriptor buffers must have length 128"))
     _validate_descriptor_args(y, x, sigma, angle)
-    _descriptor!(out, DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle)
+    _descriptor!(out, DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle, rootsift)
     @inbounds for k in 1:128
         hist[k] = Float64(out[k])
     end
     return out
 end
 
-function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real)
+function descriptor(a::Matrix{Float32}, y::Real, x::Real, sigma::Real, angle::Real;
+                    rootsift::Bool=false)
     _validate_descriptor_args(y, x, sigma, angle)
-    return _descriptor!(Vector{Float32}(undef, 128), DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle)
+    return _descriptor!(Vector{Float32}(undef, 128), DescriptorWorkspace(min(4096, max(256, length(a)))), a, y, x, sigma, angle, rootsift)
 end
+
+"""
+    rootsift!(descriptors)
+
+In-place RootSIFT (Hellinger) transform for a nonnegative descriptor vector or
+column-wise descriptor matrix: L1-normalizes each vector/column and applies the
+elementwise square root (leaving all-zero vectors unchanged). The output columns
+have unit L2 norm so Euclidean matching computes the Hellinger kernel.
+"""
+function rootsift!(v::AbstractVector{T}) where {T<:AbstractFloat}
+    Base.require_one_based_indexing(v)
+    s = zero(T)
+    @inbounds for i in eachindex(v)
+        x = v[i]
+        isfinite(x) && x >= zero(T) ||
+            throw(ArgumentError("RootSIFT descriptors must be finite and nonnegative"))
+        s += x
+    end
+    if s > zero(T)
+        inv_s = inv(s)
+        @inbounds @simd for i in eachindex(v)
+            v[i] = sqrt(v[i] * inv_s)
+        end
+    end
+    return v
+end
+
+function rootsift!(m::AbstractMatrix{T}) where {T<:AbstractFloat}
+    Base.require_one_based_indexing(m)
+    nrows, ncols = size(m)
+    @inbounds for j in 1:ncols
+        s = zero(T)
+        for i in 1:nrows
+            x = m[i, j]
+            isfinite(x) && x >= zero(T) ||
+                throw(ArgumentError("RootSIFT descriptors must be finite and nonnegative"))
+            s += x
+        end
+        if s > zero(T)
+            inv_s = inv(s)
+            @simd for i in 1:nrows
+                m[i, j] = sqrt(m[i, j] * inv_s)
+            end
+        end
+    end
+    return m
+end
+
+"""
+    rootsift(descriptors)
+
+Return a RootSIFT-transformed copy of a nonnegative SIFT descriptor vector or
+column-wise matrix. See [`rootsift!`](@ref).
+"""
+rootsift(v::AbstractVector{T}) where {T<:AbstractFloat} = rootsift!(copy(v))
+rootsift(m::AbstractMatrix{T}) where {T<:AbstractFloat} = rootsift!(copy(m))
+rootsift(x::AbstractVecOrMat{<:Real}) = rootsift!(Float32.(x))
 
 # Rounding a value just below 2π to Float32 can otherwise leave the interval.
 @inline function angle32(angle)
@@ -1300,7 +1377,8 @@ function _build_descriptors_range!(desc::Matrix{Float32},
                                    kp::Vector{SIFTKeypoint{Float32}},
                                    gp::Vector{Vector{Matrix{Float32}}},
                                    first_octave::Int,
-                                   r::UnitRange{Int})
+                                   r::UnitRange{Int},
+                                   use_rootsift::Bool=false)
     ws = _DescriptorWorkspace(4096)
     @views for i in r
         k = kp[i]
@@ -1311,7 +1389,8 @@ function _build_descriptors_range!(desc::Matrix{Float32},
             1 + (k.y - 1) / factor,
             1 + (k.x - 1) / factor,
             k.sigma / factor,
-            k.angle
+            k.angle,
+            use_rootsift
         )
     end
     return desc
@@ -1323,6 +1402,7 @@ end
 Native SIFT detection and description. Returns floating-point keypoints and a
 128×N Float32 matrix with unit-L2 columns. Multiple strong orientations create
 separate features. `nfeatures=0` keeps all features; otherwise keep the strongest.
+Set `SIFTConfig(rootsift=true)` to compute RootSIFT (Hellinger) descriptors directly.
 """
 function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=nothing)
     c = validate(config)
@@ -1356,10 +1436,10 @@ function sift(img::AbstractMatrix; config::SIFTConfig=SIFTConfig(), octaves=noth
             nchunks = min(nt, nkp)
             @sync for chunk in 1:nchunks
                 r = _chunk_range(nkp, chunk, nchunks)
-                Threads.@spawn _build_descriptors_range!(desc, kp, gp, c.first_octave, r)
+                Threads.@spawn _build_descriptors_range!(desc, kp, gp, c.first_octave, r, c.rootsift)
             end
         else
-            _build_descriptors_range!(desc, kp, gp, c.first_octave, 1:nkp)
+            _build_descriptors_range!(desc, kp, gp, c.first_octave, 1:nkp, c.rootsift)
         end
     end
     return kp, desc
