@@ -236,6 +236,14 @@ end
     @test SF.gaussian_blur!(blur_dst2, blur_tmp, blur_src, 0.0) == blur_src
     @test_throws ArgumentError SF.gaussian_blur!(blur_dst, blur_dst, blur_src, 1.5)
     @test_throws ArgumentError SF.gaussian_blur!(blur_dst, blur_src, blur_src, 1.5)
+    # Distinct Matrix objects sharing backing storage (via reshape) must also be caught.
+    shared_vec = copy(vec(blur_src))
+    alias_a = reshape(shared_vec, size(blur_src))
+    alias_b = reshape(shared_vec, size(blur_src))
+    @test alias_a !== alias_b
+    @test_throws ArgumentError SF.gaussian_blur!(alias_a, alias_b, blur_src, 1.5)
+    @test_throws ArgumentError SF.gaussian_blur!(blur_dst, alias_b, alias_a, 1.5)
+    @test SF.gaussian_blur!(alias_a, similar(blur_src), alias_b, 1.5) == SF.gaussian_blur(blur_src, 1.5)
     @test_throws ArgumentError SF.gaussian_blur(blur_src, -0.5)
     @test_throws ArgumentError SF.gaussian_blur(blur_src, NaN)
     @test_throws ArgumentError SF.gaussian_blur(blur_src, 1e20)
