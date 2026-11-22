@@ -1,8 +1,12 @@
-using Test, SIFTFeatures, LinearAlgebra
+using Test, Aqua, SIFTFeatures, LinearAlgebra
 using ColorTypes: Gray, RGB, RGBA
 using FixedPointNumbers: N0f8
 const SF = SIFTFeatures
 include("fixtures.jl")
+
+@testset "Aqua.jl package quality" begin
+    Aqua.test_all(SIFTFeatures)
+end
 
 struct _ZeroBasedArray{T,N,A<:AbstractArray{T,N}} <: AbstractArray{T,N}
     data::A
@@ -541,3 +545,5 @@ end
 @testset "Type stability, zero-allocation kernels, and chunk determinism" begin
     test_stability_and_determinism()
 end
+
+include("self_contained_validation.jl")
