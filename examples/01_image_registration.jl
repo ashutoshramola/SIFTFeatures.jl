@@ -6,30 +6,43 @@
 @isdefined(ransac_homography) || include("homography_ransac.jl")
 
 """
-    register_images(img_ref, img_target; config=SIFTConfig(), ratio=0.8, thresh_px=3.0)
+    register_images(img_ref, img_target; config=SIFTConfig(nfeatures=1000, rootsift=true),
+                    ratio=0.8, thresh_px=3.0, min_inliers=8)
 
-Detect SIFT features in `img_ref` and `img_target`, match descriptors with a strict
-Lowe ratio and mutual nearest-neighbor check, estimate the 3×3 homography `H_ref_to_target`
-via RANSAC, and warp `img_target` back into `img_ref`'s coordinate frame.
+Detect features in `img_ref` and `img_target`, match descriptors with a strict
+Lowe ratio and mutual nearest-neighbor check, estimate the 3×3 homography
+`H_ref_to_target` via RANSAC, and warp `img_target` onto `img_ref`'s grid.
+
+Requires at least `min_inliers` (>= 4) distinct spatial inlier locations; when
+support is insufficient, returns `found=false`, `H=nothing`, and `aligned=nothing`.
 """
 function register_images(img_ref::AbstractMatrix, img_target::AbstractMatrix;
-                         config::SIFTConfig=SIFTConfig(),
+                         config::SIFTConfig=SIFTConfig(nfeatures=1000, rootsift=true),
                          ratio::Real=0.8,
-                         thresh_px::Real=3.0)
+                         thresh_px::Real=3.0,
+                         min_inliers::Int=8)
+    min_inliers >= 4 || throw(ArgumentError("min_inliers must be at least 4"))
     kp_ref, desc_ref = sift(img_ref; config)
     kp_target, desc_target = sift(img_target; config)
     matches = match_descriptors(desc_ref, desc_target; ratio, crosscheck=true)
-    H_ref_to_target, inliers = ransac_homography(kp_ref, kp_target, matches; thresh_px)
+    H_est, inliers = ransac_homography(kp_ref, kp_target, matches; thresh_px)
+    n_distinct = distinct_inlier_locations(kp_ref, kp_target, matches, inliers)
+    found = n_distinct >= min_inliers
 
-    # To warp img_target back onto img_ref's grid, for each pixel (y, x) in aligned,
-    # sample img_target at H_ref_to_target * [x, y, 1].
-    aligned = Matrix{Float32}(undef, size(img_ref))
-    warp_perspective!(aligned, SIFTFeatures.grayscale_float(img_target), H_ref_to_target)
+    aligned = if found
+        buf = Matrix{Float32}(undef, size(img_ref))
+        # For each pixel (y, x) in aligned, sample img_target at H_est * [x, y, 1].
+        warp_perspective!(buf, SIFTFeatures.grayscale_float(img_target), H_est)
+    else
+        nothing
+    end
 
     return (
-        H=H_ref_to_target,
+        found=found,
+        H=found ? H_est : nothing,
         matches=matches,
         inliers=inliers,
+        distinct_inliers=n_distinct,
         kp_ref=kp_ref,
         kp_target=kp_target,
         aligned=aligned,
@@ -39,7 +52,7 @@ end
 function run_registration_demo()
     println("=== Example 1: Image Registration & Alignment ===")
     h, w = 320, 400
-    img_ref = synthetic_scene(h, w)
+    img_ref = synthetic_scene(h, w; seed=1)
 
     # Construct a known perspective + rotation + scale homography (1-based coordinates)
     theta = deg2rad(14.0)
@@ -57,7 +70,7 @@ function run_registration_demo()
     img_target = Matrix{Float32}(undef, h, w)
     warp_perspective!(img_target, img_ref, inv(H_true))
 
-    # Warmup and run registration
+    # Warmup and run valid registration
     register_images(img_ref, img_target)
     t_sec = @elapsed res = register_images(img_ref, img_target)
 
@@ -66,10 +79,17 @@ function run_registration_demo()
     println("  Reference features : ", length(res.kp_ref))
     println("  Target features    : ", length(res.kp_target))
     println("  Mutual L2 matches  : ", length(res.matches))
-    println("  RANSAC inliers     : ", n_inliers, " / ", length(res.matches),
-            " (", round(100 * n_inliers / max(1, length(res.matches)); digits=1), "%)")
+    println("  RANSAC inliers     : ", n_inliers, " (", res.distinct_inliers, " distinct locations, ",
+            round(100 * n_inliers / max(1, length(res.matches)); digits=1), "%)")
     println("  Mean probe error   : ", round(err_px; digits=4), " px")
     println("  End-to-end time    : ", round(t_sec * 1000; digits=1), " ms")
+
+    # Failure case: unrelated textured distractor is cleanly rejected
+    distractor = synthetic_scene(h, w; seed=99)
+    res_fail = register_images(img_ref, distractor)
+    println("  Distractor check   : found=", res_fail.found,
+            " (matches=", length(res_fail.matches),
+            ", distinct_inliers=", res_fail.distinct_inliers, ")")
     return res
 end
 

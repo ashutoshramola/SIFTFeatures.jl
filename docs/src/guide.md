@@ -50,10 +50,25 @@ kp, desc = sift(img; config)
 
 | Workload | Suggested `SIFTConfig` |
 |---|---|
-| **Maximum recall / photogrammetry** | `SIFTConfig()` or `SIFTConfig(rootsift=true)` |
+| **General registration (practical starting point)** | `SIFTConfig(nfeatures=1000, rootsift=true)` |
+| **Dense correspondences / photogrammetry** | `SIFTConfig(rootsift=true)` (`nfeatures=0`) |
 | **Image retrieval / database indexing** | `SIFTConfig(nfeatures=500, rootsift=true)` |
-| **Low-latency video / robotics** | `SIFTConfig(first_octave=0, nfeatures=500)` |
+| **Low-latency video / robotics** | `SIFTConfig(first_octave=0, nfeatures=500, rootsift=true)` |
 | **Dark / low-contrast imagery** | `SIFTConfig(contrast_threshold=0.02, rootsift=true)` |
+
+### Choosing `nfeatures`: Speed vs. Correspondences
+
+Brute-force matching scales as $O(N_1 N_2)$, so capping features can dramatically reduce end-to-end runtime. On all **48 Oxford photographs / 40 pairs** (single-threaded Julia 1.13, measuring extraction + mutual L2 matching only, excluding RANSAC fitting):
+
+| `nfeatures` | Mode | Correct Matches (Precision) | Accurate Homographies | SIFT (s) | Match (s) | Total (s) |
+|---:|---|---:|---:|---:|---:|---:|
+| 500 | RootSIFT | 4,280 (90.75%) | 32 / 40 | 4.02 | 0.05 | 4.07 |
+| **1,000** | **RootSIFT** | **8,785 (92.43%)** | **34 / 40** | **3.98** | **0.19** | **4.17** |
+| 2,000 | RootSIFT | 15,921 (92.47%) | 33 / 40 | 4.47 | 0.75 | 5.23 |
+| unlimited (`0`) | SIFT | 34,989 (90.76%) | 33 / 40 | 6.21 | 8.73 | 14.93 |
+| unlimited (`0`) | RootSIFT | 36,706 (92.72%) | 34 / 40 | 6.17 | 8.82 | 14.99 |
+
+`SIFTConfig(nfeatures=1000, rootsift=true)` achieves the same aggregate registration success (**34/40**, sharing 33 of the same pairs: `nfeatures=1000` succeeds on `trees_1→4`, while unlimited succeeds on `trees_1→6`) with a **3.6× reduction in measured extraction-plus-matching time**. Use `nfeatures=0` when downstream tasks (such as dense SfM or triangulation) benefit from 4× more correspondences (`36,706` vs. `8,785`).
 
 ## RootSIFT (Hellinger) Descriptors
 

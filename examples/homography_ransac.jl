@@ -161,6 +161,29 @@ function ransac_homography(kp1::AbstractVector{<:SIFTKeypoint},
 end
 
 """
+    distinct_inlier_locations(kp1, kp2, matches, inliers) -> Int
+
+Count distinct spatial locations supporting the inlier set (taking the minimum of
+unique query and train integer pixel coordinates). Multiple SIFT orientation
+instances at the same spatial location count as one location.
+"""
+function distinct_inlier_locations(kp1::AbstractVector{<:SIFTKeypoint},
+                                   kp2::AbstractVector{<:SIFTKeypoint},
+                                   matches::AbstractVector{DescriptorMatch},
+                                   inliers::AbstractVector{Bool})
+    q_locs = Set{Tuple{Int,Int}}()
+    t_locs = Set{Tuple{Int,Int}}()
+    @inbounds for (m, ok) in zip(matches, inliers)
+        ok || continue
+        ka = kp1[m.query]
+        kb = kp2[m.train]
+        push!(q_locs, (round(Int, ka.x), round(Int, ka.y)))
+        push!(t_locs, (round(Int, kb.x), round(Int, kb.y)))
+    end
+    return min(length(q_locs), length(t_locs))
+end
+
+"""
     warp_perspective!(dst::AbstractMatrix{Float32}, src::AbstractMatrix{<:Real}, H_dst_to_src::SMatrix{3,3,Float64,9})
 
 Inverse-map `src` into `dst` using bilinear interpolation and 1-based pixel coordinates.

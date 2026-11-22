@@ -562,3 +562,4 @@ end
 
 include("self_contained_validation.jl")
 include("validation_report.jl")
+include("examples_test.jl")

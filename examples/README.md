@@ -70,9 +70,9 @@ using SIFTFeatures
 1. Call `detect_object(template, scene)` from `examples/02_object_detection.jl`:
    ```julia
    include("examples/02_object_detection.jl")
-   res = detect_object(template_img, scene_img; ratio=0.8, thresh_px=2.5)
+   res = detect_object(template_img, scene_img; ratio=0.8, thresh_px=2.5, min_inliers=8)
    ```
-2. Inspect `res.corners` (the 4 projected `(x, y)` corners of the template inside `scene_img`) and `count(res.inliers)` (typically `>= 10` inliers indicates a high-confidence detection).
+2. Check `res.found` first: `detect_object` requires at least `min_inliers` **distinct spatial inlier locations** (`res.distinct_inliers`), returning `res.found == false`, `res.H === nothing`, and `res.corners === nothing` on blank or unrelated textured scenes.
 
 ---
 
@@ -81,16 +81,20 @@ using SIFTFeatures
 **When to use:** Searching a database of reference locations or product images to identify which scene matches a new query photo.
 
 **Step-by-step workflow:**
-1. Pre-index your reference images using a capped feature budget (`nfeatures=500` or `1000`) so each image stores a compact `128 × K` `Float32` matrix:
+1. Pre-index your reference images using a capped feature budget (`nfeatures=500` or `1000`) with RootSIFT so each image stores a compact `128 × K` `Float32` matrix:
    ```julia
    include("examples/03_place_recognition.jl")
-   cfg = SIFTConfig(nfeatures=500)
+   cfg = SIFTConfig(nfeatures=500, rootsift=true)
    db = build_image_database(["lobby" => img1, "hallway" => img2, "lab" => img3]; config=cfg)
    ```
 2. Query the database with a new image:
    ```julia
-   result = query_image_database(db, query_img; config=cfg)
-   println("Best match: ", result.best_match, " with ", result.best_count, " mutual matches")
+   result = query_image_database(db, query_img; config=cfg, min_matches=10)
+   if result.best_match !== nothing
+       println("Best match: ", result.best_match, " with ", result.best_count, " mutual matches")
+   else
+       println("No match (top score ", result.best_count, " < min_matches)")
+   end
    ```
 
 ---
