@@ -1,18 +1,18 @@
 {
   "suite": "synthetic OpenCV reference",
-  "run_id": "dacb5d2986b246b7b5c6d905a0aea186",
-  "started_utc": "2026-11-22T06:59:58.539227+00:00",
+  "run_id": "b0c68ee5a0104917aea54d746a55ed2b",
+  "started_utc": "2026-11-22T10:28:13.256133+00:00",
   "state": "complete",
   "passed": true,
   "python": "3.13.18",
   "python_optimization": 0,
   "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "source_sha256": {
-    "Project.toml": "118abfc79206684a36725b407ccffe88a0e5f18b8369688ba2581cc9e5dbe9b2",
-    "src/SIFTFeatures.jl": "8f9888e872c0e7b64add402e577d89054a7b48620e4bc805b638216f28b0baff",
+    "Project.toml": "fc96e4f2da1497aad9545575bb542b33863ae175d7b5458c60a07ce33dc296db",
+    "src/SIFTFeatures.jl": "21a13b68bb22356484407b06475b1c8c3fa8513e8f449b72ca9bd624b8089a20",
     "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
     "validation/common.py": "d0e229b979856b76ecda53aff124e827330de1c5285593931637f9adbb66767f",
-    "validation/download_oxford.py": "d412aee03f37e41af8e6ece5f70ff98fb580e396f2d1ec081b605cf5b7758d45",
+    "validation/download_oxford.py": "5b8ae0c782706523fd97d539effbd1af6ae05410021dcae79cd3f0c62e873647",
     "validation/extended_eval.py": "bc7e72969ad7deefcdcd8f92938fd160f29dd888ce2e9de2dfeee980b660b864",
     "validation/real_world.py": "4e46a23eada146f310383fde8b2ca7862f6a5422c1b45a9c458dacb2f5ad2fc5",
     "validation/test_extended_eval.py": "f488b956db4cd7f2e9878684f8ce747d120fba970dadd69193742e7e55768742",
@@ -824,5 +824,5 @@
     "FixedPointNumbers": "0.8.6",
     "StaticArrays": "1.9.25"
   },
-  "finished_utc": "2026-11-22T07:00:05.766015+00:00"
+  "finished_utc": "2026-11-22T10:28:20.439521+00:00"
 }

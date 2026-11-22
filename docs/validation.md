@@ -2,7 +2,7 @@
 
 **Result: PASS**, with 768 explicit checks and 0 failures. The Julia implementation was tested on all 48 original-resolution photographs in eight Oxford sequences, against OpenCV 5.0.0 and the supplied homographies. The package source was unchanged during this test.
 
-Runtime: julia version 1.13.4; OpenCV 5.0.0; NumPy 2.5.5; Python 3.13.18. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `0dd0aae654524f56bc6d0fc2555ef1e6`.
+Runtime: julia version 1.13.4; OpenCV 5.0.0; NumPy 2.5.5; Python 3.13.18. The photo run used Python optimization level 1; explicit gates remained active. Run ID: `ef76d4cf26424874a9e77e35a4e279ff`.
 
 ## Numerical agreement
 

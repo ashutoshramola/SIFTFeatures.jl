@@ -8,14 +8,14 @@ ColorTypes 0.12.5, Colors 0.13.4, FixedPointNumbers 0.8.6, StaticArrays 1.9.25.
 
 | Photograph | Julia median (ms) | OpenCV raw median (ms) | OpenCV unit-output median (ms) | Julia / unit-output time | Julia minimum allocation (MiB) |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 130.0 | 191.7 | 193.0 | 0.67× | 116.8 |
-| trees_1 | 322.7 | 429.2 | 433.7 | 0.74× | 124.3 |
-| graf_1 | 103.7 | 139.0 | 140.0 | 0.74× | 85.7 |
-| wall_1 | 259.4 | 342.0 | 345.6 | 0.75× | 122.4 |
-| bark_1 | 120.2 | 155.3 | 156.7 | 0.77× | 67.5 |
-| boat_1 | 204.9 | 271.0 | 274.4 | 0.75× | 102.1 |
-| leuven_1 | 96.5 | 125.9 | 126.7 | 0.76× | 90.0 |
-| ubc_1 | 141.5 | 185.5 | 187.6 | 0.75× | 87.8 |
+| bikes_1 | 129.2 | 187.0 | 188.4 | 0.69× | 116.8 |
+| trees_1 | 314.1 | 425.9 | 430.5 | 0.73× | 124.3 |
+| graf_1 | 100.6 | 136.6 | 137.5 | 0.73× | 85.7 |
+| wall_1 | 245.5 | 334.5 | 337.5 | 0.73× | 122.4 |
+| bark_1 | 115.6 | 151.4 | 152.7 | 0.76× | 67.5 |
+| boat_1 | 196.0 | 268.0 | 270.8 | 0.72× | 102.1 |
+| leuven_1 | 93.8 | 122.4 | 123.2 | 0.76× | 90.0 |
+| ubc_1 | 133.8 | 182.6 | 184.3 | 0.73× | 87.8 |
 
 Julia times `sift` on a UInt8 matrix, including intensity conversion, detection,
 and 128×N unquantized unit Float32 descriptors. OpenCV raw times

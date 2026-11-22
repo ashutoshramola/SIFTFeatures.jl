@@ -1,18 +1,18 @@
 {
   "suite": "Oxford real-photo reference",
-  "run_id": "0dd0aae654524f56bc6d0fc2555ef1e6",
-  "started_utc": "2026-11-22T07:00:13.310256+00:00",
+  "run_id": "ef76d4cf26424874a9e77e35a4e279ff",
+  "started_utc": "2026-11-22T10:28:27.806771+00:00",
   "state": "complete",
   "passed": true,
   "python": "3.13.18",
   "python_optimization": 1,
   "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "source_sha256": {
-    "Project.toml": "118abfc79206684a36725b407ccffe88a0e5f18b8369688ba2581cc9e5dbe9b2",
-    "src/SIFTFeatures.jl": "8f9888e872c0e7b64add402e577d89054a7b48620e4bc805b638216f28b0baff",
+    "Project.toml": "fc96e4f2da1497aad9545575bb542b33863ae175d7b5458c60a07ce33dc296db",
+    "src/SIFTFeatures.jl": "21a13b68bb22356484407b06475b1c8c3fa8513e8f449b72ca9bd624b8089a20",
     "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
     "validation/common.py": "d0e229b979856b76ecda53aff124e827330de1c5285593931637f9adbb66767f",
-    "validation/download_oxford.py": "d412aee03f37e41af8e6ece5f70ff98fb580e396f2d1ec081b605cf5b7758d45",
+    "validation/download_oxford.py": "5b8ae0c782706523fd97d539effbd1af6ae05410021dcae79cd3f0c62e873647",
     "validation/extended_eval.py": "bc7e72969ad7deefcdcd8f92938fd160f29dd888ce2e9de2dfeee980b660b864",
     "validation/real_world.py": "4e46a23eada146f310383fde8b2ca7862f6a5422c1b45a9c458dacb2f5ad2fc5",
     "validation/test_extended_eval.py": "f488b956db4cd7f2e9878684f8ce747d120fba970dadd69193742e7e55768742",
@@ -4060,10 +4060,10 @@
       "native_count": 3224,
       "opencv_count": 3225,
       "native_sift": {
-        "seconds": 0.221672284,
+        "seconds": 0.213685589,
         "bytes": 122555312
       },
-      "opencv_seconds": 0.20236881599998924,
+      "opencv_seconds": 0.1961308249999547,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3223,
       "native_coverage": 0.9996898263027295,
@@ -4119,10 +4119,10 @@
       "native_count": 1828,
       "opencv_count": 1828,
       "native_sift": {
-        "seconds": 0.191945438,
-        "bytes": 121408848
+        "seconds": 0.180917818,
+        "bytes": 121403872
       },
-      "opencv_seconds": 0.15785730900000772,
+      "opencv_seconds": 0.1547100010000122,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1828,
       "native_coverage": 1.0,
@@ -4178,10 +4178,10 @@
       "native_count": 1249,
       "opencv_count": 1249,
       "native_sift": {
-        "seconds": 0.141095471,
+        "seconds": 0.157031292,
         "bytes": 120665824
       },
-      "opencv_seconds": 0.13636624800000163,
+      "opencv_seconds": 0.13266170100001773,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1248,
       "native_coverage": 0.9991993594875901,
@@ -4237,10 +4237,10 @@
       "native_count": 726,
       "opencv_count": 726,
       "native_sift": {
-        "seconds": 0.107089044,
+        "seconds": 0.09796868,
         "bytes": 120397608
       },
-      "opencv_seconds": 0.11359247300003972,
+      "opencv_seconds": 0.11220329799999718,
       "descriptor_max_norm_error": 2.980232238769531e-07,
       "paired_count": 726,
       "native_coverage": 1.0,
@@ -4296,10 +4296,10 @@
       "native_count": 517,
       "opencv_count": 517,
       "native_sift": {
-        "seconds": 0.122790543,
+        "seconds": 0.125595977,
         "bytes": 120045704
       },
-      "opencv_seconds": 0.10561282800000527,
+      "opencv_seconds": 0.10450538399999232,
       "descriptor_max_norm_error": 2.980232238769531e-07,
       "paired_count": 517,
       "native_coverage": 1.0,
@@ -4355,10 +4355,10 @@
       "native_count": 355,
       "opencv_count": 355,
       "native_sift": {
-        "seconds": 0.077128059,
+        "seconds": 0.10103318,
         "bytes": 119973336
       },
-      "opencv_seconds": 0.09906204000003527,
+      "opencv_seconds": 0.09814937999999529,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 355,
       "native_coverage": 1.0,
@@ -4414,10 +4414,10 @@
       "native_count": 12477,
       "opencv_count": 12477,
       "native_sift": {
-        "seconds": 0.35678352,
+        "seconds": 0.345349441,
         "bytes": 130337168
       },
-      "opencv_seconds": 0.4465392500000007,
+      "opencv_seconds": 0.43974534399995946,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 12475,
       "native_coverage": 0.9998397050573055,
@@ -4473,10 +4473,10 @@
       "native_count": 10728,
       "opencv_count": 10732,
       "native_sift": {
-        "seconds": 0.301166338,
+        "seconds": 0.275599531,
         "bytes": 129270416
       },
-      "opencv_seconds": 0.40771885899999916,
+      "opencv_seconds": 0.40042261400003554,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 10728,
       "native_coverage": 1.0,
@@ -4532,10 +4532,10 @@
       "native_count": 15232,
       "opencv_count": 15236,
       "native_sift": {
-        "seconds": 0.391819336,
+        "seconds": 0.381949673,
         "bytes": 133407160
       },
-      "opencv_seconds": 0.529122626000003,
+      "opencv_seconds": 0.521831533000011,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 15230,
       "native_coverage": 0.9998686974789915,
@@ -4591,10 +4591,10 @@
       "native_count": 10269,
       "opencv_count": 10267,
       "native_sift": {
-        "seconds": 0.290662581,
+        "seconds": 0.281766762,
         "bytes": 129000208
       },
-      "opencv_seconds": 0.457638261999989,
+      "opencv_seconds": 0.4479128620000097,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10261,
       "native_coverage": 0.999220956276171,
@@ -4650,10 +4650,10 @@
       "native_count": 5109,
       "opencv_count": 5111,
       "native_sift": {
-        "seconds": 0.183829667,
+        "seconds": 0.185484944,
         "bytes": 124199360
       },
-      "opencv_seconds": 0.28044275800004925,
+      "opencv_seconds": 0.27962831299998925,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 5107,
       "native_coverage": 0.999608533959679,
@@ -4709,10 +4709,10 @@
       "native_count": 3008,
       "opencv_count": 3009,
       "native_sift": {
-        "seconds": 0.147078215,
+        "seconds": 0.151806232,
         "bytes": 122114736
       },
-      "opencv_seconds": 0.2247755770000026,
+      "opencv_seconds": 0.22271637399995825,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3008,
       "native_coverage": 1.0,
@@ -4768,10 +4768,10 @@
       "native_count": 2731,
       "opencv_count": 2731,
       "native_sift": {
-        "seconds": 0.124888725,
+        "seconds": 0.111954097,
         "bytes": 89878672
       },
-      "opencv_seconds": 0.15416550300000154,
+      "opencv_seconds": 0.15284033599999702,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2730,
       "native_coverage": 0.9996338337605273,
@@ -4827,10 +4827,10 @@
       "native_count": 3105,
       "opencv_count": 3106,
       "native_sift": {
-        "seconds": 0.108780444,
+        "seconds": 0.129067364,
         "bytes": 90369144
       },
-      "opencv_seconds": 0.170468378999999,
+      "opencv_seconds": 0.16490437199996677,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3104,
       "native_coverage": 0.9996779388083736,
@@ -4886,10 +4886,10 @@
       "native_count": 3476,
       "opencv_count": 3475,
       "native_sift": {
-        "seconds": 0.12219635,
+        "seconds": 0.136860359,
         "bytes": 90665976
       },
-      "opencv_seconds": 0.18371934499998588,
+      "opencv_seconds": 0.17986788900003603,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3475,
       "native_coverage": 0.9997123130034522,
@@ -4945,10 +4945,10 @@
       "native_count": 3649,
       "opencv_count": 3647,
       "native_sift": {
-        "seconds": 0.14049713,
+        "seconds": 0.120156283,
         "bytes": 91244288
       },
-      "opencv_seconds": 0.19198899499997424,
+      "opencv_seconds": 0.1856940130000453,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3647,
       "native_coverage": 0.9994519046314059,
@@ -5004,10 +5004,10 @@
       "native_count": 3893,
       "opencv_count": 3895,
       "native_sift": {
-        "seconds": 0.129085011,
+        "seconds": 0.144448642,
         "bytes": 91395200
       },
-      "opencv_seconds": 0.19874791299997696,
+      "opencv_seconds": 0.19362002700000858,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3892,
       "native_coverage": 0.999743128692525,
@@ -5063,10 +5063,10 @@
       "native_count": 4567,
       "opencv_count": 4570,
       "native_sift": {
-        "seconds": 0.15929913,
+        "seconds": 0.150934474,
         "bytes": 91807808
       },
-      "opencv_seconds": 0.22758829900004685,
+      "opencv_seconds": 0.21318129799999497,
       "descriptor_max_norm_error": 4.76837158203125e-07,
       "paired_count": 4566,
       "native_coverage": 0.9997810378804467,
@@ -5122,10 +5122,10 @@
       "native_count": 9173,
       "opencv_count": 9175,
       "native_sift": {
-        "seconds": 0.280267748,
+        "seconds": 0.276899735,
         "bytes": 128338448
       },
-      "opencv_seconds": 0.41719827499997564,
+      "opencv_seconds": 0.39619346900002483,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 9173,
       "native_coverage": 1.0,
@@ -5181,10 +5181,10 @@
       "native_count": 10394,
       "opencv_count": 10397,
       "native_sift": {
-        "seconds": 0.265338197,
+        "seconds": 0.261261832,
         "bytes": 111753040
       },
-      "opencv_seconds": 0.37979535499999884,
+      "opencv_seconds": 0.36718959199998835,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 10391,
       "native_coverage": 0.9997113719453531,
@@ -5240,10 +5240,10 @@
       "native_count": 10231,
       "opencv_count": 10233,
       "native_sift": {
-        "seconds": 0.292691124,
+        "seconds": 0.262687312,
         "bytes": 111657616
       },
-      "opencv_seconds": 0.37734440899998845,
+      "opencv_seconds": 0.3913351070000317,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10231,
       "native_coverage": 1.0,
@@ -5299,10 +5299,10 @@
       "native_count": 10030,
       "opencv_count": 10032,
       "native_sift": {
-        "seconds": 0.264235971,
+        "seconds": 0.252417769,
         "bytes": 111527824
       },
-      "opencv_seconds": 0.3770725979999838,
+      "opencv_seconds": 0.36861961400001064,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10030,
       "native_coverage": 1.0,
@@ -5358,10 +5358,10 @@
       "native_count": 10405,
       "opencv_count": 10400,
       "native_sift": {
-        "seconds": 0.305743488,
+        "seconds": 0.272968365,
         "bytes": 111758672
       },
-      "opencv_seconds": 0.40163489899998694,
+      "opencv_seconds": 0.38196694599997727,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 10399,
       "native_coverage": 0.9994233541566555,
@@ -5417,10 +5417,10 @@
       "native_count": 10120,
       "opencv_count": 10114,
       "native_sift": {
-        "seconds": 0.253929234,
+        "seconds": 0.274172258,
         "bytes": 111579536
       },
-      "opencv_seconds": 0.3850864359999946,
+      "opencv_seconds": 0.3684266270000194,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 10111,
       "native_coverage": 0.9991106719367588,
@@ -5476,10 +5476,10 @@
       "native_count": 3757,
       "opencv_count": 3758,
       "native_sift": {
-        "seconds": 0.161185376,
+        "seconds": 0.137545467,
         "bytes": 70761376
       },
-      "opencv_seconds": 0.1640294769999855,
+      "opencv_seconds": 0.161261235999973,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3757,
       "native_coverage": 1.0,
@@ -5535,10 +5535,10 @@
       "native_count": 3123,
       "opencv_count": 3121,
       "native_sift": {
-        "seconds": 0.108506842,
+        "seconds": 0.107920686,
         "bytes": 69829592
       },
-      "opencv_seconds": 0.14607595699999365,
+      "opencv_seconds": 0.1533903640000176,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 3121,
       "native_coverage": 0.9993595901376882,
@@ -5594,10 +5594,10 @@
       "native_count": 4157,
       "opencv_count": 4158,
       "native_sift": {
-        "seconds": 0.129147218,
+        "seconds": 0.12808262,
         "bytes": 70999936
       },
-      "opencv_seconds": 0.17423297100003765,
+      "opencv_seconds": 0.17867185599999402,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4155,
       "native_coverage": 0.9995188838104402,
@@ -5653,10 +5653,10 @@
       "native_count": 4589,
       "opencv_count": 4589,
       "native_sift": {
-        "seconds": 0.159964228,
+        "seconds": 0.143920143,
         "bytes": 71271296
       },
-      "opencv_seconds": 0.1834837989999869,
+      "opencv_seconds": 0.18996329500004094,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4587,
       "native_coverage": 0.9995641752015689,
@@ -5712,10 +5712,10 @@
       "native_count": 4202,
       "opencv_count": 4204,
       "native_sift": {
-        "seconds": 0.122896442,
+        "seconds": 0.133193922,
         "bytes": 71034240
       },
-      "opencv_seconds": 0.17193906099998912,
+      "opencv_seconds": 0.1818097649999686,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4201,
       "native_coverage": 0.9997620180866255,
@@ -5771,10 +5771,10 @@
       "native_count": 4344,
       "opencv_count": 4346,
       "native_sift": {
-        "seconds": 0.132491686,
+        "seconds": 0.125556701,
         "bytes": 71119296
       },
-      "opencv_seconds": 0.18754919899993183,
+      "opencv_seconds": 0.18805313399997203,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4343,
       "native_coverage": 0.9997697974217311,
@@ -5830,10 +5830,10 @@
       "native_count": 8356,
       "opencv_count": 8359,
       "native_sift": {
-        "seconds": 0.229875501,
+        "seconds": 0.216233689,
         "bytes": 107029456
       },
-      "opencv_seconds": 0.32227599300006204,
+      "opencv_seconds": 0.3214565199999697,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 8353,
       "native_coverage": 0.9996409765438009,
@@ -5889,10 +5889,10 @@
       "native_count": 7949,
       "opencv_count": 7949,
       "native_sift": {
-        "seconds": 0.201946894,
+        "seconds": 0.204646078,
         "bytes": 106777808
       },
-      "opencv_seconds": 0.30373666299999513,
+      "opencv_seconds": 0.29878654399999505,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 7948,
       "native_coverage": 0.9998741980123286,
@@ -5948,10 +5948,10 @@
       "native_count": 6145,
       "opencv_count": 6145,
       "native_sift": {
-        "seconds": 0.21345806,
+        "seconds": 0.198670541,
         "bytes": 104024192
       },
-      "opencv_seconds": 0.2614846110000144,
+      "opencv_seconds": 0.25666658500000494,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 6143,
       "native_coverage": 0.9996745321399512,
@@ -6007,10 +6007,10 @@
       "native_count": 4915,
       "opencv_count": 4912,
       "native_sift": {
-        "seconds": 0.136831961,
+        "seconds": 0.135837904,
         "bytes": 103263296
       },
-      "opencv_seconds": 0.21636364099992988,
+      "opencv_seconds": 0.21661176499998192,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4912,
       "native_coverage": 0.9993896236012207,
@@ -6066,10 +6066,10 @@
       "native_count": 4672,
       "opencv_count": 4674,
       "native_sift": {
-        "seconds": 0.137905743,
+        "seconds": 0.145269551,
         "bytes": 103122496
       },
-      "opencv_seconds": 0.21298455800001648,
+      "opencv_seconds": 0.21291931299998623,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4672,
       "native_coverage": 1.0,
@@ -6125,10 +6125,10 @@
       "native_count": 3897,
       "opencv_count": 3896,
       "native_sift": {
-        "seconds": 0.148504147,
+        "seconds": 0.154612329,
         "bytes": 102644928
       },
-      "opencv_seconds": 0.19484874900001614,
+      "opencv_seconds": 0.1936409749999939,
       "descriptor_max_norm_error": 4.172325134277344e-07,
       "paired_count": 3896,
       "native_coverage": 0.9997433923530922,
@@ -6184,10 +6184,10 @@
       "native_count": 2311,
       "opencv_count": 2314,
       "native_sift": {
-        "seconds": 0.09771234,
+        "seconds": 0.094491192,
         "bytes": 94392560
       },
-      "opencv_seconds": 0.1529958290000195,
+      "opencv_seconds": 0.15103738699997393,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2311,
       "native_coverage": 1.0,
@@ -6243,10 +6243,10 @@
       "native_count": 1927,
       "opencv_count": 1928,
       "native_sift": {
-        "seconds": 0.092508346,
+        "seconds": 0.088616594,
         "bytes": 94159408
       },
-      "opencv_seconds": 0.14207533299997976,
+      "opencv_seconds": 0.13989442799999097,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1927,
       "native_coverage": 1.0,
@@ -6302,10 +6302,10 @@
       "native_count": 1697,
       "opencv_count": 1697,
       "native_sift": {
-        "seconds": 0.102144046,
+        "seconds": 0.104251275,
         "bytes": 94017392
       },
-      "opencv_seconds": 0.13581852599998,
+      "opencv_seconds": 0.13431903500003273,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1697,
       "native_coverage": 1.0,
@@ -6361,10 +6361,10 @@
       "native_count": 1458,
       "opencv_count": 1458,
       "native_sift": {
-        "seconds": 0.089742563,
+        "seconds": 0.085169081,
         "bytes": 93613864
       },
-      "opencv_seconds": 0.12805012700005136,
+      "opencv_seconds": 0.12675240900000517,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1458,
       "native_coverage": 1.0,
@@ -6420,10 +6420,10 @@
       "native_count": 1329,
       "opencv_count": 1328,
       "native_sift": {
-        "seconds": 0.097774948,
+        "seconds": 0.090982282,
         "bytes": 93409888
       },
-      "opencv_seconds": 0.12624995300006958,
+      "opencv_seconds": 0.12143057299999782,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1328,
       "native_coverage": 0.999247554552295,
@@ -6479,10 +6479,10 @@
       "native_count": 1085,
       "opencv_count": 1085,
       "native_sift": {
-        "seconds": 0.100941001,
+        "seconds": 0.088131172,
         "bytes": 93260608
       },
-      "opencv_seconds": 0.11479463900002429,
+      "opencv_seconds": 0.11416308900004424,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 1084,
       "native_coverage": 0.9990783410138249,
@@ -6538,10 +6538,10 @@
       "native_count": 5036,
       "opencv_count": 5037,
       "native_sift": {
-        "seconds": 0.148134235,
+        "seconds": 0.135116748,
         "bytes": 92067456
       },
-      "opencv_seconds": 0.22123516200008453,
+      "opencv_seconds": 0.21574686899998596,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 5036,
       "native_coverage": 1.0,
@@ -6597,10 +6597,10 @@
       "native_count": 6071,
       "opencv_count": 6071,
       "native_sift": {
-        "seconds": 0.171998062,
+        "seconds": 0.155267812,
         "bytes": 92699328
       },
-      "opencv_seconds": 0.23696433700001762,
+      "opencv_seconds": 0.2359142399999996,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 6070,
       "native_coverage": 0.9998352824905288,
@@ -6656,10 +6656,10 @@
       "native_count": 7221,
       "opencv_count": 7220,
       "native_sift": {
-        "seconds": 0.19073486,
+        "seconds": 0.183318151,
         "bytes": 94074344
       },
-      "opencv_seconds": 0.2629035729999032,
+      "opencv_seconds": 0.26018398299999035,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 7219,
       "native_coverage": 0.9997230300512394,
@@ -6715,10 +6715,10 @@
       "native_count": 6960,
       "opencv_count": 6958,
       "native_sift": {
-        "seconds": 0.181484232,
+        "seconds": 0.191394018,
         "bytes": 93918504
       },
-      "opencv_seconds": 0.26676559099996666,
+      "opencv_seconds": 0.2610606609999877,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 6957,
       "native_coverage": 0.9995689655172414,
@@ -6774,10 +6774,10 @@
       "native_count": 4969,
       "opencv_count": 4971,
       "native_sift": {
-        "seconds": 0.148668997,
+        "seconds": 0.162251315,
         "bytes": 92030336
       },
-      "opencv_seconds": 0.2215721659999872,
+      "opencv_seconds": 0.2207451570000103,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 4967,
       "native_coverage": 0.999597504528074,
@@ -6833,10 +6833,10 @@
       "native_count": 2875,
       "opencv_count": 2887,
       "native_sift": {
-        "seconds": 0.128520462,
+        "seconds": 0.119173727,
         "bytes": 89953584
       },
-      "opencv_seconds": 0.16854836499999237,
+      "opencv_seconds": 0.16353280999999242,
       "descriptor_max_norm_error": 3.5762786865234375e-07,
       "paired_count": 2874,
       "native_coverage": 0.9996521739130435,
@@ -6902,7 +6902,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.079232754,
+        "seconds": 0.07719733,
         "bytes": 775256
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -6996,7 +6996,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.034748999,
+        "seconds": 0.034553037,
         "bytes": 84656
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7090,7 +7090,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.020831844,
+        "seconds": 0.020135365,
         "bytes": 38344
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7184,7 +7184,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.014360425,
+        "seconds": 0.014367208,
         "bytes": 32712
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7278,7 +7278,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.01004117,
+        "seconds": 0.009993463,
         "bytes": 28616
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7372,7 +7372,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.140282253,
+        "seconds": 1.143935849,
         "bytes": 337944
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7466,7 +7466,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.61220098,
+        "seconds": 1.628691195,
         "bytes": 406040
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7560,7 +7560,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 1.089462484,
+        "seconds": 1.100732435,
         "bytes": 231984
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7654,7 +7654,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.541002819,
+        "seconds": 0.546306161,
         "bytes": 109384
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7748,7 +7748,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.3195152,
+        "seconds": 0.320212911,
         "bytes": 72136
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7842,7 +7842,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.072805277,
+        "seconds": 0.072622373,
         "bytes": 126768
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -7936,7 +7936,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.081058446,
+        "seconds": 0.081192781,
         "bytes": 120496
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8030,7 +8030,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.085460537,
+        "seconds": 0.085294524,
         "bytes": 81032
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8124,7 +8124,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.091150521,
+        "seconds": 0.090600854,
         "bytes": 83208
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8218,7 +8218,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.10617427,
+        "seconds": 0.106198657,
         "bytes": 80544
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8312,7 +8312,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.816386094,
+        "seconds": 0.816949271,
         "bytes": 561920
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8406,7 +8406,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.807099338,
+        "seconds": 0.804206167,
         "bytes": 533248
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8500,7 +8500,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.787051312,
+        "seconds": 0.789752566,
         "bytes": 333976
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8594,7 +8594,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.812203394,
+        "seconds": 0.814390058,
         "bytes": 230384
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8688,7 +8688,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.788312365,
+        "seconds": 0.79186621,
         "bytes": 168856
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8782,7 +8782,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.100541784,
+        "seconds": 0.10264815,
         "bytes": 117104
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8876,7 +8876,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.13426534,
+        "seconds": 0.136865308,
         "bytes": 131632
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -8970,7 +8970,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.147555059,
+        "seconds": 0.150810413,
         "bytes": 140528
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9064,7 +9064,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.137120732,
+        "seconds": 0.137547051,
         "bytes": 96264
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9158,7 +9158,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.139785657,
+        "seconds": 0.142437056,
         "bytes": 94280
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9252,7 +9252,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.56621275,
+        "seconds": 0.572651416,
         "bytes": 306072
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9346,7 +9346,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.438106384,
+        "seconds": 0.443365101,
         "bytes": 265048
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9440,7 +9440,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.348785702,
+        "seconds": 0.353814562,
         "bytes": 147120
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9534,7 +9534,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.332290596,
+        "seconds": 0.336596071,
         "bytes": 138992
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9628,7 +9628,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.279369146,
+        "seconds": 0.281407714,
         "bytes": 87176
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9722,7 +9722,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.038211269,
+        "seconds": 0.038512957,
         "bytes": 106224
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9816,7 +9816,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.033645471,
+        "seconds": 0.033910642,
         "bytes": 97520
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -9910,7 +9910,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.028805559,
+        "seconds": 0.029091569,
         "bytes": 89648
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10004,7 +10004,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.026219423,
+        "seconds": 0.026745047,
         "bytes": 84912
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10098,7 +10098,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.02156573,
+        "seconds": 0.021895296,
         "bytes": 44744
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10192,7 +10192,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.263567479,
+        "seconds": 0.263837896,
         "bytes": 222128
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10286,7 +10286,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.311485571,
+        "seconds": 0.310133273,
         "bytes": 293976
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10380,7 +10380,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.300725784,
+        "seconds": 0.301562307,
         "bytes": 269976
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10474,7 +10474,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.214103029,
+        "seconds": 0.214895454,
         "bytes": 147760
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10568,7 +10568,7 @@
         ]
       ],
       "native_match": {
-        "seconds": 0.124980739,
+        "seconds": 0.123944891,
         "bytes": 72456
       },
       "same_descriptor_matcher_pairs_equal": true,
@@ -10664,5 +10664,5 @@
     "native_accurate_homographies_3px": 33,
     "opencv_accurate_homographies_3px": 32
   },
-  "finished_utc": "2026-11-22T07:05:02.081888+00:00"
+  "finished_utc": "2026-11-22T10:33:17.542500+00:00"
 }

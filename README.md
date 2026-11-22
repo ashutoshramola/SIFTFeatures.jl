@@ -23,16 +23,16 @@ Measured 2026-11-22.
 
 | Photograph | Size (w×h) | Features: Julia / OpenCV | Julia (ms) | OpenCV¹ (ms) | Julia / OpenCV time |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3,224 / 3,225 | 130.0 | 193.0 | 0.67× |
-| trees_1 | 1000×700 | 12,477 / 12,477 | 322.7 | 433.7 | 0.74× |
-| graf_1 | 800×640 | 2,731 / 2,731 | 103.7 | 140.0 | 0.74× |
-| wall_1 | 1000×700 | 9,173 / 9,175 | 259.4 | 345.6 | 0.75× |
-| bark_1 | 765×512 | 3,757 / 3,758 | 120.2 | 156.7 | 0.77× |
-| boat_1 | 850×680 | 8,356 / 8,359 | 204.9 | 274.4 | 0.75× |
-| leuven_1 | 900×600 | 2,311 / 2,314 | 96.5 | 126.7 | 0.76× |
-| ubc_1 | 800×640 | 5,036 / 5,037 | 141.5 | 187.6 | 0.75× |
+| bikes_1 | 1000×700 | 3,224 / 3,225 | 129.2 | 188.4 | 0.69× |
+| trees_1 | 1000×700 | 12,477 / 12,477 | 314.1 | 430.5 | 0.73× |
+| graf_1 | 800×640 | 2,731 / 2,731 | 100.6 | 137.5 | 0.73× |
+| wall_1 | 1000×700 | 9,173 / 9,175 | 245.5 | 337.5 | 0.73× |
+| bark_1 | 765×512 | 3,757 / 3,758 | 115.6 | 152.7 | 0.76× |
+| boat_1 | 850×680 | 8,356 / 8,359 | 196.0 | 270.8 | 0.72× |
+| leuven_1 | 900×600 | 2,311 / 2,314 | 93.8 | 123.2 | 0.76× |
+| ubc_1 | 800×640 | 5,036 / 5,037 | 133.8 | 184.3 | 0.73× |
 
-**Julia currently takes 0.67–0.77× as long as OpenCV on these eight inputs.**
+**Julia currently takes 0.69–0.76× as long as OpenCV on these eight inputs.**
 These are timings for the current implementation on this machine.
 Decoding, compilation, file interchange, warmups, and forced GC are excluded;
 GC triggered inside a measured call is included. Parameters match, with OpenCV
