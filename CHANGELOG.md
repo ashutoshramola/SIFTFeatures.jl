@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0 — 2026-11-22
+
+- **SIMD performance pipeline (`0.67–0.77×` OpenCV 5.0.0 single-threaded)**:
+  - 8-wide SIMD 6-neighbor axial extremum prefilter in `_scan_octave_columns!`.
+  - Flat-patch SIMD orientation assignment in `OrientationWorkspace` / `_orientations!`.
+  - L1-compact branchless flat-patch `_descriptor!` with 2-wide `SVector{2,Float32}` scatter into a `6×6×10` padded histogram.
+- **Optional RootSIFT (Hellinger) descriptors**: added `SIFTConfig(rootsift=true)`, `descriptor(...; rootsift=true)`, and exported `rootsift` / `rootsift!` helpers for higher matching precision and homography accuracy while preserving OpenCV-identical defaults.
+- **Public reusable workspaces & hardened validation**: exported/public `OrientationWorkspace` and `DescriptorWorkspace` with dynamic growth and zero-allocation reuse; tightened input validation across `gaussian_blur!`, `orientations!`, `descriptor!`, `localize`, and `dog_pyramid`.
+- **Correctness & memory-safety fixes**:
+  - Fixed out-of-bounds descriptor workspace sizing for large-scale keypoints after early octave-level release.
+  - Replaced `_exp_neg_f32` with an exact Remez degree-6 minimax fit (`< 4e-7` abs error on `[0, 1.5625]`).
+  - Wrapped all raw-pointer SIMD loops in `GC.@preserve`.
+  - Reduced out-of-range descriptor angles in `Float64` (`rem2pi`) before `Float32` conversion.
+- **Packaging, CI & evaluation**:
+  - Replaced `ImageCore` with direct `Colors` + `FixedPointNumbers` dependencies; added `.gitattributes`; expanded CI across Ubuntu (`-t 1` & `-t auto`), macOS, Windows, and `examples/run_all.jl`.
+  - Added manual-only `Extended Evaluation & HPatches` workflow (`extended-eval.yml`) and `validation/extended_eval.py` covering non-default `SIFTConfig`s, stress tests, multi-thread scaling, and the 116-scene HPatches benchmark.
+
 ## 0.2.0 — 2026-10-16
 
 - Julia 1.13+ native optimizations: separable symmetric Float32 FIR Gaussian
