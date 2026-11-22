@@ -1,23 +1,26 @@
 {
   "suite": "synthetic OpenCV reference",
-  "run_id": "3d469b4141644a5ba478cb3f0f2c8f09",
-  "started_utc": "2026-11-21T19:13:31.663492+00:00",
+  "run_id": "dacb5d2986b246b7b5c6d905a0aea186",
+  "started_utc": "2026-11-22T06:59:58.539227+00:00",
   "state": "complete",
   "passed": true,
   "python": "3.13.18",
   "python_optimization": 0,
-  "platform": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.39",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "source_sha256": {
     "Project.toml": "118abfc79206684a36725b407ccffe88a0e5f18b8369688ba2581cc9e5dbe9b2",
-    "src/SIFTFeatures.jl": "1ec2dad6f74d47de1c2ae7d1ab24fde5b36042bc06e92fa9ef4c99ebd8069a09",
+    "src/SIFTFeatures.jl": "8f9888e872c0e7b64add402e577d89054a7b48620e4bc805b638216f28b0baff",
     "validation/check_guards.py": "c4555cf9bf4033731fa57a2ffdb10b8b684b7beb0c3e177192c81d6ffb228ecc",
     "validation/common.py": "d0e229b979856b76ecda53aff124e827330de1c5285593931637f9adbb66767f",
     "validation/download_oxford.py": "d412aee03f37e41af8e6ece5f70ff98fb580e396f2d1ec081b605cf5b7758d45",
+    "validation/extended_eval.py": "bc7e72969ad7deefcdcd8f92938fd160f29dd888ce2e9de2dfeee980b660b864",
     "validation/real_world.py": "4e46a23eada146f310383fde8b2ca7862f6a5422c1b45a9c458dacb2f5ad2fc5",
+    "validation/test_extended_eval.py": "f488b956db4cd7f2e9878684f8ce747d120fba970dadd69193742e7e55768742",
     "validation/test_validation.py": "5771e30974906887e0308fbc626547dadcc039f3f73ac4e7bf461d6e84644de1",
     "validation/update_reports.py": "80b5d1b08eb21083070c4f5a6610137c64de66a1d6af7183aa86da636f1e7868",
     "validation/validate.py": "0ee63385160597170e6360036e344d149ab629601d15a735653c2605ce0158a9",
-    "validation/export.jl": "264704d46d7d6d845b7e2c0bd558fe6cb5244093917ef7acab7ae6e58751f50d"
+    "validation/export.jl": "264704d46d7d6d845b7e2c0bd558fe6cb5244093917ef7acab7ae6e58751f50d",
+    "validation/extended_eval.jl": "70694cd424c8e127f1da40259d41568f2f2fb651ca16aa664c379ede011ab9bc"
   },
   "checks": [
     {
@@ -53,12 +56,12 @@
     {
       "name": "base: descriptor median cosine",
       "passed": true,
-      "detail": "0.9999855160713196"
+      "detail": "0.9999855756759644"
     },
     {
       "name": "base: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999796152114868"
+      "detail": "0.9999797344207764"
     },
     {
       "name": "base: cross-library retrieval count",
@@ -108,7 +111,7 @@
     {
       "name": "translate: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999792575836182"
+      "detail": "0.9999793171882629"
     },
     {
       "name": "translate: cross-library retrieval count",
@@ -203,12 +206,12 @@
     {
       "name": "similarity: descriptor median cosine",
       "passed": true,
-      "detail": "0.9999850392341614"
+      "detail": "0.9999849796295166"
     },
     {
       "name": "similarity: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999796748161316"
+      "detail": "0.9999796152114868"
     },
     {
       "name": "similarity: cross-library retrieval count",
@@ -248,7 +251,7 @@
     {
       "name": "perspective: angle p95",
       "passed": true,
-      "detail": "0.003124499469723644"
+      "detail": "0.003112292438466427"
     },
     {
       "name": "perspective: descriptor median cosine",
@@ -258,7 +261,7 @@
     {
       "name": "perspective: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999797940254211"
+      "detail": "0.9999797344207764"
     },
     {
       "name": "perspective: cross-library retrieval count",
@@ -298,7 +301,7 @@
     {
       "name": "texture: angle p95",
       "passed": true,
-      "detail": "7.543434471890431e-05"
+      "detail": "7.231213233868471e-05"
     },
     {
       "name": "texture: descriptor median cosine",
@@ -308,7 +311,7 @@
     {
       "name": "texture: fixed-frame descriptor p05",
       "passed": true,
-      "detail": "0.9999772310256958"
+      "detail": "0.9999772906303406"
     },
     {
       "name": "texture: cross-library retrieval count",
@@ -348,7 +351,7 @@
     {
       "name": "translate: homography probe error",
       "passed": true,
-      "detail": "0.017000943471947173"
+      "detail": "0.017000935609906728"
     },
     {
       "name": "rotate90: same-descriptor matcher agreement",
@@ -378,7 +381,7 @@
     {
       "name": "rotate90: homography probe error",
       "passed": true,
-      "detail": "0.012840260691588345"
+      "detail": "0.01284025970870651"
     },
     {
       "name": "similarity: same-descriptor matcher agreement",
@@ -408,7 +411,7 @@
     {
       "name": "similarity: homography probe error",
       "passed": true,
-      "detail": "0.038798401591447394"
+      "detail": "0.03879624529166552"
     },
     {
       "name": "perspective: same-descriptor matcher agreement",
@@ -438,7 +441,7 @@
     {
       "name": "perspective: homography probe error",
       "passed": true,
-      "detail": "0.10425512637176147"
+      "detail": "0.10425246278295479"
     }
   ],
   "failures": [],
@@ -451,9 +454,9 @@
       "half_pixel_probe_cosine": {
         "min": 0.9996166825294495,
         "p05": 0.9996718168258667,
-        "median": 0.9999845027923584,
-        "p95": 0.9999880194664001,
-        "max": 0.9999885559082031
+        "median": 0.9999845623970032,
+        "p95": 0.9999879598617554,
+        "max": 0.9999884963035583
       },
       "native_count": 729,
       "opencv_count": 733,
@@ -476,24 +479,24 @@
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 1.0576069278778066e-06,
+        "p05": 1.0964624921993739e-06,
         "median": 1.2543332727905081e-05,
         "p95": 0.002757065512002554,
         "max": 1.2714216474797326
       },
       "detected_descriptor_cosine": {
-        "min": 0.9987599849700928,
+        "min": 0.9987598657608032,
         "p05": 0.9999792575836182,
-        "median": 0.9999855160713196,
-        "p95": 0.9999939799308777,
-        "max": 0.9999966025352478
+        "median": 0.9999855756759644,
+        "p95": 0.9999940395355225,
+        "max": 0.9999966621398926
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999753832817078,
-        "p05": 0.9999796152114868,
-        "median": 0.9999856352806091,
-        "p95": 0.9999939799308777,
-        "max": 0.9999966025352478
+        "p05": 0.9999797344207764,
+        "median": 0.9999856948852539,
+        "p95": 0.9999940395355225,
+        "max": 0.9999966621398926
       },
       "cross_matches": 728,
       "cross_match_precision": 1.0
@@ -502,7 +505,7 @@
       "half_pixel_probe_cosine": {
         "min": 0.9999799728393555,
         "p05": 0.999981164932251,
-        "median": 0.9999897480010986,
+        "median": 0.9999896883964539,
         "p95": 0.9999964237213135,
         "max": 0.9999973177909851
       },
@@ -527,24 +530,24 @@
       },
       "angle_error_deg": {
         "min": 0.0,
-        "p05": 1.391838485945251e-06,
-        "median": 1.2286402660848905e-05,
+        "p05": 1.4668749538456677e-06,
+        "median": 1.2230377024746082e-05,
         "p95": 0.0007680562700158176,
         "max": 1.2714216474797326
       },
       "detected_descriptor_cosine": {
-        "min": 0.9987599849700928,
-        "p05": 0.9999789595603943,
+        "min": 0.9987598657608032,
+        "p05": 0.9999790191650391,
         "median": 0.999985933303833,
         "p95": 0.9999939203262329,
-        "max": 0.9999966025352478
+        "max": 0.9999966621398926
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999752044677734,
-        "p05": 0.9999792575836182,
+        "p05": 0.9999793171882629,
         "median": 0.9999860525131226,
         "p95": 0.9999939203262329,
-        "max": 0.9999966025352478
+        "max": 0.9999966621398926
       },
       "cross_matches": 693,
       "cross_match_precision": 1.0
@@ -578,24 +581,24 @@
       },
       "angle_error_deg": {
         "min": 4.333007042519988e-08,
-        "p05": 1.0341614474156266e-06,
-        "median": 1.3543155066074577e-05,
+        "p05": 1.0919781441873351e-06,
+        "median": 1.3632409839823023e-05,
         "p95": 0.002845216275548069,
         "max": 1.671104994921459
       },
       "detected_descriptor_cosine": {
         "min": 0.9979166388511658,
-        "p05": 0.9999790787696838,
+        "p05": 0.9999791383743286,
         "median": 0.9999856948852539,
-        "p95": 0.9999940395355225,
-        "max": 0.9999964833259583
+        "p95": 0.9999939799308777,
+        "max": 0.999996542930603
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.9999755620956421,
+        "min": 0.9999756813049316,
         "p05": 0.9999796152114868,
         "median": 0.999985933303833,
-        "p95": 0.9999940395355225,
-        "max": 0.9999964833259583
+        "p95": 0.9999939799308777,
+        "max": 0.999996542930603
       },
       "cross_matches": 712,
       "cross_match_precision": 1.0
@@ -604,7 +607,7 @@
       "half_pixel_probe_cosine": {
         "min": 0.9999819397926331,
         "p05": 0.9999823570251465,
-        "median": 0.99998539686203,
+        "median": 0.9999853372573853,
         "p95": 0.9999881386756897,
         "max": 0.9999884963035583
       },
@@ -629,23 +632,23 @@
       },
       "angle_error_deg": {
         "min": 1.0485645040517686e-07,
-        "p05": 9.887575879103533e-07,
-        "median": 1.1521317586001361e-05,
+        "p05": 1.0360764403060076e-06,
+        "median": 1.2352162715332034e-05,
         "p95": 0.0015642336516545603,
         "max": 0.782911400843766
       },
       "detected_descriptor_cosine": {
-        "min": 0.9994476437568665,
-        "p05": 0.9999793767929077,
-        "median": 0.9999850392341614,
+        "min": 0.9994475841522217,
+        "p05": 0.9999793171882629,
+        "median": 0.9999849796295166,
         "p95": 0.9999917149543762,
         "max": 0.9999944567680359
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999762773513794,
-        "p05": 0.9999796748161316,
-        "median": 0.9999852180480957,
-        "p95": 0.9999918341636658,
+        "p05": 0.9999796152114868,
+        "median": 0.9999850988388062,
+        "p95": 0.999991774559021,
         "max": 0.9999944567680359
       },
       "cross_matches": 527,
@@ -655,7 +658,7 @@
       "half_pixel_probe_cosine": {
         "min": 0.999957263469696,
         "p05": 0.9999608993530273,
-        "median": 0.9999836683273315,
+        "median": 0.9999837279319763,
         "p95": 0.9999867081642151,
         "max": 0.9999868869781494
       },
@@ -680,23 +683,23 @@
       },
       "angle_error_deg": {
         "min": 8.461224530209903e-08,
-        "p05": 7.67783274239348e-07,
-        "median": 1.2395087277757566e-05,
-        "p95": 0.003124499469723644,
+        "p05": 7.921574270518626e-07,
+        "median": 1.263384324825286e-05,
+        "p95": 0.003112292438466427,
         "max": 1.402465114797481
       },
       "detected_descriptor_cosine": {
         "min": 0.9984479546546936,
-        "p05": 0.9999791979789734,
+        "p05": 0.9999792575836182,
         "median": 0.9999850392341614,
-        "p95": 0.9999919533729553,
+        "p95": 0.9999920129776001,
         "max": 0.9999960660934448
       },
       "fixed_frame_descriptor_cosine": {
-        "min": 0.999975323677063,
-        "p05": 0.9999797940254211,
-        "median": 0.9999852180480957,
-        "p95": 0.9999919533729553,
+        "min": 0.9999755024909973,
+        "p05": 0.9999797344207764,
+        "median": 0.9999850988388062,
+        "p95": 0.9999920129776001,
         "max": 0.9999960660934448
       },
       "cross_matches": 606,
@@ -706,9 +709,9 @@
       "half_pixel_probe_cosine": {
         "min": 0.9999772310256958,
         "p05": 0.9999775290489197,
-        "median": 0.9999793767929077,
-        "p95": 0.9999799132347107,
-        "max": 0.9999799728393555
+        "median": 0.9999794363975525,
+        "p95": 0.9999799728393555,
+        "max": 0.9999800324440002
       },
       "native_count": 3353,
       "opencv_count": 3351,
@@ -731,9 +734,9 @@
       },
       "angle_error_deg": {
         "min": 1.6890017580443858e-09,
-        "p05": 8.536071505751287e-07,
-        "median": 8.540174701179187e-06,
-        "p95": 7.543434471890431e-05,
+        "p05": 8.679181963087796e-07,
+        "median": 8.497957977559123e-06,
+        "p95": 7.231213233868471e-05,
         "max": 1.0355706335901316
       },
       "detected_descriptor_cosine": {
@@ -741,14 +744,14 @@
         "p05": 0.9999769926071167,
         "median": 0.9999802112579346,
         "p95": 0.9999830722808838,
-        "max": 0.9999877214431763
+        "max": 0.9999878406524658
       },
       "fixed_frame_descriptor_cosine": {
         "min": 0.9999740719795227,
-        "p05": 0.9999772310256958,
+        "p05": 0.9999772906303406,
         "median": 0.9999802708625793,
         "p95": 0.9999830722808838,
-        "max": 0.9999877214431763
+        "max": 0.9999878406524658
       },
       "cross_matches": 3351,
       "cross_match_precision": 1.0
@@ -767,7 +770,7 @@
       },
       "opencv_matches": 622,
       "opencv_inlier_fraction": 0.9967845659163987,
-      "recovered_homography_max_probe_error_px": 0.017000943471947173
+      "recovered_homography_max_probe_error_px": 0.017000935609906728
     },
     "rotate90": {
       "native_matches": 671,
@@ -781,45 +784,45 @@
       },
       "opencv_matches": 672,
       "opencv_inlier_fraction": 0.9985119047619048,
-      "recovered_homography_max_probe_error_px": 0.012840260691588345
+      "recovered_homography_max_probe_error_px": 0.01284025970870651
     },
     "similarity": {
       "native_matches": 316,
       "native_inlier_fraction": 0.930379746835443,
       "native_error_px": {
         "min": 0.0009013103441028623,
-        "p05": 0.007043563810551034,
+        "p05": 0.007043563810551035,
         "median": 0.2216130238593394,
-        "p95": 10.908385204424764,
+        "p95": 10.908385204424762,
         "max": 302.97365290393765
       },
       "opencv_matches": 314,
       "opencv_inlier_fraction": 0.9363057324840764,
-      "recovered_homography_max_probe_error_px": 0.038798401591447394
+      "recovered_homography_max_probe_error_px": 0.03879624529166552
     },
     "perspective": {
       "native_matches": 384,
       "native_inlier_fraction": 0.9661458333333334,
       "native_error_px": {
         "min": 0.0038048643227581763,
-        "p05": 0.02321632680444597,
+        "p05": 0.023216326804445967,
         "median": 0.15572243089477503,
         "p95": 0.8558970980864798,
         "max": 216.1241439440283
       },
       "opencv_matches": 383,
       "opencv_inlier_fraction": 0.9660574412532638,
-      "recovered_homography_max_probe_error_px": 0.10425512637176147
+      "recovered_homography_max_probe_error_px": 0.10425246278295479
     }
   },
   "julia_environment": {
     "julia": "1.13.4",
-    "cpu_target": "graniterapids",
+    "cpu_target": "znver3",
     "julia_threads": "1",
     "ColorTypes": "0.12.5",
     "Colors": "0.13.4",
     "FixedPointNumbers": "0.8.6",
     "StaticArrays": "1.9.25"
   },
-  "finished_utc": "2026-11-21T19:13:36.330249+00:00"
+  "finished_utc": "2026-11-22T07:00:05.766015+00:00"
 }

@@ -1,21 +1,21 @@
-# Repeated Julia/OpenCV comparison — 2026-11-21
+# Repeated Julia/OpenCV comparison — 2026-11-22
 
 Five measured samples after one warmup per image, using img1 from each of eight
 Oxford sequences at original resolution. The samples run sequentially on
-Intel(R) Xeon(R) 6975P-C (`graniterapids`). Julia 1.13.4, OpenCV 5.0.0,
+AMD EPYC 7763 64-Core Processor (`znver3`). Julia 1.13.4, OpenCV 5.0.0,
 NumPy 2.5.5, Python 3.13.18; Julia/OpenCV/BLAS each use one thread.
 ColorTypes 0.12.5, Colors 0.13.4, FixedPointNumbers 0.8.6, StaticArrays 1.9.25.
 
 | Photograph | Julia median (ms) | OpenCV raw median (ms) | OpenCV unit-output median (ms) | Julia / unit-output time | Julia minimum allocation (MiB) |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 163.5 | 140.2 | 141.5 | 1.16× | 116.7 |
-| trees_1 | 403.4 | 325.7 | 339.0 | 1.19× | 124.2 |
-| graf_1 | 133.0 | 110.1 | 111.0 | 1.20× | 85.6 |
-| wall_1 | 335.5 | 261.6 | 271.3 | 1.24× | 122.3 |
-| bark_1 | 143.2 | 119.0 | 120.4 | 1.19× | 67.3 |
-| boat_1 | 261.6 | 216.3 | 225.3 | 1.16× | 101.9 |
-| leuven_1 | 122.9 | 100.7 | 101.6 | 1.21× | 89.9 |
-| ubc_1 | 182.5 | 147.6 | 151.9 | 1.20× | 87.7 |
+| bikes_1 | 130.0 | 191.7 | 193.0 | 0.67× | 116.8 |
+| trees_1 | 322.7 | 429.2 | 433.7 | 0.74× | 124.3 |
+| graf_1 | 103.7 | 139.0 | 140.0 | 0.74× | 85.7 |
+| wall_1 | 259.4 | 342.0 | 345.6 | 0.75× | 122.4 |
+| bark_1 | 120.2 | 155.3 | 156.7 | 0.77× | 67.5 |
+| boat_1 | 204.9 | 271.0 | 274.4 | 0.75× | 102.1 |
+| leuven_1 | 96.5 | 125.9 | 126.7 | 0.76× | 90.0 |
+| ubc_1 | 141.5 | 185.5 | 187.6 | 0.75× | 87.8 |
 
 Julia times `sift` on a UInt8 matrix, including intensity conversion, detection,
 and 128×N unquantized unit Float32 descriptors. OpenCV raw times
