@@ -351,7 +351,7 @@ end
 function gaussian_blur!(dst::Matrix{Float32}, tmp::Matrix{Float32}, src::Matrix{Float32}, sigma::Real)
     size(dst) == size(src) == size(tmp) ||
         throw(DimensionMismatch("dst, tmp, and src must have the same size"))
-    (tmp === dst || tmp === src) &&
+    (Base.mightalias(tmp, dst) || Base.mightalias(tmp, src)) &&
         throw(ArgumentError("tmp must not alias dst or src"))
     isfinite(sigma) && sigma >= 0 && 8.0 * Float64(sigma) + 1.0 < Float64(typemax(Int32)) ||
         throw(ArgumentError("sigma must be finite, nonnegative, and within kernel size limits"))
@@ -741,7 +741,7 @@ end
         gy = gy_buf[k]
         b = unsafe_trunc(Int32, round(_atan2_f32(gy, gx) * scale))
         bin_buf[k] = ifelse(b < Int32(0), b + Int32(36), ifelse(b >= Int32(36), b - Int32(36), b)) + Int32(1)
-        w_buf[k] = Base.sqrt_llvm(muladd(gx, gx, gy * gy)) * w_buf[k]
+        w_buf[k] = sqrt(max(0f0, muladd(gx, gx, gy * gy))) * w_buf[k]
     end
 
     @inbounds for k in 1:n
@@ -1006,7 +1006,7 @@ end
         cb = ifelse(valid, cb_raw, 0f0)
         gx = gx_buf[k]
         gy = gy_buf[k]
-        mag = ifelse(valid, Base.sqrt_llvm(muladd(gx, gx, gy * gy)) * _exp_neg_f32(ew_buf[k]), 0f0)
+        mag = ifelse(valid, sqrt(max(0f0, muladd(gx, gx, gy * gy))) * _exp_neg_f32(ew_buf[k]), 0f0)
         raw_ob = (_atan2_f32(gy, gx) - phi_f32) * scale
         # raw_ob lies in [-4, 12); branchless wrap into [0, 8) (exact 8.0f0 wraps via & 7).
         ob = raw_ob + ifelse(raw_ob < 0f0, 8f0, ifelse(raw_ob >= 8f0, -8f0, 0f0))
@@ -1065,7 +1065,7 @@ end
         fill!(out, 0f0)
         return out
     end
-    inv_n1 = 1f0 / Base.sqrt_llvm(s1)
+    inv_n1 = 1f0 / sqrt(s1)
     if use_rootsift
         l1 = 0f0
         @inbounds for k in 1:128
@@ -1075,7 +1075,7 @@ end
         end
         inv_l1 = 1f0 / l1
         @inbounds @simd for k in 1:128
-            out[k] = Base.sqrt_llvm(out[k] * inv_l1)
+            out[k] = sqrt(max(0f0, out[k] * inv_l1))
         end
     else
         s2 = 0f0
@@ -1084,7 +1084,7 @@ end
             out[k] = v
             s2 = muladd(v, v, s2)
         end
-        inv_n2 = 1f0 / Base.sqrt_llvm(s2)
+        inv_n2 = 1f0 / sqrt(s2)
         @inbounds @simd for k in 1:128
             out[k] *= inv_n2
         end
