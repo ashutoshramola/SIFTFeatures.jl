@@ -1,6 +1,6 @@
 # Pure-Julia Validation & Benchmark Report — 2026-11-22
 
-Runtime: Julia `1.13.4` (`raptorlake`, `1` thread(s)). Zero Python or OpenCV dependencies.
+Runtime: Julia `1.13.4` (`graniterapids`, `1` thread(s)). Zero Python or OpenCV dependencies.
 
 ## Oxford 48-Photograph Ground-Truth Accuracy (40 pairs)
 
@@ -26,12 +26,12 @@ Runtime: Julia `1.13.4` (`raptorlake`, `1` thread(s)). Zero Python or OpenCV dep
 
 | Photograph | Size (w×h) | Features | Median (ms) | Min (ms) | Allocated (MiB) |
 |---|---:|---:|---:|---:|---:|
-| bikes_1 | 1000×700 | 3224 | 113.8 | 112.4 | 116.8 |
-| trees_1 | 1000×700 | 12477 | 227.7 | 218.4 | 124.3 |
-| graf_1 | 800×640 | 2729 | 96.9 | 89.2 | 85.7 |
-| wall_1 | 1000×700 | 9175 | 193.2 | 182.2 | 122.4 |
-| bark_1 | 765×512 | 3757 | 88.5 | 84.8 | 67.5 |
-| boat_1 | 850×680 | 8356 | 169.8 | 147.2 | 102.1 |
-| leuven_1 | 900×600 | 2310 | 81.5 | 79.6 | 90.0 |
-| ubc_1 | 800×640 | 5037 | 112.4 | 106.7 | 87.8 |
+| bikes_1 | 1000×700 | 3224 | 108.1 | 105.8 | 116.8 |
+| trees_1 | 1000×700 | 12477 | 222.6 | 219.0 | 124.3 |
+| graf_1 | 800×640 | 2729 | 82.0 | 80.1 | 85.7 |
+| wall_1 | 1000×700 | 9175 | 183.2 | 177.7 | 122.4 |
+| bark_1 | 765×512 | 3757 | 78.3 | 77.0 | 67.5 |
+| boat_1 | 850×680 | 8356 | 150.6 | 146.3 | 102.1 |
+| leuven_1 | 900×600 | 2310 | 78.4 | 76.9 | 90.0 |
+| ubc_1 | 800×640 | 5037 | 106.5 | 105.9 | 87.8 |
 
